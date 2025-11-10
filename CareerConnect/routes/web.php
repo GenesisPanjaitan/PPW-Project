@@ -17,6 +17,10 @@ Route::get('/about', function () {
     return view('about');
 });
 
+Route::get('/favorit', function () {
+    return view('favorit');
+});
+
 // Halaman profile
 Route::get('/profile', function () {
     return view('profile');
@@ -51,3 +55,4 @@ Route::get('/register/alumni', function () {
 // Proses register (umum)
 Route::post('/register', function () {
 })->name('register.submit');
+
