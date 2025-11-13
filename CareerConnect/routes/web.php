@@ -10,7 +10,8 @@ Route::get('/', function () {
 // Halaman home
 Route::get('/home', function () {
     return view('home');
-});
+})->name('home');
+
 
 // Halaman about
 Route::get('/about', function () {
