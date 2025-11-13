@@ -1,111 +1,154 @@
-<!doctype html>
-<html lang="id">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Profil - Akademik & Karir | CareerConnect</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <style>
-      :root{--accent:#4b63ff;--outer:#dfe7ff;--muted:#9aa0b7}
-      html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial}
-      body{background:var(--outer);}
-      .site{max-width:1180px;margin:18px auto;background:#fff;border-radius:6px;overflow:hidden}
-      header.site-header{display:flex;align-items:center;justify-content:space-between;padding:18px 28px;background:linear-gradient(90deg,#fff 0%, rgba(75,99,255,0.04) 70%);border-bottom:1px solid rgba(0,0,0,0.04)}
-      .logo{display:flex;align-items:center;gap:12px;font-weight:700}
-      .logo .icon{width:28px;height:28px;border-radius:6px;background:#fff;color:var(--accent);display:inline-flex;align-items:center;justify-content:center;border:1px solid rgba(0,0,0,0.04)}
-      nav.center{display:flex;gap:28px;align-items:center}
-      nav.center a{color:#111;text-decoration:none}
-      nav.center a.active{color:var(--accent);font-weight:600}
-      .user{display:flex;align-items:center;gap:8px}
-      .container{padding:28px}
-      .page-title{color:var(--accent);font-weight:600;margin:8px 0}
-      .subtitle{color:var(--muted);margin:6px 0 22px}
-      .tabs{display:flex;gap:12px;background:#f3f4f6;padding:10px;border-radius:999px;align-items:center}
-      .tab{padding:8px 18px;border-radius:999px;color:var(--muted)}
-      .tab.active{background:#fff;box-shadow:0 8px 20px rgba(16,24,40,0.06);color:var(--accent);}
-      .card{background:#fff;border-radius:12px;padding:18px;margin-top:18px;border:1px solid rgba(0,0,0,0.06);box-shadow:0 10px 28px rgba(2,6,23,0.04)}
-      .card + .card{margin-top:22px}
-      .card h4{margin:0 0 6px}
-      .card p.desc{color:var(--muted);margin:0 0 12px}
-      .item{background:#f3f4f6;padding:12px;border-radius:10px;display:flex;align-items:center;gap:12px}
-      .chip{display:inline-block;background:#f3f4f6;padding:8px 12px;border-radius:10px;margin-right:8px}
-      @media (max-width:900px){.container{padding:18px}.logo{font-size:16px}}
-    </style>
-  </head>
-  <body>
-    <div class="site">
-      <header class="site-header">
-        <div class="logo">
-          <span class="icon">CC</span>
-          <span>CareerConnect</span>
-        </div>
+@extends('layouts.app')
 
-        <nav class="center">
-          <a href="/home">Home</a>
-          <a href="/recruitment">Recruitment</a>
-          <a class="active" href="/profile">My Profile</a>
-        </nav>
+@section('content')
 
-        <div class="user">
-          @auth
-            {{ Auth::user()->name }}
-          @else
-            Guest
-          @endauth
-        </div>
-      </header>
-
-      <div class="container">
-        <h2 class="page-title">My Profile</h2>
-        <p class="subtitle">Kelola informasi profil dan pengaturan akun Anda</p>
-
-        <div style="display:flex;align-items:center;justify-content:space-between;gap:18px">
-          <div style="flex:1">
-            <div class="tabs" role="tablist">
-              <div class="tab">Informasi Dasar</div>
-              <div class="tab active">Akademik & Karir</div>
-              <div class="tab">Pengaturan</div>
+    <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
+        <div class="container">
+            
+            <a class="navbar-brand fw-bold fs-4" href="{{ route('home') }}">
+                <img src="{{ asset('images/logokita.png') }}" 
+                     alt="CareerConnect Logo" 
+                     style="height: 30px;" 
+                     class="ms-2"> CareerConnect
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navDashboard" aria-controls="navDashboard" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navDashboard">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item mx-3">
+                        <a class="nav-link {{ Request::is('home') ? 'active fw-semibold' : '' }}" href="{{ route('home') }}">Home</a>
+                    </li>
+                    <li class="nav-item mx-3">
+                        <a class="nav-link {{ Request::is('recruitment*') ? 'active fw-semibold' : '' }}" href="/recruitment">Recruitment</a>
+                    </li>
+                    <li class="nav-item mx-3">
+                        <a class="nav-link {{ Request::is('profile*') ? 'active fw-semibold' : '' }}" href="/profile">My Profile</a>
+                    </li>
+                </ul>
+                
+                <div class="navbar-nav">
+                    <a href="#" class="nav-link fw-semibold">
+                        <i class="bi bi-person-circle me-1"></i>
+                        Kevin Gultom
+                    </a>
+                </div>
             </div>
-          </div>
         </div>
+    </nav>
 
-        <!-- Informasi Akademik -->
-        <div class="card">
-          <h4>Informasi Akademik</h4>
-          <p class="desc">Detail tentang pendidikan dan program studi Anda</p>
 
-          <label style="font-size:13px;color:var(--muted);margin-bottom:8px;display:block">Jurusan / Program Studi</label>
-          <div class="item">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zM4 20c0-3.31 2.69-6 6-6h4c3.31 0 6 2.69 6 6" stroke="#888" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            <div>Sistem Informasi</div>
-          </div>
-        </div>
+    <main class="py-4">
+        <div class="container">
 
-        <!-- Minat & Karir -->
-        <div class="card">
-          <h4>Minat & Karir</h4>
-          <p class="desc">Bidang pekerjaan yang Anda minati</p>
+            <h2 class="fw-bold mb-1" style="color: #6b5ce7;">My Profile</h2>
+            <p class="text-muted mb-4">Kelola informasi profil dan pengaturan akun Anda</p>
 
-          <label style="font-size:13px;color:var(--muted);margin-bottom:8px;display:block">Minat Karir</label>
-          <div class="item">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 2l3 7h7l-5.5 4.5L20 21l-8-5-8 5 1.5-7.5L0 9h7l3-7z" stroke="#888" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            <div>Software Development</div>
-          </div>
-        </div>
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                
+                <div class="profile-tabs-container">
+                    <a href="/profile" class="tab-link {{ Request::is('profile') ? 'active' : '' }}">Informasi Dasar</a>
+                    <a href="/profile/academic" class="tab-link {{ Request::is('profile/academic') ? 'active' : '' }}">Akademik & Karir</a>
+                    <a href="{{ route('profile.settings') }}" class="tab-link {{ Request::is('profile/settings') ? 'active' : '' }}">Pengaturan</a>
+                </div>
+                
+                @if(request('mode') == 'edit')
+                    <div class="d-flex gap-2">
+                        <button type="submit" form="academicForm" class="btn btn-dark btn-sm fw-semibold">
+                            <i class="bi bi-save me-1"></i> Simpan
+                        </button>
+                        <a href="/profile/academic" class="btn btn-danger btn-sm fw-semibold">
+                            <i class="bi bi-x-lg me-1"></i> Batal
+                        </a>
+                    </div>
+                @else
+                    <a href="/profile/academic?mode=edit" class="btn btn-dark btn-sm fw-semibold">
+                        <i class="bi bi-pencil-fill me-1"></i> Edit Profil
+                    </a>
+                @endif
 
-        <!-- Skills & Keahlian -->
-        <div class="card">
-          <h4>Skills & Keahlian</h4>
-          <p class="desc">Skill teknis dan soft skill yang Anda kuasai</p>
+            </div>
 
-          <div style="display:flex;gap:8px;flex-wrap:wrap">
-            <span class="chip">Python</span>
-            <span class="chip">Javascript</span>
-            <span class="chip">C++</span>
-          </div>
-        </div>
+            <form action="#" method="POST" id="academicForm">
+                @csrf
+                <div class="card shadow-sm border-0 mb-4" style="border-radius: 1rem;">
+                    <div class="card-body p-4 p-md-5">
+                        <h5 class="fw-bold mb-1">Informasi Akademik</h5>
+                        <p class="text-muted small mb-4">Detail tentang pendidikan dan program studi Anda</p>
+                        
+                        <label class="form-label-custom">Jurusan / Program Studi</label>
+                        
+                        @if(request('mode') == 'edit')
+                            <select class="form-select form-control-custom" id="jurusan" name="jurusan" required>
+                                <option value="if">S1-Informatika</option>
+                                <option value="si" selected>S1-Sistem Informasi</option>
+                                <option value="te">S1-Teknik Elektro</option>
+                                <option value="mr">S1-Manajemen Rekayasa</option>
+                                <option value="tm">S1-Teknik Metalurgi</option>
+                                <option value="bp">S1-Teknik Bioproses</option>
+                                <option value="bt">S1-Bioteknologi</option>
+                                <option value="trpl">D4-Teknologi Rekayasa Perangkat Lunak</option>
+                                <option value="ti">D3-Teknologi Informasi</option>
+                                <option value="nm">D3-Teknologi Komputer</option>
+                            </select>
+                        @else
+                            <div class="form-control-custom d-flex align-items-center">
+                                <i class="bi bi-mortarboard me-2 text-muted"></i>
+                                <span class="fw-medium">Sistem Informasi</span>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+                
+                <div class="card shadow-sm border-0 mb-4" style="border-radius: 1rem;">
+                    <div class="card-body p-4 p-md-5">
+                        <h5 class="fw-bold mb-1">Minat & Karir</h5>
+                        <p class="text-muted small mb-4">Bidang pekerjaan yang Anda minati</p>
+                        
+                        <label class="form-label-custom">Minat Karir</label>
 
-      </div>
-    </div>
-  </body>
-</html>
+                        @if(request('mode') == 'edit')
+                            <select class="form-select form-control-custom" id="minat_karir" name="minat_karir">
+                                <option value="" disabled>Pilih bidang yang diminati</option>
+                                <option value="swe" selected>Software Engineering</option>
+                                <option value="uiux">UI/UX Design</option>
+                                <option value="data">Data Science</option>
+                                <option value="product">Product Management</option>
+                                <option value="digital_marketing">Digital Marketing</option>
+                                <option value="qa_testing">QA & Testing</option>
+                                <option value="cybersecurity">Cybersecurity</option>
+                                <option value="operations">Operations</option>
+                                <option value="lainnya">Lainnya</option>
+                            </select>
+                        @else
+                            <div class="form-control-custom d-flex align-items-center">
+                                <i class="bi bi-briefcase me-2 text-muted"></i>
+                                <span class="fw-medium">Software Development</span>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+
+                <div class="card shadow-sm border-0" style="border-radius: 1rem;">
+                    <div class="card-body p-4 p-md-5">
+                        <h5 class="fw-bold mb-1">Skills & Keahlian</h5>
+                        <p class="text-muted small mb-4">Skill teknis dan soft skill yang Anda kuasai</p>
+                        
+                        @if(request('mode') == 'edit')
+                            <label class="form-label-custom">Skills <small class="text-muted">(Pisahkan dengan koma)</small></label>
+                            <input type="text" class="form-control form-control-custom" name="skills" value="Python, Javascript, C++">
+                        @else
+                            <div class="d-flex flex-wrap gap-2">
+                                <span class="skill-pill">Python</span>
+                                <span class="skill-pill">Javascript</span>
+                                <span class="skill-pill">C++</span>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+            
+            </form> </div> </main>
+
+@endsection

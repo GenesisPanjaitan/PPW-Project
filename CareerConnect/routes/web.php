@@ -30,11 +30,21 @@ Route::get('/profile', function () {
 // Halaman login
 Route::get('/login', function () {
     return view('auth.login');
-})->name('login');
+})->name('login'); // Ini untuk 'GET'
 
+// =======================================================
+// PERUBAHAN DI SINI
+// =======================================================
 // Proses login
 Route::post('/login', function () {
-})->name('login.submit');
+    
+    // Logika login Anda di sini...
+    
+    // Jika login berhasil:
+    return redirect()->route('home')->with('login_success', 'Welcome, Anda telah berhasil login');
+
+})->name('login'); // <-- Diubah dari 'login.submit' menjadi 'login'
+// =======================================================
 
 
 // Pilihan tipe akun
@@ -60,3 +70,7 @@ Route::post('/register', function () {
 Route::get('/profile/academic', function () {
     return view('profile_academic');
 });
+
+Route::get('/profile/settings', function () {
+    return view('profile_pengaturan'); 
+})->name('profile.settings');
