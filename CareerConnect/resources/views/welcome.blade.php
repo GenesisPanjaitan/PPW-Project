@@ -2,29 +2,29 @@
 
 @section('content')
 
-    <nav class="navbar navbar-expand-lg navbar-light navbar-section">
-        <div class="container">
-            
-        <a class="navbar-brand fw-bold fs-4" href="/">
-        <img src="{{ asset('images/logokita.png') }}" 
-                alt="CareerConnect Logo" 
-                style="height: 30px;" 
-                class="ms-2"> CareerConnect
-        </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <div class="navbar-nav ms-auto">
-                    <a href="{{ route('login') }}" class="btn btn-login-nav btn-sm px-4 py-2 me-2 mb-2 mb-lg-0 rounded-pill">Login</a>
-                    
-                    <!-- [PERBAIKAN] Mengubah href="#" menjadi {{ route('register') }} -->
-                    <a href="{{ route('register') }}" class="btn btn-register-nav btn-sm px-4 py-2 rounded-pill">Register</a>
-                </div>
+   <nav class="navbar navbar-expand-lg navbar-light navbar-section">
+    <div class="container">
+        
+       <a class="navbar-brand fw-bold fs-4" href="/">
+    <img src="{{ asset('images/logokita.png') }}" 
+         alt="CareerConnect Logo" 
+         style="height: 30px;" 
+         class="ms-2"> CareerConnect
+    </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <div class="navbar-nav ms-auto">
+                <a href="{{ route('login') }}" class="btn btn-login-nav btn-sm px-4 py-2 me-2 mb-2 mb-lg-0 rounded-pill">Login</a>
+                
+                <a href="{{ route('register') }}" class="btn btn-register-nav btn-sm px-4 py-2 rounded-pill">Register</a>
+
             </div>
         </div>
-    </nav>
+    </div>
+</nav>
 
     <main>
 
@@ -41,7 +41,7 @@
                         <a href="{{ route('login') }}" class="btn btn-dark px-4">
                             Masuk ke Akun
                         </a>
-                    </div>
+                    </div>  
                     
                     <div class="col-lg-6">
                         <img src="{{ asset('images/Plaza_IT_Del.jpg') }}" 
@@ -157,4 +157,23 @@
                 <h5 class="fw-bold">Contact Us</h5> 
                 <ul class="list-unstyled text-muted"> 
                     <li class="mb-2"><i class="bi bi-envelope me-2"></i>careerconnect@del.ac.id</li> 
-                    <li class="mb-2"><i class="bi bi-telephone me-2"></i>(0632) 123 456</li>
+                    <li class="mb-2"><i class="bi bi-telephone me-2"></i>(0632) 123 456</li> 
+                    <li class="mb-2"><i class="bi bi-geo-alt me-2"></i>Institut Teknologi Del, Sitoluama</li> 
+                </ul> 
+            </div> 
+            
+            <div class="col-md-4"> 
+                <h5 class="fw-bold fs-4">CareerConnect</h5> 
+                <p class="text-muted"> Menghubungkan mahasiswa dan alumni Institut Teknologi Del dengan peluang terbaik untuk magang, part-time, dan karir penuh waktu. </p> 
+            </div> 
+            
+            <div class="col-md-4"> 
+                <h5 class="fw-bold">Dukungan</h5> 
+                <p class="text-muted mb-2">Platform ini dikembangkan bersama Institut Teknologi Del.</p> 
+                <img src="{{ asset('images/logo del.jpg') }}" alt="Logo Institut Teknologi Del" class="mx-auto d-block footer-logo"> 
+            </div> 
+        </div> 
+    </div> 
+</footer>
+
+@endsection
