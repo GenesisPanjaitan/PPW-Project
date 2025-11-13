@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
     <style>
-        /* == Hero & Footer Styles (dari kode Anda) == */
+        /* == Hero & Footer Styles == */
         :root {
             --del-dark-blue: #2A2F4F;
         }
@@ -54,15 +54,13 @@
             background-color: #333;
             color: #FFF;
         }
-        .navbar-brand-custom { /* Style ini ada di register.blade.php Anda */
+        .navbar-brand-custom {
             font-weight: 700; 
             font-size: 1.5rem; 
             color: #000; 
         }
 
-        /* ============================================== */
-        /* == STYLES UNTUK HALAMAN REGISTER (BARU DITAMBAH) == */
-        /* ============================================== */
+        /* == Halaman Register == */
         .register-card {
             border: 1px solid #E0E0E0;
             border-radius: 1.5rem;
@@ -93,144 +91,165 @@
             text-decoration: underline;
         }
 
-        /* ============================================== */
-/* == STYLES UNTUK FORM LOGIN/REGISTER (TAMBAHKAN INI) == */
-/* ============================================== */
+        /* == Styles Form (Login, Register) == */
+        .form-control-custom {
+            background-color: #F3F4F6;
+            border: none;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+        }
+        .form-control-custom:focus {
+            background-color: #F3F4F6;
+            box-shadow: 0 0 0 2px #3B49DF; 
+        }
+        .form-select.form-control-custom {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23333' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 16px 12px;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
+        .btn-masuk {
+            background-color: #3B49DF;
+            border: none;
+            font-weight: 600;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+        }
+        .btn-masuk:hover {
+            background-color: #2F3AB2;
+        }
+        .form-label-custom {
+            font-weight: 600;
+            color: #333;
+            font-size: 0.9rem;
+            margin-bottom: 0.25rem;
+        }
+                
+        /* == Halaman Home (Dashboard) == */
+        body {
+            background-color: #F8F7FF; /* Latar belakang lavender muda */
+        }
+        .alert-welcome {
+            position: fixed;
+            top: 20px; 
+            left: 50%;
+            transform: translateX(-50%);
+            width: auto;
+            z-index: 1050; 
+            background-color: #E6F7F0;
+            color: #097B4B;
+            font-weight: 500;
+            padding: 0.75rem 1.25rem; 
+            font-size: 0.9rem; 
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transition: opacity 0.5s ease-out, top 0.5s ease-out, transform 0.5s ease-out;
+        }
+        .alert-welcome .bi {
+            font-size: 1.1rem !important;
+        }
+        .profile-card {
+            background-color: #ECEBFE; 
+            border-radius: 1rem;
+        }
+        .skill-tag {
+            background-color: #DCD9FE; 
+            color: #3B49DF;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        .btn-edit-profile {
+            background-color: #FFFFFF;
+            color: #3B49DF;
+            font-weight: 600;
+            border-radius: 0.5rem;
+        }
+        .btn-edit-profile:hover {
+            background-color: #f0f0f0;
+        }
+        .job-card {
+            background-color: #E4F1FF; 
+            border-radius: 0.75rem;
+            color: #052C65;
+        }
+        .btn-bookmark {
+            color: #052C65;
+            background-color: rgba(255, 255, 255, 0.4);
+            border-radius: 0.5rem;
+        }
+        .btn-bookmark:hover {
+            background-color: #FFFFFF;
+            color: #052C65;
+        }
+        .job-card .badge {
+            color: #052C65;
+            font-weight: 500;
+            font-size: 0.75rem;
+            padding: 6px 10px;
+        }
+        .job-badge-internship { background-color: #C7E4FF; }
+        .job-badge-part-time { background-color: #DFFFEA; }
+        .job-badge-full-time { background-color: #FCE8D5; }
+        
+        /* == Navbar Menu Aktif == */
+        .navbar-nav .nav-link {
+            border-bottom: 3px solid transparent;
+            padding-bottom: 5px; 
+        }
+        .navbar-nav .nav-link.active {
+            color: #3B49DF !important; 
+            border-bottom: 3px solid #3B49DF; 
+        }
 
-/* Style untuk input form (abu-abu muda) */
-    .form-control-custom {
-        background-color: #F3F4F6;
-        border: none;
-        padding: 0.75rem 1rem;
-        border-radius: 0.5rem;
-    }
-    .form-control-custom:focus {
-        background-color: #F3F4F6;
-        box-shadow: 0 0 0 2px #3B49DF; /* Ganti border saat fokus */
-    }
-    /* Memastikan select box punya style yang sama */
-    .form-select.form-control-custom {
-        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23333' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
-        background-repeat: no-repeat;
-        background-position: right 1rem center;
-        background-size: 16px 12px;
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        appearance: none;
-    }
-
-    /* Style untuk tombol submit biru */
-    .btn-masuk {
-        background-color: #3B49DF;
-        border: none;
-        font-weight: 600;
-        padding: 0.75rem;
-        border-radius: 0.5rem;
-    }
-    .btn-masuk:hover {
-        background-color: #2F3AB2;
-    }
-
-    /* Style untuk label form */
-    .form-label-custom {
-        font-weight: 600;
-        color: #333;
-        font-size: 0.9rem;
-        margin-bottom: 0.25rem;
-    }
-            
-    /* ============================================== */
-/* == STYLES UNTUK HALAMAN HOME (TAMBAHKAN INI) == */
-/* ============================================== */
-
-/* Ganti background body agar sesuai gambar */
-body {
-    background-color: #F8F7FF; /* Latar belakang lavender muda */
-}
-
-.alert-welcome {
-    /* Posisi & Ukuran */
-    position: fixed;
-    top: 20px; 
-    left: 50%;
-    transform: translateX(-50%);
-    width: auto;
-    z-index: 1050; 
-    
-    /* Tampilan (Update untuk lebih kecil) */
-    background-color: #E6F7F0;
-    color: #097B4B;
-    font-weight: 500;
-    padding: 0.75rem 1.25rem; /* Mengurangi padding */
-    font-size: 0.9rem; /* Mengurangi ukuran font */
-    
-    border-radius: 0.5rem;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    
-    /* Transisi */
-    transition: opacity 0.5s ease-out, top 0.5s ease-out, transform 0.5s ease-out;
-}
-
-/* Anda juga bisa mengurangi ukuran ikon jika ingin */
-.alert-welcome .bi {
-    font-size: 1.1rem !important; /* Contoh, jika ingin ikon lebih kecil */
-}
-
-/* Kartu Profil (Ungu) */
-.profile-card {
-    background-color: #ECEBFE; /* Ungu muda */
-    border-radius: 1rem;
-}
-.skill-tag {
-    background-color: #DCD9FE; /* Ungu lebih gelap */
-    color: #3B49DF;
-    padding: 5px 10px;
-    border-radius: 5px;
-    font-size: 0.8rem;
-    font-weight: 500;
-}
-.btn-edit-profile {
-    background-color: #FFFFFF;
-    color: #3B49DF;
-    font-weight: 600;
-    border-radius: 0.5rem;
-}
-.btn-edit-profile:hover {
-    background-color: #f0f0f0;
-}
-
-
-/* Kartu Lowongan (Biru) */
-.job-card {
-    background-color: #E4F1FF; /* Biru muda */
-    border-radius: 0.75rem;
-    color: #052C65;
-}
-.btn-bookmark {
-    color: #052C65;
-    background-color: rgba(255, 255, 255, 0.4);
-    border-radius: 0.5rem;
-}
-.btn-bookmark:hover {
-    background-color: #FFFFFF;
-    color: #052C65;
-}
-
-/* Badge Tipe Pekerjaan */
-.job-card .badge {
-    color: #052C65;
-    font-weight: 500;
-    font-size: 0.75rem;
-    padding: 6px 10px;
-}
-.job-badge-internship { background-color: #C7E4FF; }
-.job-badge-part-time { background-color: #DFFFEA; }
-.job-badge-full-time { background-color: #FCE8D5; }
-       </style>
-    </head>
-    <body class="bg-white">
-
-
+        /* == Halaman Profil == */
+        .profile-tabs-container {
+            background-color: #EFEFEF;
+            padding: 0.5rem;
+            border-radius: 999px;
+            display: flex;
+            gap: 0.5rem;
+        }
+        .tab-link {
+            padding: 0.5rem 1.25rem;
+            border-radius: 999px;
+            text-decoration: none;
+            color: #555;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .tab-link:hover {
+            background-color: #e0e0e0;
+            color: #111;
+        }
+        .tab-link.active {
+            background-color: #FFFFFF;
+            color: #111;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+        .avatar-placeholder {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background-color: #E0E0E0;
+            color: #555;
+        }
+        .skill-pill {
+            background-color: #F3F4F6;
+            border-radius: 0.5rem;
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
 
     @yield('content')
 
