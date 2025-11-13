@@ -1,22 +1,12 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
 
 // Halaman utama
-Route::get('/', function () {
-    return view('welcome');
-});
-
+Route::get('/', [HomeController::class, 'welcome'])->name('welcome');
 // Halaman home
-Route::get('/home', function () {
-    return view('home');
-})->name('home');
-
-
-// Halaman about
-Route::get('/about', function () {
-    return view('about');
-});
+Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 Route::get('/favorit', function () {
     return view('favorit');
