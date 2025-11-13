@@ -26,7 +26,6 @@ Route::get('/profile', function () {
     return view('profile');
 });
 
-
 // Halaman login
 Route::get('/login', function () {
     return view('auth.login');
@@ -56,3 +55,7 @@ Route::get('/register/alumni', function () {
 Route::post('/register', function () {
 })->name('register.submit');
 
+// Halaman Akademik & Karir (profile)
+Route::get('/profile/academic', function () {
+    return view('profile_academic');
+});
