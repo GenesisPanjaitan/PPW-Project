@@ -8,6 +8,11 @@ Route::get('/', [HomeController::class, 'welcome'])->name('welcome');
 // Halaman home
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
+// Halaman recruitment
+Route::get('/recruitment', function () {
+    return view('recruitment');
+})->name('recruitment');
+
 Route::get('/favorit', function () {
     return view('favorit');
 });
