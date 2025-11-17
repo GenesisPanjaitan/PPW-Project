@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Recruitment Hub - CareerConnect</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <!-- Bootstrap (for components that use bootstrap classes) -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-" crossorigin="anonymous">
+
+    <!-- Use Tailwind Play CDN (v3+) for the utility classes used in the layout -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
     <style>
         /* Posting modal edit appearance */
         .posting-input {
@@ -43,13 +44,10 @@
             top: -1.4rem;
             border: 1px solid rgba(99,102,241,0.08);
         }
-        /* Custom styles if needed, e.g., for specific button colors or font sizes */
-        .dropdown-menu {
-            display: none;
-        }
-        .dropdown-menu.show {
-            display: block;
-        }
+        .dropdown-menu { display: none; }
+        .dropdown-menu.show { display:block; }
+
+        /* refined tooltip look */
         .validation-tooltip {
             position: absolute;
             left: 50%;
@@ -68,26 +66,16 @@
             white-space: nowrap;
         }
         .validation-tooltip svg { width: 16px; height: 16px; flex: 0 0 16px; }
+
         .empty-comments { text-align: center; color: #9CA3AF; }
         .empty-comments svg { display: block; margin: 0 auto; }
         .no-comments-input input { background: #F9FAFB; }
-        .empty-comments svg { display: block; margin: 0 auto; }
-        .no-comments-input input { background: #F9FAFB; }
-
-        /* Logo and icon sizing rules to keep consistent between Tailwind and Bootstrap contexts */
         img.logo { height: 34px; width: auto; }
-        @media (min-width: 768px) {
-            img.logo { height: 36px; }
-        }
+        @media (min-width: 768px) { img.logo { height: 36px; } }
         svg.icon { width: 18px; height: 18px; }
         svg.icon-lg { width: 20px; height: 20px; }
-        /* Ensure buttons using bootstrap sizing align with icon sizes */
         .btn .icon { margin-right: 6px; }
-        /* Navigation link styles: remove underline and match site font */
-        nav a { text-decoration: none !important; color: #1f2937; font-weight: 600; }
-        nav a:hover, nav a:focus { text-decoration: none !important; color: #1f40af; }
-        nav { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Liberation Sans', sans-serif; }
-        /* Edit button appearance to match provided mockup */
+
         button.btn-edit {
             background: #EEF6FF !important;
             color: #1D4ED8 !important;
@@ -104,11 +92,10 @@
         button.btn-edit svg { color: #1D4ED8; fill: currentColor; width: 20px; height: 20px; }
         button.btn-edit:hover { background: #E6F0FF !important; }
         button.btn-edit:active, button.btn-edit.pressed { background: #DCEFFF !important; transform: translateY(1px); }
-    </style>
-    <style>
-        /* Posting modal edit appearance */
+
+        /* Posting modal specialized styles */
         #postingModal .posting-input {
-            background: #F3F4F6; /* light gray */
+            background: #F3F4F6;
             border: none;
             padding: 14px 16px;
             border-radius: 12px;
@@ -120,94 +107,107 @@
         #postingModal.editing h3 { font-weight: 700; }
         #postingModal .submit-btn { background: #000; color: #fff; border-radius: 999px; padding: 10px 28px; }
         #postingModal .field-label { font-weight: 600; color: #111827; }
+
+        /* ensure modals sit above other elements */
+        #postingModal, #jobDetailModal, #deleteConfirmModal { z-index: 60; }
     </style>
 </head>
 <body class="bg-gray-100 font-sans">
 
-    <nav class="bg-white shadow-md p-4 d-flex justify-content-between align-items-center">
-        <div class="d-flex align-items-center">
-            <img src="{{ asset('images/logokita.png') }}" alt="CareerConnect Logo" class="logo mr-3">
-            <a href="{{ route('home') }}" class="text-xl font-bold text-gray-800">CareerConnect</a>
+    <!-- NAVBAR (use Tailwind only to match design precisely) -->
+    <nav class="bg-white shadow-md px-6 py-4 flex items-center justify-between">
+        <div class="flex items-center space-x-4">
+            <img src="{{ asset('images/logokita.png') }}" alt="CareerConnect Logo" class="logo">
+            <a href="{{ route('home') }}" class="text-lg font-bold text-gray-800">CareerConnect</a>
         </div>
-        <div class="flex space-x-6">
-            <a href="{{ route('home') }}" class="text-gray-600 hover:text-blue-600">Home</a>
-            <a href="{{ route('recruitment') }}" class="text-gray-600 hover:text-blue-600 font-semibold">Recruitment</a>
-            <a href="{{ url('/profile') }}" class="text-gray-600 hover:text-blue-600">My Profile</a>
-        </div>
-        <div class="d-flex align-items-center">
-            <span class="text-gray-700 mr-2">Kevin Gultom</span>
-            <img src="https://via.placeholder.com/30" alt="User Avatar" class="rounded-circle" style="height:32px;width:32px;">
+
+        <div class="flex items-center space-x-8">
+            <div class="flex items-center space-x-6">
+                <a href="{{ route('home') }}" class="text-gray-600 hover:text-blue-600">Home</a>
+                <a href="{{ route('recruitment') }}" class="text-gray-800 hover:text-blue-600 font-semibold">Recruitment</a>
+                <a href="{{ url('/profile') }}" class="text-gray-600 hover:text-blue-600">My Profile</a>
+            </div>
+            <div class="flex items-center space-x-3">
+                <span class="text-gray-700">Kevin Gultom</span>
+                <img src="https://via.placeholder.com/32" alt="User Avatar" class="rounded-full h-8 w-8 object-cover">
+            </div>
         </div>
     </nav>
 
-    <div class="container mx-auto p-6">
-        <h1 class="text-3xl font-bold text-gray-800 mb-2">Recruitment Hub</h1>
-        <p class="text-gray-600 mb-6">Lowongan pekerjaan yang dibagikan langsung oleh alumni di berbagai perusahaan</p>
+    <main class="max-w-6xl mx-auto p-6">
+        <header class="mb-6">
+            <h1 class="text-3xl font-bold text-gray-800 mb-1">Recruitment Hub</h1>
+            <p class="text-gray-600">Lowongan pekerjaan yang dibagikan langsung oleh alumni di berbagai perusahaan</p>
+        </header>
 
-        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+        <!-- FILTERS CARD -->
+        <section class="bg-white rounded-lg shadow-md p-6 mb-8">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
                 <div class="relative">
-                    <label for="jobType" class="block text-sm font-medium text-gray-700 mb-1">Job Type</label>
-                    <button id="jobTypeBtn" class="bg-white border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 sm:text-sm w-full flex justify-between items-center">
-                        <span id="selectedJobType">Semua</span>
-                        <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <label class="text-sm font-medium text-gray-700 mb-1 block">Job Type</label>
+                    <button id="jobTypeBtn" class="bg-white border border-gray-300 rounded-md shadow-sm pl-3 pr-3 py-2 text-left w-full flex justify-between items-center">
+                        <span id="selectedJobType" class="text-sm">Semua</span>
+                        <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
                         </svg>
                     </button>
-                    <div id="jobTypeDropdown" class="dropdown-menu absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
-                        <a href="#" class="text-gray-900 cursor-default select-none relative py-2 pl-3 pr-9 flex items-center hover:bg-blue-100" data-value="Semua">Semua</a>
-                        <a href="#" class="text-gray-900 cursor-default select-none relative py-2 pl-3 pr-9 flex items-center hover:bg-blue-100" data-value="Full-time">Full-time</a>
-                        <a href="#" class="text-gray-900 cursor-default select-none relative py-2 pl-3 pr-9 flex items-center hover:bg-blue-100" data-value="Part-time">Part-time</a>
-                        <a href="#" class="text-gray-900 cursor-default select-none relative py-2 pl-3 pr-9 flex items-center hover:bg-blue-100" data-value="Internship">Internship</a>
+                    <div id="jobTypeDropdown" class="dropdown-menu absolute mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto sm:text-sm">
+                        <a href="#" class="block text-gray-900 py-2 px-3 hover:bg-blue-100" data-value="Semua">Semua</a>
+                        <a href="#" class="block text-gray-900 py-2 px-3 hover:bg-blue-100" data-value="Full-time">Full-time</a>
+                        <a href="#" class="block text-gray-900 py-2 px-3 hover:bg-blue-100" data-value="Part-time">Part-time</a>
+                        <a href="#" class="block text-gray-900 py-2 px-3 hover:bg-blue-100" data-value="Internship">Internship</a>
                     </div>
                 </div>
 
-                <div class="md:col-span-1">
-                    <label for="search" class="block text-sm font-medium text-gray-700 mb-1 invisible">Search</label>
-                    <div class="relative rounded-md shadow-sm">
+                <div>
+                    <label class="text-sm font-medium text-gray-700 mb-1 block">Cari</label>
+                    <div class="relative">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                 <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
                             </svg>
                         </div>
-                        <input type="text" name="search" id="search" class="focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 pr-3 sm:text-sm border-gray-300 rounded-md py-2" placeholder="Cari lowongan perusahaan, atau lokasi...">
+                        <input type="text" id="search" class="block w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-200 focus:border-blue-500 text-sm" placeholder="Cari lowongan, perusahaan, lokasi...">
                     </div>
                 </div>
 
-                <div class="md:col-span-1 flex justify-end">
-                    <button id="openPostingBtn" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black">
-                        <svg class="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
-                        </svg>
+                <div class="flex justify-end">
+                    <button id="openPostingBtn" class="inline-flex items-center px-4 py-2 rounded-md shadow text-white bg-black hover:bg-gray-800">
+                        <svg class="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"/></svg>
                         Posting Lowongan
                     </button>
                 </div>
             </div>
 
             <div class="mt-4 relative">
-                <label for="kategori" class="block text-sm font-medium text-gray-700 mb-1">Kategori</label>
-                <button id="kategoriBtn" class="bg-white border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 sm:text-sm w-48 flex justify-between items-center">
-                    <span id="selectedKategori">Semua Kategori</span>
-                    <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                        <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                    </svg>
-                </button>
-                <div id="kategoriDropdown" class="dropdown-menu absolute z-10 mt-1 w-48 bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
-                    <a href="#" class="text-gray-900 cursor-default select-none relative py-2 pl-3 pr-9 flex items-center hover:bg-blue-100" data-value="Semua Kategori">Semua Kategori</a>
-                    <a href="#" class="text-gray-900 cursor-default select-none relative py-2 pl-3 pr-9 flex items-center hover:bg-blue-100" data-value="Teknologi & IT">Teknologi & IT</a>
-                    <a href="#" class="text-gray-900 cursor-default select-none relative py-2 pl-3 pr-9 flex items-center hover:bg-blue-100" data-value="Design & Creative">Design & Creative</a>
-                    <a href="#" class="text-gray-900 cursor-default select-none relative py-2 pl-3 pr-9 flex items-center hover:bg-blue-100" data-value="Business & Marketing">Business & Marketing</a>
-                    <a href="#" class="text-gray-900 cursor-default select-none relative py-2 pl-3 pr-9 flex items-center hover:bg-blue-100" data-value="Data & Analytics">Data & Analytics</a>
-                    <a href="#" class="text-gray-900 cursor-default select-none relative py-2 pl-3 pr-9 flex items-center hover:bg-blue-100" data-value="Finance & Banking">Finance & Banking</a>
+                <label class="text-sm font-medium text-gray-700 mb-1 block">Kategori</label>
+                <div class="flex items-center">
+                    <div class="relative">
+                        <button id="kategoriBtn" class="bg-white border border-gray-300 rounded-md shadow-sm pl-3 pr-3 py-2 text-left w-48 flex justify-between items-center">
+                            <span id="selectedKategori" class="text-sm">Semua Kategori</span>
+                            <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+                        </button>
+                        <div id="kategoriDropdown" class="dropdown-menu absolute mt-1 w-48 bg-white shadow-lg max-h-60 rounded-md py-1 ring-1 ring-black ring-opacity-5 overflow-auto sm:text-sm">
+                            <a href="#" class="block py-2 px-3 hover:bg-blue-100" data-value="Semua Kategori">Semua Kategori</a>
+                            <a href="#" class="block py-2 px-3 hover:bg-blue-100" data-value="Teknologi & IT">Teknologi & IT</a>
+                            <a href="#" class="block py-2 px-3 hover:bg-blue-100" data-value="Design & Creative">Design & Creative</a>
+                            <a href="#" class="block py-2 px-3 hover:bg-blue-100" data-value="Business & Marketing">Business & Marketing</a>
+                            <a href="#" class="block py-2 px-3 hover:bg-blue-100" data-value="Data & Analytics">Data & Analytics</a>
+                            <a href="#" class="block py-2 px-3 hover:bg-blue-100" data-value="Finance & Banking">Finance & Banking</a>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
+        </section>
 
-        <div id="job-listings">
-            <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+        <!-- JOB LISTINGS -->
+        <section id="job-listings" class="space-y-6">
+
+            <!-- CARD #1 -->
+            <article class="bg-white rounded-lg shadow-md p-6">
                 <div class="flex justify-between items-start mb-4">
                     <div class="flex items-center">
-                        <img src="https://via.placeholder.com/40" alt="Sarah Putri Avatar" class="rounded-full h-10 w-10 mr-4">
+                        <img src="https://via.placeholder.com/40" alt="Sarah Putri Avatar" class="rounded-full h-10 w-10 mr-4 object-cover">
                         <div>
                             <p class="font-semibold text-gray-900">Sarah Putri</p>
                             <p class="text-sm text-gray-500">Senior Software Engineer</p>
@@ -220,14 +220,12 @@
                 <div class="border border-gray-200 rounded-lg p-4 mb-4">
                     <div class="flex justify-between items-center mb-2">
                         <div class="flex items-center">
-                            <img src="https://via.placeholder.com/20" alt="Company Logo" class="h-5 w-5 mr-2">
+                            <img src="https://via.placeholder.com/20" alt="Company Logo" class="h-5 w-5 mr-2 object-cover">
                             <div>
                                 <p class="font-semibold text-gray-800">Frontend Developer</p>
                                 <p class="text-sm text-gray-600">JW Marriott</p>
                                 <p class="text-xs text-gray-500 flex items-center">
-                                    <svg class="h-3 w-3 mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
-                                    </svg>
+                                    <svg class="h-3 w-3 mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/></svg>
                                     Medan
                                 </p>
                             </div>
@@ -236,15 +234,11 @@
                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">Full-time</span>
                             <p class="text-xs text-gray-500 mt-1">2 jam lalu</p>
                             <button class="ml-2 text-gray-400 hover:text-gray-600">
-                                <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd" d="M3 5a2 2 0 012-2h10a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V5zm10 0H7v6l2-2 2 2V5z" clip-rule="evenodd" />
-                                </svg>
+                                <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 5a2 2 0 012-2h10a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V5zm10 0H7v6l2-2 2 2V5z" clip-rule="evenodd"/></svg>
                             </button>
                         </div>
                     </div>
-                    <p class="text-sm text-gray-700 mt-2">
-                        Kami sedang mencari Frontend Developer yang passionate untuk bergabung dengan tim kami. Bertanggung jawab atas pengembangan fitur baru menggunakan React, TypeScript, dan Next.js untuk membangun produk yang digunakan oleh jutaan pengguna.
-                    </p>
+                    <p class="text-sm text-gray-700 mt-2">Kami sedang mencari Frontend Developer yang passionate untuk bergabung dengan tim kami. Bertanggung jawab atas pengembangan fitur baru menggunakan React, TypeScript, dan Next.js untuk membangun produk yang digunakan oleh jutaan pengguna.</p>
                 </div>
 
                 <div class="space-y-3 mb-4">
@@ -258,7 +252,7 @@
                             <p class="text-sm text-gray-700">Company culture-nya gimana kak? Apakah beginner-friendly untuk fresh graduate?</p>
                         </div>
                     </div>
-                    <!-- empty state (hidden by default) -->
+
                     <div class="empty-comments hidden py-10">
                         <div class="text-center text-gray-400">
                             <svg class="mx-auto mb-4" width="56" height="56" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 22s8-4.5 8-10a8 8 0 10-16 0c0 5.5 8 10 8 10z" stroke="#9CA3AF" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 11.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" stroke="#9CA3AF" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -266,7 +260,7 @@
                             <p class="text-sm text-gray-500">Tinggalkan komentar anda disini</p>
                         </div>
                     </div>
-                    <!-- alternate input layout for empty state (hidden by default) -->
+
                     <div class="no-comments-input hidden mt-6">
                         <input type="text" placeholder="Tulis komentar ..." class="w-full border border-gray-300 rounded-md py-3 px-4 text-sm bg-gray-50">
                         <div class="flex items-center justify-between mt-3">
@@ -275,11 +269,11 @@
                                 Kirim Komentar
                             </button>
                             <div class="space-x-3">
-                                <button class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-gray-700 bg-gray-200 hover:bg-gray-300 btn-edit">
+                                <button class="inline-flex items-center px-4 py-2 text-sm bg-gray-200 text-gray-700 btn-edit">
                                     <svg class="-ml-1 mr-2 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M13.586 3.586a2 2 0 112.828 2.828l-7 7A2 2 0 018.172 17H2v-5.172a2 2 0 01.586-1.414l7-7zM7 11a1 1 0 100 2h.01a1 1 0 100-2H7z"/></svg>
                                     Edit
                                 </button>
-                                <button class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-red-700 bg-red-100 hover:bg-red-200 btn-delete">
+                                <button class="inline-flex items-center px-4 py-2 text-sm bg-red-100 text-red-700 btn-delete">
                                     <svg class="-ml-1 mr-2 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
                                     Hapus
                                 </button>
@@ -289,33 +283,24 @@
                 </div>
 
                 <div class="flex items-center justify-between">
-                    <div class="relative w-full mr-4">
+                    <div class="relative flex-1 mr-4">
                         <input type="text" placeholder="Tulis komentar..." class="w-full border border-gray-300 rounded-md py-2 pl-3 pr-10 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-sm">
                         <button class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-blue-600">
-                            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
-                            </svg>
+                            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" /></svg>
                         </button>
                     </div>
-                    <button class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-blue-700 bg-blue-100 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 mr-2 btn-edit">
-                        <svg class="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                            <path d="M13.586 3.586a2 2 0 112.828 2.828l-7 7A2 2 0 018.172 17H2v-5.172a2 2 0 01.586-1.414l7-7zM7 11a1 1 0 100 2h.01a1 1 0 100-2H7z" />
-                        </svg>
-                        Edit
-                    </button>
-                    <button class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-red-700 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 btn-delete">
-                        <svg class="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
-                        </svg>
-                        Hapus
-                    </button>
+                    <div class="flex items-center space-x-2">
+                        <button class="inline-flex items-center px-4 py-2 text-sm bg-blue-100 text-blue-700 rounded-md">Edit</button>
+                        <button class="inline-flex items-center px-4 py-2 text-sm bg-red-100 text-red-700 rounded-md">Hapus</button>
+                    </div>
                 </div>
-            </div>
+            </article>
 
-            <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+            <!-- CARD #2 (keeps the same structure) -->
+            <article class="bg-white rounded-lg shadow-md p-6">
                 <div class="flex justify-between items-start mb-4">
                     <div class="flex items-center">
-                        <img src="https://via.placeholder.com/40" alt="Budi Santoso Avatar" class="rounded-full h-10 w-10 mr-4">
+                        <img src="https://via.placeholder.com/40" alt="Budi Santoso Avatar" class="rounded-full h-10 w-10 mr-4 object-cover">
                         <div>
                             <p class="font-semibold text-gray-900">Budi Santoso</p>
                             <p class="text-sm text-gray-500">Product Manager</p>
@@ -328,14 +313,12 @@
                 <div class="border border-gray-200 rounded-lg p-4 mb-4">
                     <div class="flex justify-between items-center mb-2">
                         <div class="flex items-center">
-                            <img src="https://via.placeholder.com/20" alt="Company Logo" class="h-5 w-5 mr-2">
+                            <img src="https://via.placeholder.com/20" alt="Company Logo" class="h-5 w-5 mr-2 object-cover">
                             <div>
                                 <p class="font-semibold text-gray-800">UI/UX Designer</p>
                                 <p class="text-sm text-gray-600">Shopee</p>
                                 <p class="text-xs text-gray-500 flex items-center">
-                                    <svg class="h-3 w-3 mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
-                                    </svg>
+                                    <svg class="h-3 w-3 mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/></svg>
                                     Bandung
                                 </p>
                             </div>
@@ -344,15 +327,11 @@
                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">Internship</span>
                             <p class="text-xs text-gray-500 mt-1">2 jam lalu</p>
                             <button class="ml-2 text-gray-400 hover:text-gray-600">
-                                <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd" d="M3 5a2 2 0 012-2h10a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V5zm10 0H7v6l2-2 2 2V5z" clip-rule="evenodd" />
-                                </svg>
+                                <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 5a2 2 0 012-2h10a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V5zm10 0H7v6l2-2 2 2V5z" clip-rule="evenodd"/></svg>
                             </button>
                         </div>
                     </div>
-                    <p class="text-sm text-gray-700 mt-2">
-                        Startup fintech yang sedang berkembang pesat mencari UI/UX Designer Intern yang kreatif dan detail-oriented. Kesempatan bagus untuk belajar langsung dari senior designer dan berkontribusi pada produk yang impact-nya besar.
-                    </p>
+                    <p class="text-sm text-gray-700 mt-2">Startup fintech yang sedang berkembang pesat mencari UI/UX Designer Intern yang kreatif dan detail-oriented. Kesempatan bagus untuk belajar langsung dari senior designer dan berkontribusi pada produk yang impact-nya besar.</p>
                 </div>
 
                 <div class="space-y-3 mb-4">
@@ -367,7 +346,7 @@
                         </div>
                         <p class="text-sm text-blue-600 hover:underline cursor-pointer">Komentar lainnya (5)</p>
                     </div>
-                    <!-- empty state (hidden by default) -->
+
                     <div class="empty-comments hidden py-10">
                         <div class="text-center text-gray-400">
                             <svg class="mx-auto mb-4" width="56" height="56" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 22s8-4.5 8-10a8 8 0 10-16 0c0 5.5 8 10 8 10z" stroke="#9CA3AF" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 11.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" stroke="#9CA3AF" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -375,7 +354,7 @@
                             <p class="text-sm text-gray-500">Tinggalkan komentar anda disini</p>
                         </div>
                     </div>
-                    <!-- alternate input layout for empty state (hidden by default) -->
+
                     <div class="no-comments-input hidden mt-6">
                         <input type="text" placeholder="Tulis komentar ..." class="w-full border border-gray-300 rounded-md py-3 px-4 text-sm bg-gray-50">
                         <div class="flex items-center justify-between mt-3">
@@ -384,11 +363,11 @@
                                 Kirim Komentar
                             </button>
                             <div class="space-x-3">
-                                <button class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-gray-700 bg-gray-200 hover:bg-gray-300 btn-edit">
+                                <button class="inline-flex items-center px-4 py-2 text-sm bg-gray-200 text-gray-700 btn-edit">
                                     <svg class="-ml-1 mr-2 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M13.586 3.586a2 2 0 112.828 2.828l-7 7A2 2 0 018.172 17H2v-5.172a2 2 0 01.586-1.414l7-7zM7 11a1 1 0 100 2h.01a1 1 0 100-2H7z"/></svg>
                                     Edit
                                 </button>
-                                <button class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-red-700 bg-red-100 hover:bg-red-200 btn-delete">
+                                <button class="inline-flex items-center px-4 py-2 text-sm bg-red-100 text-red-700 btn-delete">
                                     <svg class="-ml-1 mr-2 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
                                     Hapus
                                 </button>
@@ -397,6 +376,27 @@
                     </div>
                 </div>
 
+                <div class="flex items-center justify-between">
+                    <div class="relative flex-1 mr-4">
+                        <input type="text" placeholder="Tulis komentar..." class="w-full border border-gray-300 rounded-md py-2 pl-3 pr-10 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-sm">
+                        <button class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-blue-600">
+                            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" /></svg>
+                        </button>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <button class="inline-flex items-center px-4 py-2 text-sm bg-blue-100 text-blue-700 rounded-md">Edit</button>
+                        <button class="inline-flex items-center px-4 py-2 text-sm bg-red-100 text-red-700 rounded-md">Hapus</button>
+                    </div>
+                </div>
+            </article>
+
+        </section>
+    </main>
+
+    <!-- Delete confirmation modal -->
+    <div id="deleteConfirmModal" class="fixed inset-0 hidden items-center justify-center">
+        <div id="deleteConfirmOverlay" class="absolute inset-0 bg-black opacity-40"></div>
+        <div class="relative bg-white rounded-lg max
                 <div class="flex items-center justify-between">
                     <div class="relative w-full mr-4">
                         <input type="text" placeholder="Tulis komentar..." class="w-full border border-gray-300 rounded-md py-2 pl-3 pr-10 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-sm">
