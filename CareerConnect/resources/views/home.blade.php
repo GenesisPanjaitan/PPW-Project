@@ -4,34 +4,68 @@
 
 <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
     <div class="container">
+        
+        <!-- Logo -->
         <a class="navbar-brand fw-bold fs-4" href="{{ route('home') }}">
             <img src="{{ asset('images/logokita.png') }}" 
                  alt="CareerConnect Logo" 
                  style="height: 30px;" 
                  class="ms-2"> CareerConnect
         </a>
-
+        
+        <!-- Tombol Mobile Toggle -->
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navDashboard" aria-controls="navDashboard" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
+        
+        <!-- Menu -->
+        <div class="collapse navbar-collapse" id="navDashboard">
+            
+            <!-- Menu Tengah -->
+            <ul class="navbar-nav mx-auto">
+                <li class="nav-item mx-3">
+                    <a class="nav-link {{ Request::is('home') ? 'active fw-semibold' : '' }}" href="{{ route('home') }}">Home</a>
+                </li>
+                <li class="nav-item mx-3">
+                    <a class="nav-link {{ Request::is('recruitment*') ? 'active fw-semibold' : '' }}" href="/recruitment">Recruitment</a>
+                </li>
+                <li class="nav-item mx-3">
+                    <a class="nav-link {{ Request::is('profile*') ? 'active fw-semibold' : '' }}" href="/profile">My Profile</a>
+                </li>
+            </ul>
+            
+            <!-- Menu Kanan (Dropdown Profil) -->
+            <ul class="navbar-nav">
+                <li class="nav-item dropdown">
+                    <!-- Tombol Pemicu Dropdown -->
+                    <a class="nav-link dropdown-toggle fw-semibold" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-person-circle me-1"></i>
+                        Kevin Gultom
+                    </a>
+                    
+                    <!-- Isi Dropdown -->
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                        <li>
+                            <a class="dropdown-item" href="{{ route('favorit') }}">
+                                <i class="bi bi-bookmark-fill me-2"></i> Favorit Anda
+                            </a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <!-- Link Logout -->
+                            <a class="dropdown-item" href="{{ route('logout') }}"
+                               onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                <i class="bi bi-box-arrow-right me-2"></i> Keluar Akun
+                            </a>
+                            <!-- Form Logout (Tersembunyi) -->
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                @csrf
+                            </form>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
 
-        <ul class="navbar-nav mx-auto">
-            <li class="nav-item mx-3">
-                <a class="nav-link active fw-semibold" href="{{ route('home') }}">Home</a>
-            </li>
-            <li class="nav-item mx-3">
-                <a class="nav-link" href="/recruitment">Recruitment</a>
-            </li>
-            <li class="nav-item mx-3">
-                <a class="nav-link" href="/profile">My Profile</a>
-            </li>
-        </ul>
-
-        <div class="navbar-nav">
-            <a href="#" class="nav-link fw-semibold">
-                <i class="bi bi-person-circle me-1"></i>
-                Kevin Gultom
-            </a>
         </div>
     </div>
 </nav>
@@ -39,10 +73,15 @@
 <main class="py-4">
     <div class="container">
 
-        <div class="alert alert-welcome d-flex align-items-center">
-            <i class="bi bi-check-circle-fill me-2 fs-5"></i>
-            <div>Welcome, Anda telah berhasil login</div>
-        </div>
+        <!-- Notifikasi (Hanya muncul sekali setelah login) -->
+        @if (session('login_success'))
+            <div class="alert alert-welcome d-flex align-items-center">
+                <i class="bi bi-check-circle-fill me-2 fs-5"></i>
+                <div>
+                    {{ session('login_success') }}
+                </div>
+            </div>
+        @endif
         
         <h2 class="fw-bold mb-1">Selamat datang, Kevin Gultom 👋</h2>
         <p class="text-muted mb-4">Siap untuk mencari peluang karir hari ini?</p>
@@ -178,7 +217,15 @@
                         </div>
 
                         <hr class="my-3">
-                        <a href="#" class="btn btn-edit-profile w-100">Edit Profil</a>
+                        
+                        <!-- =======================
+                        PERUBAHAN DI SINI
+                        ======================== -->
+                        <a href="{{ url('/profile?mode=edit') }}" class="btn btn-edit-profile w-100">Edit Profil</a>
+                        <!-- =======================
+                        AKHIR PERUBAHAN
+                        ======================== -->
+
                     </div>
                 </div>
             </div>
@@ -186,6 +233,8 @@
     </div>
 </main>
 
+<!-- Script Notifikasi (Hanya jika ada session) -->
+@if (session('login_success'))
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const alertBox = document.querySelector('.alert-welcome');
@@ -201,5 +250,6 @@
         }
     });
 </script>
+@endif
 
 @endsection

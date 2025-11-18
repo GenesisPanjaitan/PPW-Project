@@ -247,7 +247,173 @@
             font-weight: 500;
             color: #333;
         }
+        .text-header-blue { 
+            color: #4F6BF0; 
+        }
+        .job-info-card {
+            background-color: #EBE9FF; 
+            border-radius: 1rem;
+            border: none;
+            color: #333;
+        }
+        .comment-bubble {
+            background-color: #F3F4F6; 
+            border-radius: 0.75rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+        .input-comment {
+            background-color: #F3F4F6;
+            border: none;
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem;
+        }
+        .input-comment:focus {
+            background-color: #fff;
+            box-shadow: 0 0 0 2px #ddd;
+        }
+        .btn-send-comment {
+            background-color: #9CA3AF;
+            color: white;
+            border-radius: 0.5rem;
+            padding: 0.5rem 1.5rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+            border: none;
+        }
+        .btn-send-comment:hover {
+            background-color: #6B7280;
+            color: white;
+        }
+        .img-building {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        <style>
+        /* Warna Judul Utama */
+        .text-recruitment-blue { color: #4F6BF0; }
+        
+        /* Input Search & Filter (Background Abu-abu muda) */
+        .bg-input-gray { background-color: #F3F4F6; border: none; color: #666; }
+        .bg-input-gray:focus { background-color: #fff; border: 1px solid #ddd; box-shadow: none; }
+
+        /* Kotak Lowongan (Ungu Muda) */
+        .job-box {
+            background-color: #EEF2FF;
+            border-radius: 1rem;
+            border: none;
+        }
+
+        /* Badge Tipe Job */
+        .badge-job-cream {
+            background-color: #FFF7E2;
+            color: #B45309;
+            font-weight: 600;
+            font-size: 0.75rem;
+            border-radius: 0.5rem;
+            padding: 4px 10px;
+        }
+
+        /* Tombol Lihat Detail */
+        .btn-detail-gray {
+            background-color: #E5E7EB;
+            color: #374151;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 6px;
+            border: none;
+        }
+
+        /* Komentar Box */
+        .comment-box {
+            background-color: #F3F4F6;
+            border-radius: 0.75rem;
+            padding: 12px;
+            margin-bottom: 10px;
+        }
+
+        /* Tombol Aksi */
+        .btn-action-gray {
+            background-color: #9CA3AF;
+            color: white;
+            font-size: 0.85rem;
+            font-weight: 500;
+            border-radius: 8px;
+            padding: 6px 16px;
+            border: none;
+        }
+        .btn-action-gray:hover { background-color: #6B7280; color: white; }
+
+        .btn-action-red {
+            background-color: #EF4444;
+            color: white;
+            font-size: 0.85rem;
+            font-weight: 500;
+            border-radius: 8px;
+            padding: 6px 16px;
+            border: none;
+        }
+        .btn-action-red:hover { background-color: #DC2626; color: white; }
+
+
+
+        .btn-upload-foto {
+            background-color: #F3F4F6;
+            border: none;
+            color: #333;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+        }
+        .btn-upload-foto:hover {
+            background-color: #E5E7EB;
+        }
+
+        /* Tombol Posting (Hitam & Bulat) */
+      .btn-posting-black {
+    background-color: #9CA3AF; /* Diubah dari #000 */
+    color: #fff;
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding: 0.6rem 2rem;
+    border-radius: 999px;
+    border: none;
+}
+.btn-posting-black:hover {
+    background-color: #6B7280; /* Diubah dari #333 */
+}
+
+/* Mengatur style kotak dropdown */
+        .navbar-nav .dropdown-menu {
+            background-color: #F8F7FF;
+            border: 1px solid #E0E0E0;
+            border-radius: 0.75rem; /* Membuatnya bulat */
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            padding: 0.5rem 0;
+        }
+        
+        /* Mengatur style item di dalam dropdown */
+        .navbar-nav .dropdown-item {
+            color: #333;
+            font-weight: 500;
+            padding: 0.6rem 1.25rem;
+        }
+        .navbar-nav .dropdown-item:hover {
+            background-color: #E5E7EB; /* Warna abu-abu saat di-hover */
+            color: #000;
+        }
+        .navbar-nav .dropdown-item i {
+            color: #6B7280; /* Warna ikon abu-abu */
+        }
     </style>
+
 </head>
 <body>
 
