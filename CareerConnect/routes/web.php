@@ -8,11 +8,6 @@ Route::get('/', [HomeController::class, 'welcome'])->name('welcome');
 // Halaman home
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
-// Halaman recruitment
-Route::get('/recruitment', function () {
-    return view('recruitment');
-})->name('recruitment');
-
 Route::get('/favorit', function () {
     return view('favorit');
 });
@@ -69,3 +64,21 @@ Route::get('/profile/academic', function () {
 Route::get('/profile/settings', function () {
     return view('profile_pengaturan'); 
 })->name('profile.settings');
+
+Route::get('/recruitment', function () {
+    return view('recruitment');
+})->name('recruitment');
+Route::get('/recruitment/detail', function () {
+    return view('recruitment_detail');
+})->name('recruitment.detail');
+
+Route::get('/favorit', function () {
+    return view('favorit');
+})->name('favorit');
+
+Route::post('/logout', function () {
+    // Di sini Anda akan menambahkan logika Auth::logout()
+    
+    // Untuk sekarang, kita redirect ke halaman login
+    return redirect()->route('login');
+})->name('logout');

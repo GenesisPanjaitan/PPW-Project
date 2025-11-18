@@ -4,16 +4,24 @@
 
     <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
         <div class="container">
+            
+            <!-- Logo -->
             <a class="navbar-brand fw-bold fs-4" href="{{ route('home') }}">
                 <img src="{{ asset('images/logokita.png') }}" 
                      alt="CareerConnect Logo" 
                      style="height: 30px;" 
                      class="ms-2"> CareerConnect
             </a>
+            
+            <!-- Tombol Mobile Toggle -->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navDashboard" aria-controls="navDashboard" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
+            
+            <!-- Menu -->
             <div class="collapse navbar-collapse" id="navDashboard">
+                
+                <!-- Menu Tengah -->
                 <ul class="navbar-nav mx-auto">
                     <li class="nav-item mx-3">
                         <a class="nav-link {{ Request::is('home') ? 'active fw-semibold' : '' }}" href="{{ route('home') }}">Home</a>
@@ -25,12 +33,39 @@
                         <a class="nav-link {{ Request::is('profile*') ? 'active fw-semibold' : '' }}" href="/profile">My Profile</a>
                     </li>
                 </ul>
-                <div class="navbar-nav">
-                    <a href="#" class="nav-link fw-semibold">
-                        <i class="bi bi-person-circle me-1"></i>
-                        Kevin Gultom
-                    </a>
-                </div>
+                
+                <!-- Menu Kanan (Dropdown Profil) -->
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <!-- Tombol Pemicu Dropdown -->
+                        <a class="nav-link dropdown-toggle fw-semibold" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-person-circle me-1"></i>
+                            Kevin Gultom
+                        </a>
+                        
+                        <!-- Isi Dropdown -->
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                            <li>
+                                <a class="dropdown-item" href="{{ route('favorit') }}">
+                                    <i class="bi bi-bookmark-fill me-2"></i> Favorit Anda
+                                </a>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <!-- Link Logout -->
+                                <a class="dropdown-item" href="{{ route('logout') }}"
+                                   onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                    <i class="bi bi-box-arrow-right me-2"></i> Keluar Akun
+                                </a>
+                                <!-- Form Logout (Tersembunyi) -->
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                    @csrf
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+
             </div>
         </div>
     </nav>

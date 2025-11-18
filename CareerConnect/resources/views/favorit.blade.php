@@ -1,149 +1,116 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Favorit Anda</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
-    <style>
-        body { background:#e6eef8; }
-        .topbar { background:linear-gradient(180deg,#fff,#f3f7fb); box-shadow:0 2px 6px rgba(0,0,0,.03); }
-        .brand { font-weight:700; }
-        .page-title { color:#3b6db4; }
-        .card-fav{
-            border-radius:14px;
-            border:1px solid #e6e9ee;
-            padding:18px;
-            position:relative;
-            display:flex;
-            gap:12px;
-            align-items:center;
-            background:#fff;
-            box-shadow:0 1px 0 rgba(0,0,0,.02);
-        }
-        .card-fav + .card-fav{ margin-top:14px; }
-        .avatar{ width:64px; height:64px; object-fit:cover; border-radius:8px; }
-        .avatar-fallback{ width:64px; height:64px; border-radius:8px; display:flex; align-items:center; justify-content:center; background:#6c757d; color:#fff; font-weight:700; }
-        .remove-btn{
-            position:absolute;
-            right:16px;
-            top:50%;
-            transform:translateY(-50%);
-            width:36px;
-            height:36px;
-            border-radius:50%;
-            background:#ff5c64;
-            color:#fff;
-            border:none;
-            display:flex;
-            align-items:center;
-            justify-content:center;
-            box-shadow:0 4px 10px rgba(255,92,100,.12);
-        }
-        .small-muted{ font-size:.85rem; color:#6c757d; }
-        .meta-line{ font-size:.9rem; color:#6b7280; }
-        .badge-custom{ background:#eef6ff; color:#1e63b8; font-weight:600; font-size:.78rem; padding:.25rem .5rem; border-radius:.5rem; }
-        a.text-decoration-none:hover{ text-decoration:underline; color:#123e78; }
-        @media (max-width:576px){
-            .remove-btn{ right:10px; top:14px; transform:none; }
-        }
-    </style>
-</head>
-<body>
-    <header class="topbar py-2">
-        <div class="container d-flex align-items-center justify-content-between">
-            <div class="d-flex align-items-center gap-3">
-                <strong class="brand h5 mb-0">CareerConnect</strong>
-                <nav class="d-none d-md-flex gap-3">
-                    <a class="text-decoration-none text-muted" href="/">Home</a>
-                    <a class="text-decoration-none text-muted" href="/recruitment">Recruitment</a>
-                    <a class="text-decoration-none text-muted" href="/profile">My Profile</a>
-                </nav>
-            </div>
-            <div class="text-muted">User</div>
-        </div>
-    </header>
+@extends('layouts.app')
 
-    <main class="container py-5">
-        <div class="text-center mb-4">
-            <h2 class="mb-1 page-title">Favorit Anda</h2>
-            <div class="small text-muted">Pilihan Terbaik Menuju Karier Impian</div>
-        </div>
+@section('content')
 
-        <div class="row justify-content-center">
-            <div class="col-lg-8">
-
-                {{-- if you want search/filters, re-enable below --}}
-                {{-- <div class="card mb-4"><div class="card-body">...filters...</div></div> --}}
-
-                @if(isset($favorites) && $favorites->count())
-                    <div class="d-flex flex-column">
-                        @foreach($favorites as $fav)
-                            <div class="card-fav">
-                                <div class="d-flex align-items-center">
-                                    @if(!empty($fav->image))
-                                        <img src="{{ $fav->image }}" alt="" class="avatar">
-                                    @else
-                                        <div class="avatar-fallback">
-                                            {{ strtoupper(substr($fav->title ?? '', 0, 1)) }}
-                                        </div>
-                                    @endif
-                                </div>
-
-                                <div class="flex-grow-1">
-                                    <h5 class="mb-1">
-                                        @if($fav->type === 'job')
-                                            <a href="{{ url('/jobs/'.$fav->slug) }}" class="text-decoration-none">{{ $fav->title }}</a>
-                                        @else
-                                            <a href="{{ url('/companies/'.$fav->id) }}" class="text-decoration-none">{{ $fav->title }}</a>
-                                        @endif
-                                    </h5>
-
-                                    <div class="d-flex gap-2 align-items-center mb-1">
-                                        @if(!empty($fav->company))
-                                            <div class="meta-line">{{ $fav->company }}</div>
-                                        @elseif(!empty($fav->category))
-                                            <div class="meta-line">{{ $fav->category }}</div>
-                                        @endif
-                                        <div class="small-muted">· {{ $fav->location ?? '—' }}</div>
-                                    </div>
-
-                                    <div class="d-flex gap-2 align-items-center">
-                                        @if(!empty($fav->salary))
-                                            <span class="badge-custom">Salary: {{ $fav->salary }}</span>
-                                        @endif
-                                        <div class="small-muted">Saved {{ ($fav->saved_at ?? $fav->created_at)->diffForHumans() }}</div>
-                                    </div>
-                                </div>
-
-                                <form action="{{ route('favorites.destroy', $fav->id) }}" method="POST" onsubmit="return confirm('Hapus dari favorit?')" style="display:inline;">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
+        <div class="container">
+            
+            <!-- Logo -->
+            <a class="navbar-brand fw-bold fs-4" href="{{ route('home') }}">
+                <img src="{{ asset('images/logokita.png') }}" 
+                     alt="CareerConnect Logo" 
+                     style="height: 30px;" 
+                     class="ms-2"> CareerConnect
+            </a>
+            
+            <!-- Tombol Mobile Toggle -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navDashboard" aria-controls="navDashboard" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <!-- Menu -->
+            <div class="collapse navbar-collapse" id="navDashboard">
+                
+                <!-- Menu Tengah -->
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item mx-3">
+                        <a class="nav-link {{ Request::is('home') ? 'active fw-semibold' : '' }}" href="{{ route('home') }}">Home</a>
+                    </li>
+                    <li class="nav-item mx-3">
+                        <a class="nav-link {{ Request::is('recruitment*') ? 'active fw-semibold' : '' }}" href="/recruitment">Recruitment</a>
+                    </li>
+                    <li class="nav-item mx-3">
+                        <a class="nav-link {{ Request::is('profile*') ? 'active fw-semibold' : '' }}" href="/profile">My Profile</a>
+                    </li>
+                </ul>
+                
+                <!-- Menu Kanan (Dropdown Profil) -->
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <!-- Tombol Pemicu Dropdown -->
+                        <a class="nav-link dropdown-toggle fw-semibold" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-person-circle me-1"></i>
+                            Kevin Gultom
+                        </a>
+                        
+                        <!-- Isi Dropdown -->
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                            <li>
+                                <a class="dropdown-item" href="{{ route('favorit') }}">
+                                    <i class="bi bi-bookmark-fill me-2"></i> Favorit Anda
+                                </a>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <!-- Link Logout -->
+                                <a class="dropdown-item" href="{{ route('logout') }}"
+                                   onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                    <i class="bi bi-box-arrow-right me-2"></i> Keluar Akun
+                                </a>
+                                <!-- Form Logout (Tersembunyi) -->
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                     @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="remove-btn" title="Remove">
-                                        <i class="bi bi-trash"></i>
-                                    </button>
                                 </form>
-                            </div>
-                        @endforeach
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+    </nav>
+
+
+    <!-- =======================
+    Konten Halaman Favorit
+    ======================== -->
+    <main class="py-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+
+                    <!-- Judul Halaman -->
+                    <div class="text-center mb-5">
+                        <h2 class="fw-bold mb-1 text-recruitment-blue">Favorit Anda</h2>
+                        <p class="text-muted small">Pilihan Terbaik Menuju Karier Impian</p>
                     </div>
 
-                    <div class="mt-4">
-                        {{ $favorites->withQueryString()->links() }}
-                    </div>
-                @else
-                    <div class="card text-center p-4">
-                        <div class="card-body">
-                            <p class="mb-0">Anda belum memiliki favorit.</p>
-                            <a href="/jobs" class="btn btn-primary mt-3">Jelajahi Lowongan</a>
+                    <!-- 
+                    ========================
+                    PERUBAHAN DI SINI:
+                    Semua kartu dummy dihapus dan diganti dengan 
+                    tampilan "Kosong" (Empty State).
+                    ========================
+                    -->
+                    <div class="card shadow-sm border-0" style="border-radius: 1rem;">
+                        <div class="card-body p-5 text-center">
+                            <i class="bi bi-bookmark-x fs-1 text-muted"></i>
+                            <h5 class="mt-3 fw-bold text-dark">Anda belum memiliki favorit</h5>
+                            <p class="text-muted">Klik ikon bookmark pada lowongan untuk menyimpannya di sini.</p>
+                            
+                            <!-- 
+                              Tombol ini menggunakan style .btn-masuk (biru) 
+                              dari app.blade.php Anda agar konsisten 
+                            -->
+                            <a href="{{ route('recruitment') }}" class="btn btn-masuk text-white mt-3 px-4 py-2 fw-semibold">
+                                Jelajahi Lowongan
+                            </a>
                         </div>
                     </div>
-                @endif
 
+                </div>
             </div>
         </div>
     </main>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+@endsection
