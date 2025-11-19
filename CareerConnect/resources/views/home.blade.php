@@ -18,13 +18,9 @@
             <ul class="navbar-nav">
                 <li class="nav-item dropdown">
                     <!-- Tombol Pemicu Dropdown -->
-                    <a class="nav-link dropdown-toggle fw-semibold" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle fw-semibold" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="bi bi-person-circle me-1"></i>
-                        @auth
-                            {{ auth()->user()->name }}
-                        @else
-                            Kevin Gultom
-                        @endauth
+                        {{ optional(auth()->user())->name ?? 'Kevin Gultom' }}
                     </a>
                     
                     <!-- Isi Dropdown -->
@@ -77,7 +73,7 @@
                         <!-- Tombol Pemicu Dropdown -->
                         <a class="nav-link dropdown-toggle fw-semibold" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="bi bi-person-circle me-1"></i>
-                            Kevin Gultom
+                            {{ optional(auth()->user())->name ?? 'Kevin Gultom' }}
                         </a>
                         
                         <!-- Isi Dropdown -->
@@ -143,7 +139,7 @@
             </div>
         @endif
         
-        <h2 class="fw-bold mb-1">Selamat datang, @auth {{ auth()->user()->name }} @else Kevin Gultom @endauth 👋</h2>
+        <h2 class="fw-bold mb-1">Selamat datang, {{ optional(auth()->user())->name ?? 'Kevin Gultom' }} 👋</h2>
         <p class="text-muted mb-4">Siap untuk mencari peluang karir hari ini?</p>
 
         <div class="row g-4">
