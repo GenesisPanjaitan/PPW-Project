@@ -43,7 +43,7 @@
                             @auth
                                 {{ auth()->user()->name }}
                             @else
-                                Kevin Gultom
+                                {{ optional(auth()->user())->name ?? 'Kevin Gultom' }}
                             @endauth
                         </a>
                         
