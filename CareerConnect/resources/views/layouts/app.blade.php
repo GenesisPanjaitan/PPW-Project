@@ -17,11 +17,64 @@
         .bg-del-dark-blue {
             background-color: var(--del-dark-blue);
         }
-        .hero-section {
-            border-bottom-left-radius: 60px;
-            border-bottom-right-radius: 60px;
-            overflow: hidden;
+        
+        /* --- [UPDATE] Style Hero Section Baru (Slideshow Card) --- */
+        .hero-wrapper {
+            padding: 1.5rem 0;
+            background-color: #F8F7FF; /* Menyesuaikan warna body */
         }
+
+        .hero-section {
+            position: relative;
+            height: 500px;
+            width: 100%;
+            overflow: hidden;
+            border-radius: 20px; /* Membuat sudut membulat penuh */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        /* Background Slideshow Images */
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            z-index: 0;
+        }
+        
+        .hero-bg.active {
+            opacity: 1;
+        }
+
+        /* Kotak Gelap di Tengah (Overlay) */
+        .hero-card-overlay {
+            position: relative;
+            z-index: 2;
+            background-color: rgba(23, 23, 23, 0.85);
+            border-radius: 20px;
+            padding: 3rem 2rem;
+            max-width: 800px;
+            width: 90%;
+            text-align: center;
+            color: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            backdrop-filter: blur(2px);
+        }
+
+        .text-highlight {
+            color: #0d6efd; /* Biru Bootstrap */
+            font-weight: 800;
+        }
+        /* --- [END UPDATE] --- */
+
         .footer-logo {
             height: 80px;
         }
@@ -176,6 +229,11 @@
             background-color: #E4F1FF; 
             border-radius: 0.75rem;
             color: #052C65;
+            transition: transform 0.2s ease, box-shadow 0.2s ease; /* Animasi hover */
+        }
+        .job-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
         }
         .btn-bookmark {
             color: #052C65;
@@ -294,7 +352,6 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
-        <style>
         /* Warna Judul Utama */
         .text-recruitment-blue { color: #4F6BF0; }
         
@@ -361,8 +418,6 @@
         }
         .btn-action-red:hover { background-color: #DC2626; color: white; }
 
-
-
         .btn-upload-foto {
             background-color: #F3F4F6;
             border: none;
@@ -377,24 +432,24 @@
         }
 
         /* Tombol Posting (Hitam & Bulat) */
-      .btn-posting-black {
-    background-color: #9CA3AF; /* Diubah dari #000 */
-    color: #fff;
-    font-weight: 600;
-    font-size: 0.9rem;
-    padding: 0.6rem 2rem;
-    border-radius: 999px;
-    border: none;
-}
-.btn-posting-black:hover {
-    background-color: #6B7280; /* Diubah dari #333 */
-}
+        .btn-posting-black {
+            background-color: #9CA3AF; 
+            color: #fff;
+            font-weight: 600;
+            font-size: 0.9rem;
+            padding: 0.6rem 2rem;
+            border-radius: 999px;
+            border: none;
+        }
+        .btn-posting-black:hover {
+            background-color: #6B7280; 
+        }
 
-/* Mengatur style kotak dropdown */
+        /* Mengatur style kotak dropdown */
         .navbar-nav .dropdown-menu {
             background-color: #F8F7FF;
             border: 1px solid #E0E0E0;
-            border-radius: 0.75rem; /* Membuatnya bulat */
+            border-radius: 0.75rem; 
             box-shadow: 0 4px 12px rgba(0,0,0,0.05);
             padding: 0.5rem 0;
         }
@@ -406,12 +461,35 @@
             padding: 0.6rem 1.25rem;
         }
         .navbar-nav .dropdown-item:hover {
-            background-color: #E5E7EB; /* Warna abu-abu saat di-hover */
+            background-color: #E5E7EB; 
             color: #000;
         }
         .navbar-nav .dropdown-item i {
-            color: #6B7280; /* Warna ikon abu-abu */
+            color: #6B7280; 
         }
+
+        btn-detail-gray {
+    background-color: #E5E7EB;
+    color: #374151;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 6px 16px; /* Sedikit diperlebar padding-nya */
+    border-radius: 6px;
+    border: none;
+    text-decoration: none; /* Hapus garis bawah default */
+    display: inline-block;
+    transition: all 0.2s ease-in-out; /* Efek transisi halus */
+}
+
+/* Efek Hover (Saat mouse mengarah) */
+.btn-detail-gray:hover {
+    background-color: #d1d5db; /* Warna background jadi lebih gelap sedikit */
+    color: #000; /* Warna teks jadi hitam */
+    transform: translateY(-1px); /* Efek naik sedikit */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Tambah bayangan tipis */
+    cursor: pointer; /* Ubah kursor jadi jari tunjuk */
+}
+
     </style>
 
 </head>

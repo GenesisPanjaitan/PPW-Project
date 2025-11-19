@@ -101,18 +101,19 @@
 
                     <!-- Search Bar (Diperpendek) -->
                     <div class="col-md-4">
-                        <label class="fw-bold text-dark small mb-1">Cari:</label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-input-gray border-0 ps-3" style="border-radius: 8px 0 0 8px;">
-                                <i class="bi bi-search text-muted"></i>
-                            </span>
-                            <input type="text" class="form-control bg-input-gray border-0 py-2" placeholder="Cari lowongan..." style="border-radius: 0 8px 8px 0;">
-                        </div>
-                    </div>
+    <label class="fw-bold text-dark small mb-1">Cari:</label>
+    <div class="input-group">
+        <input type="text" class="form-control bg-input-gray border-0 py-2 ps-3" placeholder="Cari lowongan..." style="border-radius: 8px 0 0 8px;">
+        
+        <button class="btn btn-primary border-0 px-3" type="button" style="border-radius: 0 8px 8px 0; background-color: #4F6BF0;">
+            <i class="bi bi-search text-white"></i>
+        </button>
+    </div>
+</div>
 
                     <!-- Tombol Posting -->
                     <div class="col-md-5 text-md-end">
-                        <button id="openPostingBtn" class="btn btn-black text-white fw-semibold px-4" style="background-color: #000; border-radius: 8px;">
+                        <button id="openPostingBtn" class="btn btn-black text-white fw-semibold px-2" style="background-color: #000; border-radius: 8px;">
                             <i class="bi bi-plus-lg me-1"></i> Posting Lowongan
                         </button>
                     </div>
@@ -342,9 +343,7 @@
         </div>
     </div>
 
-    <!-- ========================================== -->
-    <!-- JAVASCRIPT (DIPERBARUI) -->
-    <!-- ========================================== -->
+ 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Logic Modal Posting

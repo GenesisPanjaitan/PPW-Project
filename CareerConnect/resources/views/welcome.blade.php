@@ -70,9 +70,29 @@
                     </li>
                 </ul>
 
-            </div>
-        </div>
-    </nav>
+ <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm navbar-section">
+    <div class="container">
+        
+       <a class="navbar-brand fw-bold fs-4" href="/">
+           <img src="{{ asset('images/logokita.png') }}" 
+                alt="CareerConnect Logo" 
+                style="height: 30px;" 
+                class="ms-2"> CareerConnect
+       </a>
+
+       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+           <span class="navbar-toggler-icon"></span>
+       </button>
+       
+       <div class="collapse navbar-collapse" id="navbarNav">
+           <div class="navbar-nav ms-auto">
+               <a href="{{ route('login') }}" class="btn btn-light btn-sm px-4 py-2 me-2 mb-2 mb-lg-0 rounded-pill fw-semibold">Login</a>
+               
+               <a href="{{ route('register') }}" class="btn btn-dark btn-sm px-4 py-2 rounded-pill fw-semibold">Register</a>
+           </div>
+       </div>
+    </div>
+</nav>
 
     <main>
 
