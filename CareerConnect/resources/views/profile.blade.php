@@ -40,7 +40,11 @@
                         <!-- Tombol Pemicu Dropdown -->
                         <a class="nav-link dropdown-toggle fw-semibold" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="bi bi-person-circle me-1"></i>
-                            Kevin Gultom
+                            @auth
+                                {{ auth()->user()->name }}
+                            @else
+                                Kevin Gultom
+                            @endauth
                         </a>
                         
                         <!-- Isi Dropdown -->
@@ -126,7 +130,7 @@
                                 <h5 class="fw-bold mb-1">Informasi Personal</h5>
                                 <p class="text-muted small mb-0">Informasi dasar tentang diri Anda</p>
                             </div>
-                            <span class="badge bg-primary rounded-pill fw-semibold" style="font-size: 0.8rem;">Mahasiswa</span>
+                            <span class="badge bg-primary rounded-pill fw-semibold" style="font-size: 0.8rem;">{{ ucfirst(auth()->user()->role ?? 'Mahasiswa') }}</span>
                         </div>
 
                         <div class="row g-3">
@@ -134,11 +138,11 @@
                             <div class="col-md-6">
                                 <label class="form-label-custom">Nama Lengkap</label>
                                 @if(request('mode') == 'edit')
-                                    <input type="text" class="form-control form-control-custom" name="nama_lengkap" value="Kevin Gultom">
+                                    <input type="text" class="form-control form-control-custom" name="nama_lengkap" value="{{ old('nama_lengkap', auth()->user()->name ?? '') }}">
                                 @else
                                     <div class="form-control-custom d-flex align-items-center">
                                         <i class="bi bi-person me-2 text-muted"></i>
-                                        <span class="fw-medium">Kevin Gultom</span>
+                                        <span class="fw-medium">{{ auth()->user()->name ?? 'Kevin Gultom' }}</span>
                                     </div>
                                 @endif
                             </div>
@@ -146,11 +150,11 @@
                             <div class="col-md-6">
                                 <label class="form-label-custom">Email</label>
                                 @if(request('mode') == 'edit')
-                                    <input type="email" class="form-control form-control-custom" name="email" value="kevingultom@gmail.com">
+                                    <input type="email" class="form-control form-control-custom" name="email" value="{{ old('email', auth()->user()->email ?? '') }}">
                                 @else
                                     <div class="form-control-custom d-flex align-items-center">
                                         <i class="bi bi-envelope me-2 text-muted"></i>
-                                        <span class="fw-medium">kevingultom@gmail.com</span>
+                                        <span class="fw-medium">{{ auth()->user()->email ?? 'kevingultom@gmail.com' }}</span>
                                     </div>
                                 @endif
                             </div>
@@ -158,11 +162,11 @@
                             <div class="col-md-6">
                                 <label class="form-label-custom">NIM</label>
                                 @if(request('mode') == 'edit')
-                                    <input type="text" class="form-control form-control-custom" name="nim" value="12S23001">
+                                    <input type="text" class="form-control form-control-custom" name="nim" value="{{ old('nim', auth()->user()->nim ?? '') }}">
                                 @else
                                     <div class="form-control-custom d-flex align-items-center">
                                         <i class="bi bi-person-vcard me-2 text-muted"></i>
-                                        <span class="fw-medium">12S23001</span>
+                                        <span class="fw-medium">{{ auth()->user()->nim ?? '12S23001' }}</span>
                                     </div>
                                 @endif
                             </div>
@@ -170,11 +174,11 @@
                             <div class="col-md-6">
                                 <label class="form-label-custom">Kontak</label>
                                 @if(request('mode') == 'edit')
-                                    <input type="text" class="form-control form-control-custom" name="kontak" value="+62 811 2233 4455">
+                                    <input type="text" class="form-control form-control-custom" name="kontak" value="{{ old('kontak', auth()->user()->contact ?? '') }}">
                                 @else
                                     <div class="form-control-custom d-flex align-items-center">
                                         <i class="bi bi-telephone me-2 text-muted"></i>
-                                        <span class="fw-medium">+62 811 2233 4455</span>
+                                        <span class="fw-medium">{{ auth()->user()->contact ?? '+62 811 2233 4455' }}</span>
                                     </div>
                                 @endif
                             </div>
