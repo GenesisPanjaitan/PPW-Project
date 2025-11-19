@@ -40,7 +40,11 @@
                         <!-- Tombol Pemicu Dropdown -->
                         <a class="nav-link dropdown-toggle fw-semibold" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="bi bi-person-circle me-1"></i>
-                            Kevin Gultom
+                            @auth
+                                {{ auth()->user()->name }}
+                            @else
+                                Kevin Gultom
+                            @endauth
                         </a>
                         
                         <!-- Isi Dropdown -->

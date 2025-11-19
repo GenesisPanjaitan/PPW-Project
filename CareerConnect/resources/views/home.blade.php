@@ -14,6 +14,42 @@
                      class="ms-2"> CareerConnect
             </a>
             
+            <!-- Menu Kanan (Dropdown Profil) -->
+            <ul class="navbar-nav">
+                <li class="nav-item dropdown">
+                    <!-- Tombol Pemicu Dropdown -->
+                    <a class="nav-link dropdown-toggle fw-semibold" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-person-circle me-1"></i>
+                        @auth
+                            {{ auth()->user()->name }}
+                        @else
+                            Kevin Gultom
+                        @endauth
+                    </a>
+                    
+                    <!-- Isi Dropdown -->
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                        <li>
+                            <a class="dropdown-item" href="{{ route('favorit') }}">
+                                <i class="bi bi-bookmark-fill me-2"></i> Favorit Anda
+                            </a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <!-- Link Logout -->
+                            <a class="dropdown-item" href="{{ route('logout') }}"
+                               onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                <i class="bi bi-box-arrow-right me-2"></i> Keluar Akun
+                            </a>
+                            <!-- Form Logout (Tersembunyi) -->
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                @csrf
+                            </form>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
             <!-- Tombol Mobile Toggle -->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navDashboard" aria-controls="navDashboard" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -71,7 +107,6 @@
         </div>
     </nav>
 
-
 <main class="pb-5">
     
     {{-- Hero Section --}}
@@ -108,6 +143,9 @@
             </div>
         @endif
         
+        <h2 class="fw-bold mb-1">Selamat datang, @auth {{ auth()->user()->name }} @else Kevin Gultom @endauth 👋</h2>
+        <p class="text-muted mb-4">Siap untuk mencari peluang karir hari ini?</p>
+
         <div class="row g-4">
             <div class="col-lg-8">
                 <div class="card shadow-sm border-0 mb-4" style="border-radius: 1rem;">
