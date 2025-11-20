@@ -111,11 +111,19 @@
     </div>
 </div>
 
-                    <!-- Tombol Posting -->
+                    <!-- Tombol Posting (hanya untuk alumni) -->
                     <div class="col-md-5 text-md-end">
-                        <button id="openPostingBtn" class="btn btn-black text-white fw-semibold px-2" style="background-color: #000; border-radius: 8px;">
-                            <i class="bi bi-plus-lg me-1"></i> Posting Lowongan
-                        </button>
+                        @auth
+                            @if(auth()->user()->role === 'alumni' || auth()->user()->role === 'admin')
+                                <button id="openPostingBtn" class="btn btn-black text-white fw-semibold px-2" style="background-color: #000; border-radius: 8px;">
+                                    <i class="bi bi-plus-lg me-1"></i> Posting Lowongan
+                                </button>
+                            @endif
+                        @else
+                            <a href="{{ route('login') }}" class="btn btn-black text-white fw-semibold px-2" style="background-color: #000; border-radius: 8px;">
+                                <i class="bi bi-plus-lg me-1"></i> Login untuk Posting
+                            </a>
+                        @endauth
                     </div>
                 </div>
 
@@ -134,99 +142,98 @@
             </div>
 
             <!-- =======================
-            DAFTAR POSTINGAN (Card Utama)
+            DAFTAR POSTINGAN (Card Utama) - Render from DB
             ======================== -->
-            <div class="card shadow-sm border-1 mb-5" style="border-radius: 1.5rem; border-color: #eee;">
-                <div class="card-body p-4">
-                    
-                    <!-- 1. Header User -->
-                    <div class="d-flex justify-content-between align-items-start mb-3">
-                        <div class="d-flex align-items-center">
-                            <div class="me-3">
-                                <i class="bi bi-person-circle fs-1 text-dark"></i> 
-                            </div>
-                            <div>
-                                <h6 class="fw-bold mb-0 text-dark">Sarah Putri</h6>
-                                <p class="text-muted small mb-0">Senior Software Engineer</p>
-                                <p class="text-muted small mb-0" style="font-size: 0.75rem;">IT DEL - Teknik Informatika 2019</p>
-                            </div>
-                        </div>
-                        <a href="{{ route('recruitment.detail') }}" class="btn-detail-gray text-decoration-none">Lihat Detail</a>
-                    </div>
+            <div class="mb-4">
+                @if(session('success'))
+                    <div class="alert alert-success">{{ session('success') }}</div>
+                @endif
+                @if(session('error'))
+                    <div class="alert alert-danger">{{ session('error') }}</div>
+                @endif
 
-                    <!-- 2. Kotak Lowongan (Ungu) -->
-                    <div class="job-box p-3 mb-4">
-                        <div class="d-flex justify-content-between align-items-start">
-                            <div class="d-flex align-items-center">
-                                <div class="me-3">
-                                    <i class="bi bi-building fs-2 text-dark"></i>
-                                </div>
-                                <div>
-                                    <div class="d-flex align-items-center gap-2 mb-1">
-                                        <h6 class="fw-bold mb-0 text-dark">Frontend Developer</h6>
-                                        <span class="badge-job-cream">Full-time</span>
+                @forelse($recruitments ?? [] as $r)
+                    <div class="card shadow-sm border-1 mb-4" style="border-radius: 1.5rem; border-color: #eee;">
+                        <div class="card-body p-4">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <div class="d-flex align-items-center">
+                                    <div class="me-3">
+                                        <i class="bi bi-person-circle fs-1 text-dark"></i>
                                     </div>
-                                    <p class="small text-dark mb-0 fw-semibold">JW Marriott</p>
-                                    <p class="small text-muted mb-0"><i class="bi bi-geo-alt me-1"></i> Medan</p>
+                                    <div>
+                                        <h6 class="fw-bold mb-0 text-dark">{{ $r->author ?? 'Anon' }}</h6>
+                                        <p class="text-muted small mb-0">{{ $r->jobtype ?? '' }}</p>
+                                    </div>
+                                </div>
+                                <a href="{{ route('recruitment.detail', ['id' => $r->id]) }}" class="btn-detail-gray text-decoration-none">Lihat Detail</a>
+                            </div>
+
+                            <div class="job-box p-3 mb-4">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div class="d-flex align-items-center">
+                                        <div class="me-3">
+                                            <i class="bi bi-building fs-2 text-dark"></i>
+                                        </div>
+                                        <div>
+                                            <div class="d-flex align-items-center gap-2 mb-1">
+                                                <h6 class="fw-bold mb-0 text-dark">{{ $r->position }}</h6>
+                                                <span class="badge-job-cream">{{ $r->jobtype ?? '—' }}</span>
+                                            </div>
+                                            <p class="small text-dark mb-0 fw-semibold">{{ $r->company_name }}</p>
+                                            <p class="small text-muted mb-0"><i class="bi bi-geo-alt me-1"></i> {{ $r->location }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-end">
+                                        <p class="text-muted small mb-2" style="font-size: 0.75rem;">{{ 
+                                            \Carbon\Carbon::parse($r->date)->diffForHumans() }}
+                                        </p>
+                                        <button class="btn btn-light btn-sm rounded-circle shadow-sm border">
+                                            <i class="bi bi-bookmark"></i>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="text-end">
-                                <p class="text-muted small mb-2" style="font-size: 0.75rem;">2 jam lalu</p>
-                                <button class="btn btn-light btn-sm rounded-circle shadow-sm border">
-                                    <i class="bi bi-bookmark"></i>
-                                </button>
+
+                            <p class="text-muted small mb-4" style="line-height: 1.6;">{{ \Illuminate\Support\Str::limit($r->description, 300) }}</p>
+
+                            <hr class="text-muted opacity-25 mb-4">
+
+                            <!-- Placeholder comments area (implement comment relations later) -->
+                            <div class="mb-4">
+                                <div class="comment-box mb-2">
+                                    <div class="d-flex justify-content-between">
+                                        <span class="fw-bold small text-dark">Ahmad Fauzi</span>
+                                        <span class="text-muted small" style="font-size: 0.7rem;">1 jam lalu</span>
+                                    </div>
+                                    <p class="small text-dark mb-0 mt-1">Wah opportunity bagus nih! Requirements-nya cocok sama background saya. Thanks for sharing kak!</p>
+                                </div>
+
+                                <div class="comment-box">
+                                    <div class="d-flex justify-content-between">
+                                        <span class="fw-bold small text-dark">Maya Sari Sibuea</span>
+                                        <span class="text-muted small" style="font-size: 0.7rem;">2 jam lalu</span>
+                                    </div>
+                                    <p class="small text-dark mb-0 mt-1">Company culture-nya gimana kak? Apakah beginner-friendly untuk fresh graduate?</p>
+                                </div>
+                            </div>
+
+                            <div class="mt-3">
+                                <form method="POST" action="{{ route('recruitment.comment', ['id' => $r->id]) }}">
+                                    @csrf
+                                    <div class="input-group mb-3">
+                                        <input type="text" name="comment" class="form-control bg-input-gray" placeholder="Tulis komentar..." style="border-radius: 8px; padding: 10px;">
+                                        <button class="btn btn-secondary btn-sm fw-semibold px-3" type="submit" style="background-color: #9CA3AF; border:none; border-radius: 6px;">
+                                            <i class="bi bi-send-fill me-1"></i> Kirim
+                                        </button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
-
-                    <!-- 3. Deskripsi Singkat -->
-                    <p class="text-muted small mb-4" style="line-height: 1.6;">
-                        Kami sedang mencari Frontend Developer yang passionate untuk bergabung dengan tim engineering kami. Kamu akan bekerja dengan teknologi modern seperti React, TypeScript, dan Next.js untuk membangun produk yang digunakan oleh jutaan pengguna.
-                    </p>
-
-                    <hr class="text-muted opacity-25 mb-4">
-
-                    <!-- 4. List Komentar -->
-                    <div class="mb-4">
-                        <div class="comment-box">
-                            <div class="d-flex justify-content-between">
-                                <span class="fw-bold small text-dark">Ahmad Fauzi</span>
-                                <span class="text-muted small" style="font-size: 0.7rem;">1 jam lalu</span>
-                            </div>
-                            <p class="small text-dark mb-0 mt-1">Wah opportunity bagus nih! Requirements-nya cocok sama background saya. Thanks for sharing kak Sarah!</p>
-                        </div>
-
-                        <div class="comment-box">
-                            <div class="d-flex justify-content-between">
-                                <span class="fw-bold small text-dark">Maya Sari Sibuea</span>
-                                <span class="text-muted small" style="font-size: 0.7rem;">2 jam lalu</span>
-                            </div>
-                            <p class="small text-dark mb-0 mt-1">Company culture-nya gimana kak? Apakah beginner-friendly untuk fresh graduate?</p>
-                        </div>
-                    </div>
-
-                    <!-- 5. Input Komentar & Tombol Aksi -->
-                    <div class="mt-3">
-                        <input type="text" class="form-control bg-input-gray mb-3" placeholder="Tulis komentar..." style="border-radius: 8px; padding: 10px;">
-                        
-                        <div class="d-flex justify-content-between align-items-center">
-                            <button class="btn btn-secondary btn-sm fw-semibold px-3" style="background-color: #9CA3AF; border:none; border-radius: 6px;">
-                                <i class="bi bi-send-fill me-1"></i> Kirim Komentar
-                            </button>
-                            <div class="d-flex gap-2">
-                                <button class="btn-action-gray btn-edit">
-                                    <i class="bi bi-pencil-fill me-1"></i> Edit
-                                </button>
-                                <button class="btn-action-red btn-delete">
-                                    <i class="bi bi-trash-fill me-1"></i> Hapus
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
+                @empty
+                    <div class="alert alert-info">Belum ada postingan lowongan.</div>
+                @endforelse
             </div>
-            <!-- End Card -->
 
         </div>
     </main>
@@ -247,7 +254,8 @@
                     <h4 class="fw-bold mb-1">Posting Lowongan Baru</h4>
                     <p class="text-muted small mb-4">Bagikan informasi lowongan di perusahaan Anda kepada adik-adik mahasiswa</p>
 
-                    <form id="postingForm">
+                    <form id="postingForm" method="POST" action="{{ route('recruitment.store') }}" enctype="multipart/form-data">
+                        @csrf
                         <div class="row g-3">
                             
                             <!-- Nama Perusahaan -->
@@ -321,7 +329,7 @@
                         
                         <!-- Tombol Submit -->
                         <div class="text-center mt-4">
-                            <button type="button" id="submitPosting" class="btn btn-posting-black">Posting</button>
+                            <button type="submit" id="submitPosting" class="btn btn-posting-black">Posting</button>
                         </div>
                     </form>
                 </div>

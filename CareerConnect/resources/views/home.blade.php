@@ -205,29 +205,35 @@
                         <h5 class="fw-bold mb-1">Lowongan Terbaru</h5>
                         <p class="text-muted small mb-3">Temukan Kesempatan Baru Hari Ini</p>
 
-                        <div class="card job-card mb-3 border-0 bg-light">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between align-items-start">
-                                    <div class="d-flex">
-                                        <div class="me-3 d-flex align-items-center justify-content-center bg-white rounded shadow-sm" style="width:50px; height:50px;">
-                                           <i class="bi bi-building fs-4 text-danger"></i>
+                        @if(!empty($latestRecruitments) && $latestRecruitments->count())
+                            @foreach($latestRecruitments as $r)
+                                <div class="card job-card mb-3 border-0 bg-light">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-start">
+                                            <div class="d-flex">
+                                                <div class="me-3 d-flex align-items-center justify-content-center bg-white rounded shadow-sm" style="width:50px; height:50px;">
+                                                   <i class="bi bi-building fs-4 text-danger"></i>
+                                                </div>
+                                                <div>
+                                                    <h6 class="fw-bold mb-0">{{ $r->position }}</h6>
+                                                    <p class="small mb-1 text-dark">{{ $r->company_name }}</p>
+                                                    <p class="small text-muted mb-0">
+                                                        <i class="bi bi-geo-alt me-1"></i> {{ $r->location }} 
+                                                        <i class="bi bi-clock ms-2 me-1"></i> {{ \Carbon\Carbon::parse($r->date)->diffForHumans() }}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <button class="btn btn-sm btn-outline-secondary rounded-circle"><i class="bi bi-bookmark"></i></button>
                                         </div>
-                                        <div>
-                                            <h6 class="fw-bold mb-0">Data Analyst</h6>
-                                            <p class="small mb-1 text-dark">Telkom Indonesia</p>
-                                            <p class="small text-muted mb-0">
-                                                <i class="bi bi-geo-alt me-1"></i> Jakarta 
-                                                <i class="bi bi-clock ms-2 me-1"></i> 1 hari lalu
-                                            </p>
+                                        <div class="mt-3">
+                                            <span class="badge bg-success bg-opacity-10 text-success border border-success rounded-pill px-3">{{ $r->jobtype ?? 'Full-time' }}</span>
                                         </div>
                                     </div>
-                                    <button class="btn btn-sm btn-outline-secondary rounded-circle"><i class="bi bi-bookmark"></i></button>
                                 </div>
-                                <div class="mt-3">
-                                    <span class="badge bg-success bg-opacity-10 text-success border border-success rounded-pill px-3">Full-time</span>
-                                </div>
-                            </div>
-                        </div>
+                            @endforeach
+                        @else
+                            <div class="alert alert-info">Belum ada lowongan terbaru.</div>
+                        @endif
 
                     </div>
                 </div>

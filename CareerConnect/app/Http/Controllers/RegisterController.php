@@ -34,6 +34,9 @@ class RegisterController extends Controller
             'class' => 'nullable|string|max:100',
         ]);
 
+        // determine role (default mahasiswa)
+        $role = $request->input('role', 'mahasiswa');
+
         $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
@@ -45,7 +48,7 @@ class RegisterController extends Controller
             'interest' => null,
             'field' => null,
             'contact' => null,
-            'role' => 'mahasiswa',
+            'role' => $role,
         ]);
 
         return redirect()->route('login')->with('success', 'Registrasi berhasil. Silakan masuk.');
