@@ -13,38 +13,6 @@
                      style="height: 30px;" 
                      class="ms-2"> CareerConnect
             </a>
-            
-            <!-- Menu Kanan (Dropdown Profil) -->
-            <ul class="navbar-nav">
-                <li class="nav-item dropdown">
-                    <!-- Tombol Pemicu Dropdown -->
-                        <a class="nav-link dropdown-toggle fw-semibold" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="bi bi-person-circle me-1"></i>
-                        {{ optional(auth()->user())->name ?? 'Kevin Gultom' }}
-                    </a>
-                    
-                    <!-- Isi Dropdown -->
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                        <li>
-                            <a class="dropdown-item" href="{{ route('favorit') }}">
-                                <i class="bi bi-bookmark-fill me-2"></i> Favorit Anda
-                            </a>
-                        </li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li>
-                            <!-- Link Logout -->
-                            <a class="dropdown-item" href="{{ route('logout') }}"
-                               onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                <i class="bi bi-box-arrow-right me-2"></i> Keluar Akun
-                            </a>
-                            <!-- Form Logout (Tersembunyi) -->
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                @csrf
-                            </form>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
 
             <!-- Tombol Mobile Toggle -->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navDashboard" aria-controls="navDashboard" aria-expanded="false" aria-label="Toggle navigation">
@@ -110,9 +78,11 @@
         <div class="container"> {{-- Membatasi lebar hero section --}}
             <div class="hero-section">
                 {{-- Background Slides --}}
-                <div class="hero-bg active" style="background-image: url('https://images.unsplash.com/photo-1497215728101-856f4ea42174?q=80&w=2070&auto=format&fit=crop');"></div>
-                <div class="hero-bg" style="background-image: url('https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=2084&auto=format&fit=crop');"></div>
-                <div class="hero-bg" style="background-image: url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=2071&auto=format&fit=crop');"></div>
+                <div class="hero-bg active" style="background-image: url('{{ asset('images/gambar1.jpg') }}');"></div>
+                
+                <div class="hero-bg " style="background-image: url('{{ asset('images/gambar2.jpg') }}');"></div>
+                
+                <div class="hero-bg" style="background-image: url('{{ asset('images/gambar3.jpg') }}');"></div>
 
                 {{-- Overlay Card dengan Teks --}}
                 <div class="hero-card-overlay">
@@ -122,7 +92,7 @@
                     <p class="lead text-light opacity-75 mb-4 fs-6">
                         Temukan dunia peluang karir melalui ribuan lowongan di bidang teknologi, bisnis, hingga kreatif. Mulai perjalanan profesionalmu sekarang!
                     </p>
-                   <a href="{{ url('/recruitment') }}" class="btn btn-primary btn-lg rounded-pill px-5 fw-bold">
+                   <a href="{{ url('/recruitment') }}" class="btn btn-primary btn-sm rounded-pill px-4 fw-bold">
                         Jelajahi Lowongan
                     </a>
                 </div>
@@ -275,32 +245,6 @@
         </div>
     </div>
 </main>
-<footer class="py-5 bg-white border-top"> 
-    <div class="container"> 
-        <div class="row g-4 text-center"> 
-            
-            <div class="col-md-4"> 
-                <h5 class="fw-bold">Contact Us</h5> 
-                <ul class="list-unstyled text-muted"> 
-                    <li class="mb-2"><i class="bi bi-envelope me-2"></i>careerconnect@del.ac.id</li> 
-                    <li class="mb-2"><i class="bi bi-telephone me-2"></i>(0632) 123 456</li> 
-                    <li class="mb-2"><i class="bi bi-geo-alt me-2"></i>Institut Teknologi Del, Sitoluama</li> 
-                </ul> 
-            </div> 
-            
-            <div class="col-md-4"> 
-                <h5 class="fw-bold fs-4">CareerConnect</h5> 
-                <p class="text-muted"> Menghubungkan mahasiswa dan alumni Institut Teknologi Del dengan peluang terbaik untuk magang, part-time, dan karir penuh waktu. </p> 
-            </div> 
-            
-            <div class="col-md-4"> 
-                <h5 class="fw-bold">Dukungan</h5> 
-                <p class="text-muted mb-2">Platform ini dikembangkan bersama Institut Teknologi Del.</p> 
-                <img src="{{ asset('images/logo del.jpg') }}" alt="Logo Institut Teknologi Del" class="mx-auto d-block footer-logo"> 
-            </div> 
-        </div> 
-    </div> 
-</footer>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {

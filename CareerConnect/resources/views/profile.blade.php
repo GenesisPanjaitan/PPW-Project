@@ -20,8 +20,6 @@
             
             <!-- Menu -->
             <div class="collapse navbar-collapse" id="navDashboard">
-                
-                <!-- Menu Tengah -->
                 <ul class="navbar-nav mx-auto">
                     <li class="nav-item mx-3">
                         <a class="nav-link {{ Request::is('home') ? 'active fw-semibold' : '' }}" href="{{ route('home') }}">Home</a>
@@ -34,10 +32,8 @@
                     </li>
                 </ul>
                 
-                <!-- Menu Kanan (Dropdown Profil) -->
                 <ul class="navbar-nav">
                     <li class="nav-item dropdown">
-                        <!-- Tombol Pemicu Dropdown -->
                         <a class="nav-link dropdown-toggle fw-semibold" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="bi bi-person-circle me-1"></i>
                             @auth
@@ -47,7 +43,6 @@
                             @endauth
                         </a>
                         
-                        <!-- Isi Dropdown -->
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                             <li>
                                 <a class="dropdown-item" href="{{ route('favorit') }}">
@@ -56,12 +51,10 @@
                             </li>
                             <li><hr class="dropdown-divider"></li>
                             <li>
-                                <!-- Link Logout -->
                                 <a class="dropdown-item" href="{{ route('logout') }}"
                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                     <i class="bi bi-box-arrow-right me-2"></i> Keluar Akun
                                 </a>
-                                <!-- Form Logout (Tersembunyi) -->
                                 <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                     @csrf
                                 </form>
@@ -69,11 +62,9 @@
                         </ul>
                     </li>
                 </ul>
-
             </div>
         </div>
     </nav>
-
 
     <main class="py-4">
         <div class="container">
@@ -82,7 +73,6 @@
             <p class="text-muted mb-4">Kelola informasi profil dan pengaturan akun Anda</p>
 
             <div class="d-flex justify-content-between align-items-center mb-4">
-                
                 <div class="profile-tabs-container">
                     <a href="/profile" class="tab-link {{ Request::is('profile') ? 'active' : '' }}">Informasi Dasar</a>
                     <a href="/profile/academic" class="tab-link {{ Request::is('profile/academic') ? 'active' : '' }}">Akademik & Karir</a>
@@ -103,25 +93,40 @@
                         <i class="bi bi-pencil-fill me-1"></i> Edit Profil
                     </a>
                 @endif
-                
             </div>
 
-            <div class="text-center mb-4">
-                <h5 class="fw-bold">Foto Profil</h5>
-                <p class="text-muted small">Upload foto profil untuk membantu orang mengenal Anda</p>
-                <div class="avatar-placeholder mx-auto d-flex align-items-center justify-content-center fw-bold fs-2">
-                    K
-                </div>
-                
-                @if(request('mode') == 'edit')
-                    <button class="btn btn-dark btn-sm fw-semibold mt-3">
-                        <i class="bi bi-upload me-1"></i> Upload Foto
-                    </button>
-                @endif
-            </div>
-
-            <form action="#" method="POST" id="profileForm">
+            <!-- Form Profile (Ditambah enctype untuk upload gambar) -->
+            <form action="#" method="POST" id="profileForm" enctype="multipart/form-data">
                 @csrf
+                
+                <div class="text-center mb-4">
+                    <h5 class="fw-bold">Foto Profil</h5>
+                    <p class="text-muted small">Upload foto profil untuk membantu orang mengenal Anda</p>
+                    
+                    <!-- AREA FOTO PROFIL (UPDATED) -->
+                    <!-- Menambahkan overflow-hidden agar gambar tidak keluar dari lingkaran -->
+                    <div class="avatar-placeholder mx-auto d-flex align-items-center justify-content-center position-relative overflow-hidden">
+                        
+                        <!-- 1. Gambar Preview (Default Sembunyi) -->
+                        <img id="avatarPreview" src="#" alt="Preview" class="d-none w-100 h-100" style="object-fit: cover;">
+                        
+                        <!-- 2. Icon User Default (Pengganti huruf K) -->
+                        <i id="avatarInitial" class="bi bi-person-fill" style="font-size: 3rem; color: #6c757d;"></i>
+                        
+                    </div>
+                    
+                    <!-- LOGIC UPLOAD FOTO -->
+                    @if(request('mode') == 'edit')
+                        <!-- Input File Tersembunyi -->
+                        <input type="file" id="fileInput" name="foto_profil" class="d-none" accept="image/*" onchange="previewImage(event)">
+                        
+                        <!-- Label sebagai Tombol -->
+                        <label for="fileInput" class="btn btn-dark btn-sm fw-semibold mt-3" style="cursor: pointer;">
+                            <i class="bi bi-upload me-1"></i> Upload Foto
+                        </label>
+                    @endif
+                </div>
+
                 <div class="card shadow-sm border-0" style="border-radius: 1rem;">
                     <div class="card-body p-4 p-md-5">
                         
@@ -183,6 +188,27 @@
                                 @endif
                             </div>
 
-                        </div> </div> </div> </form> </div> </main>
+                        </div> 
+                    </div> 
+                </div> 
+            </form> 
+        </div> 
+    </main>
+
+    <!-- Javascript Preview Gambar -->
+    <script>
+        function previewImage(event) {
+            var reader = new FileReader();
+            reader.onload = function(){
+                var output = document.getElementById('avatarPreview');
+                var initial = document.getElementById('avatarInitial');
+                
+                output.src = reader.result;
+                output.classList.remove('d-none'); // Munculkan gambar
+                initial.style.display = 'none';    // Sembunyikan icon user
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        }
+    </script>
 
 @endsection
