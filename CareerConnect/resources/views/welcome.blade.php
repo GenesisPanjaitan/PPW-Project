@@ -2,50 +2,29 @@
 
 @section('content')
 
-    {{-- Single, clean navbar (shows login/register when guest, profile dropdown when auth) --}}
-    <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom navbar-section">
-        <div class="container">
-            <a class="navbar-brand fw-bold fs-4" href="{{ route('welcome') }}">
-                <img src="{{ asset('images/logokita.png') }}" alt="CareerConnect Logo" style="height:30px;" class="me-2">CareerConnect
-            </a>
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm navbar-section">
+    <div class="container">
+        
+       <a class="navbar-brand fw-bold fs-4" href="/">
+           <img src="{{ asset('images/logokita.png') }}" 
+                alt="CareerConnect Logo" 
+                style="height: 30px;" 
+                class="ms-2"> CareerConnect
+       </a>
 
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain" aria-controls="navMain" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse" id="navMain">
-                <ul class="navbar-nav mx-auto">
-                    <li class="nav-item mx-3"><a class="nav-link {{ Request::is('home') ? 'active fw-semibold' : '' }}" href="{{ route('home') }}">Home</a></li>
-                    <li class="nav-item mx-3"><a class="nav-link {{ Request::is('recruitment*') ? 'active fw-semibold' : '' }}" href="{{ route('recruitment') }}">Recruitment</a></li>
-                    <li class="nav-item mx-3"><a class="nav-link {{ Request::is('profile*') ? 'active fw-semibold' : '' }}" href="{{ route('profile') }}">My Profile</a></li>
-                </ul>
-
-                <div class="navbar-nav ms-auto">
-                    @auth
-                        <li class="nav-item dropdown list-unstyled">
-                            <a class="nav-link dropdown-toggle fw-semibold" href="#" id="navbarUser" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi bi-person-circle me-1"></i> {{ auth()->user()->name }}
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarUser">
-                                <li><a class="dropdown-item" href="{{ route('favorit') }}"><i class="bi bi-bookmark-fill me-2"></i> Favorit Anda</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li>
-                                    <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                        <i class="bi bi-box-arrow-right me-2"></i> Keluar Akun
-                                    </a>
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">@csrf</form>
-                                </li>
-                            </ul>
-                        </li>
-                    @else
-                        <a href="{{ route('login') }}" class="btn btn-light btn-sm px-4 py-2 me-2 rounded-pill btn-login-nav">Login</a>
-                        <a href="{{ route('register') }}" class="btn btn-dark btn-sm px-4 py-2 rounded-pill btn-register-nav">Register</a>
-                    @endauth
-                </div>
-            </div>
-        </div>
-    </nav>
-
+       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+           <span class="navbar-toggler-icon"></span>
+       </button>
+       
+       <div class="collapse navbar-collapse" id="navbarNav">
+           <div class="navbar-nav ms-auto">
+               <a href="{{ route('login') }}" class="btn btn-light btn-sm px-4 py-2 me-2 mb-2 mb-lg-0 rounded-pill fw-semibold">Login</a>
+               
+               <a href="{{ route('register') }}" class="btn btn-dark btn-sm px-4 py-2 rounded-pill fw-semibold">Register</a>
+           </div>
+       </div>
+    </div>
+</nav>
     <main>
 
         <section class="bg-del-dark-blue text-white hero-section">
