@@ -35,7 +35,14 @@ Route::middleware('auth')->group(function () {
 	Route::get('/profile/academic', [ProfileController::class, 'academic'])->name('profile.academic');
 	Route::get('/profile/settings', [ProfileController::class, 'settings'])->name('profile.settings');
 	Route::get('/recruitment', [RecruitmentController::class, 'index'])->name('recruitment');
-	Route::get('/recruitment/detail', [RecruitmentController::class, 'detail'])->name('recruitment.detail');
+	// dynamic detail by id
+	Route::get('/recruitment/{id}', [RecruitmentController::class, 'detailById'])->name('recruitment.detail');
+
+	// store new recruitment posting
+	Route::post('/recruitment', [RecruitmentController::class, 'store'])->name('recruitment.store');
+
+	// store comment for recruitment
+	Route::post('/recruitment/{id}/comment', [RecruitmentController::class, 'storeComment'])->name('recruitment.comment');
 
 	// Logout should be a POST; keep it protected
 	Route::post('/logout', [AuthController::class, 'logout'])->name('logout');

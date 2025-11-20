@@ -42,14 +42,15 @@
                                 </p>
                             </div>
 
-                            <form action="#" method="POST">
+                            <form action="{{ route('register.submit') }}" method="POST">
                                 @csrf
+                                <input type="hidden" name="role" value="mahasiswa">
                                 
                                 <h5 class="fw-bold mb-3 fs-6">Informasi Dasar</h5>
                                 <div class="row g-3">
                                     <div class="col-md-6">
                                         <label for="nama_lengkap" class="form-label-custom">Nama Lengkap</label>
-                                        <input type="text" class="form-control form-control-custom" id="nama_lengkap" name="nama_lengkap" placeholder="Nama lengkap Anda" required>
+                                        <input type="text" class="form-control form-control-custom" id="nama_lengkap" name="name" placeholder="Nama lengkap Anda" required>
                                     </div>
                                     <div class="col-md-6">
                                         <label for="email" class="form-label-custom">Email</label>
@@ -58,6 +59,10 @@
                                     <div class="col-md-12">
                                         <label for="password" class="form-label-custom">Password</label>
                                         <input type="password" class="form-control form-control-custom" id="password" name="password" placeholder="Buat password yang kuat" required>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <label for="password_confirmation" class="form-label-custom">Konfirmasi Password</label>
+                                        <input type="password" class="form-control form-control-custom" id="password_confirmation" name="password_confirmation" placeholder="Konfirmasi password" required>
                                     </div>
                                 </div>
 
@@ -71,7 +76,7 @@
                                     </div>
                                     <div class="col-md-6">
                                         <label for="jurusan" class="form-label-custom">Jurusan / Program Studi</label>
-                                        <select class="form-select form-control-custom" id="jurusan" name="jurusan" required>
+                                        <select class="form-select form-control-custom" id="jurusan" name="study_program" required>
                                             <option value="" selected disabled>Pilih Jurusan Anda</option>
                                             <option value="if">S1-Informatika</option>
                                             <option value="si">S1-Sistem Informasi</option>
@@ -112,7 +117,7 @@
                                     </div>
                                     <div class="col-md-12">
                                         <label for="kontak" class="form-label-custom">Kontak (Opsional)</label>
-                                        <input type="text" class="form-control form-control-custom" id="kontak" name="kontak" placeholder="WhatsApp atau Kontak lain">
+                                        <input type="text" class="form-control form-control-custom" id="kontak" name="contact" placeholder="WhatsApp atau Kontak lain">
                                     </div>
                                 </div>
                                 

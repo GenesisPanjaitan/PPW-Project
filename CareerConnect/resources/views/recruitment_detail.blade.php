@@ -84,20 +84,22 @@
             <div class="row g-5">
                 
                 <div class="col-lg-5">
-                    <img src="{{ asset('images/jwmarriot.jpg') }}" 
-                    alt="Gambar Perusahaan" 
-                    class="img-building">
+                        @if(!empty($r->image))
+                            <img src="{{ asset('storage/' . $r->image) }}" alt="Gambar Perusahaan" class="img-building">
+                        @else
+                            <img src="{{ asset('images/jwmarriot.jpg') }}" alt="Gambar Perusahaan" class="img-building">
+                        @endif
 
-                    <div class="job-info-card p-4 shadow-sm">
-                        <h5 class="fw-bold mb-1">Frontend Developer</h5>
-                        <p class="text-muted mb-4 fw-medium">JW MARRIOTT</p>
+                        <div class="job-info-card p-4 shadow-sm">
+                            <h5 class="fw-bold mb-1">{{ $r->position }}</h5>
+                            <p class="text-muted mb-4 fw-medium">{{ $r->company_name }}</p>
                         
-                        <div class="d-flex justify-content-between align-items-center text-muted small">
-                            <span><i class="bi bi-geo-alt me-1"></i> Medan</span>
-                            <span>1 jam lalu</span>
+                            <div class="d-flex justify-content-between align-items-center text-muted small">
+                                <span><i class="bi bi-geo-alt me-1"></i> {{ $r->location }}</span>
+                                <span>{{ \Carbon\Carbon::parse($r->date)->diffForHumans() }}</span>
+                            </div>
                         </div>
                     </div>
-                </div>
 
                 <div class="col-lg-7">
                     <h5 class="fw-bold mb-3">Deskripsi Pekerjaan</h5>
@@ -131,44 +133,36 @@
                     <div class="card-body p-4 p-md-5">
                         
                         <h5 class="fw-bold mb-1">Diskusi & Pertanyaan</h5>
-                        <p class="text-muted small mb-4">Tanyakan hal-hal yang ingin kamu ketahui tentang posisi ini</p>
+                            <p class="text-muted small mb-4">Tanyakan hal-hal yang ingin kamu ketahui tentang posisi ini</p>
 
-                        <div class="comments-list mb-5">
-                            <div class="comment-bubble">
-                                <div class="d-flex justify-content-between mb-1">
-                                    <span class="fw-bold text-dark">Ahmad Fauzi</span>
-                                    <span class="text-muted small">1 jam lalu</span>
-                                </div>
-                                <p class="mb-0 text-secondary small">Wah opportunity bagus nih! Requirements-nya cocok sama background saya. Thanks for sharing kak Sarah!</p>
+                            <div class="comments-list mb-5">
+                                @if(!empty($comments) && $comments->count())
+                                    @foreach($comments as $c)
+                                        <div class="comment-bubble">
+                                            <div class="d-flex justify-content-between mb-1">
+                                                <span class="fw-bold text-dark">{{ $c->author ?? 'Anon' }}</span>
+                                                <span class="text-muted small">{{ \Carbon\Carbon::parse($c->created_at)->diffForHumans() }}</span>
+                                            </div>
+                                            <p class="mb-0 text-secondary small">{{ $c->content }}</p>
+                                        </div>
+                                    @endforeach
+                                @else
+                                    <div class="alert alert-info">Belum ada komentar.</div>
+                                @endif
                             </div>
 
-                            <div class="comment-bubble">
-                                <div class="d-flex justify-content-between mb-1">
-                                    <span class="fw-bold text-dark">Maya Sari Sibuea</span>
-                                    <span class="text-muted small">2 jam lalu</span>
-                                </div>
-                                <p class="mb-0 text-secondary small">Company culture-nya gimana kak? Apakah beginner-friendly untuk fresh graduate?</p>
+                            <div>
+                                <label class="fw-bold small mb-2">Tambah Komentar</label>
+                                <form method="POST" action="{{ route('recruitment.comment', ['id' => $r->id]) }}">
+                                    @csrf
+                                    <input type="text" name="comment" class="form-control input-comment mb-3" placeholder="Tulis komentar ..." required>
+                                    <div class="d-flex justify-content-end">
+                                        <button type="submit" class="btn-send-comment d-flex align-items-center btn btn-primary">
+                                            <i class="bi bi-send-fill me-2"></i> Kirim Komentar
+                                        </button>
+                                    </div>
+                                </form>
                             </div>
-
-                            <div class="comment-bubble">
-                                <div class="d-flex justify-content-between mb-1">
-                                    <span class="fw-bold text-dark">Rian Pakpahan</span>
-                                    <span class="text-muted small">3 jam lalu</span>
-                                </div>
-                                <p class="mb-0 text-secondary small">Boleh tau gak kak tech stack apa aja yang dipake di JW MARRIOTT? Terutama untuk state management</p>
-                            </div>
-                        </div>
-
-                        <div>
-                            <label class="fw-bold small mb-2">Tambah Komentar</label>
-                            <input type="text" class="form-control input-comment mb-3" placeholder="Tulis komentar ...">
-                            
-                            <div class="d-flex justify-content-end">
-                                <button class="btn-send-comment d-flex align-items-center">
-                                    <i class="bi bi-send-fill me-2"></i> Kirim Komentar
-                                </button>
-                            </div>
-                        </div>
 
                     </div>
                 </div>
