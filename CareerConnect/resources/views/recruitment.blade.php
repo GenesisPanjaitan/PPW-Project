@@ -155,7 +155,7 @@
                 @forelse($recruitments ?? [] as $r)
                     <div class="card shadow-sm border-1 mb-4" style="border-radius: 1.5rem; border-color: #eee;">
                         <div class="card-body p-4">
-                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
                                 <div class="d-flex align-items-center">
                                     <div class="me-3">
                                         <i class="bi bi-person-circle fs-1 text-dark"></i>
@@ -165,7 +165,16 @@
                                         <p class="text-muted small mb-0">{{ $r->jobtype ?? '' }}</p>
                                     </div>
                                 </div>
-                                <a href="{{ route('recruitment.detail', ['id' => $r->id]) }}" class="btn-detail-gray text-decoration-none">Lihat Detail</a>
+                                <div class="d-flex gap-2 align-items-center">
+                                    <a href="{{ route('recruitment.detail', ['id' => $r->id]) }}" class="btn-detail-gray text-decoration-none">Lihat Detail</a>
+
+                                    @auth
+                                        @if(auth()->user()->role === 'admin' || auth()->user()->id === $r->user_id)
+                                            <a href="{{ route('recruitment.edit', ['id' => $r->id]) }}" class="btn btn-sm btn-outline-primary btn-edit">Edit</a>
+                                            <button type="button" data-id="{{ $r->id }}" class="btn btn-sm btn-outline-danger btn-delete">Hapus</button>
+                                        @endif
+                                    @endauth
+                                </div>
                             </div>
 
                             <div class="job-box p-3 mb-4">
@@ -226,6 +235,11 @@
                                             <i class="bi bi-send-fill me-1"></i> Kirim
                                         </button>
                                     </div>
+                                </form>
+                                {{-- Hidden delete form for server-side deletion --}}
+                                <form id="delete-form-{{ $r->id }}" action="{{ route('recruitment.destroy', ['id' => $r->id]) }}" method="POST" class="d-none">
+                                    @csrf
+                                    @method('DELETE')
                                 </form>
                             </div>
                         </div>
@@ -402,11 +416,31 @@
             if (confirmDeleteBtn) {
                 confirmDeleteBtn.addEventListener('click', function() {
                     if (cardToDelete) {
-                        cardToDelete.remove();
+                        const id = cardToDelete.getAttribute('data-id');
+                        // submit server-side delete form if available
+                        const form = document.getElementById('delete-form-' + id);
+                        if (form) {
+                            form.submit();
+                        } else {
+                            // fallback: remove from DOM
+                            cardToDelete.remove();
+                        }
                         if(deleteModal) deleteModal.hide();
                     }
                 });
             }
+
+            // when clicking delete button, set cardToDelete to the card element and show modal
+            document.addEventListener('click', function(e) {
+                const btn = e.target.closest('.btn-delete');
+                if (btn) {
+                    const id = btn.getAttribute('data-id');
+                    const card = btn.closest('.card');
+                    if (card) card.setAttribute('data-id', id);
+                    cardToDelete = card;
+                    if(deleteModal) deleteModal.show();
+                }
+            });
         });
     </script>
 

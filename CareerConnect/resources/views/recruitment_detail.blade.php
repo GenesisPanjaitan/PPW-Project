@@ -102,6 +102,18 @@
                     </div>
 
                 <div class="col-lg-7">
+                    <div class="d-flex justify-content-end mb-3">
+                        @auth
+                            @if(auth()->user()->role === 'admin' || auth()->user()->id === $r->user_id)
+                                <a href="{{ route('recruitment.edit', ['id'=>$r->id]) }}" class="btn btn-sm btn-outline-primary me-2">Edit</a>
+                                <form action="{{ route('recruitment.destroy', ['id'=>$r->id]) }}" method="POST" class="d-inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="btn btn-sm btn-outline-danger" onclick="return confirm('Hapus postingan ini?')">Hapus</button>
+                                </form>
+                            @endif
+                        @endauth
+                    </div>
                     <h5 class="fw-bold mb-3">Deskripsi Pekerjaan</h5>
                     <div class="text-dark" style="line-height: 1.7; font-size: 0.95rem;">
                         <p>

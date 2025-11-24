@@ -15,8 +15,10 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        // Create admin accounts
-            // Create admin accounts
-        $this->call([AdminSeeder::class]);
+        // Create admin accounts and sample recruitments
+        $this->call([
+            AdminSeeder::class,
+            RecruitmentSeeder::class,
+        ]);
     }
 }

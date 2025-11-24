@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Str;
 
 class RecruitmentController extends Controller
 {
@@ -153,5 +155,121 @@ class RecruitmentController extends Controller
         ]);
 
         return redirect()->route('recruitment')->with('success', 'Posting lowongan berhasil dibuat.');
+    }
+
+    /**
+     * Show edit form for a recruitment
+     */
+    public function edit($id)
+    {
+        $r = DB::table('recruitment')->where('id', $id)->first();
+        if (! $r) abort(404);
+
+        // authorization: admin can edit any, alumni can edit own, mahasiswa cannot
+        if (!Auth::check()) return redirect()->route('login');
+        $user = Auth::user();
+        if ($user->role === 'mahasiswa') {
+            return redirect()->route('recruitment')->with('error', 'Aksi tidak diizinkan.');
+        }
+        if ($user->role !== 'admin' && $r->user_id !== $user->id) {
+            return redirect()->route('recruitment')->with('error', 'Anda hanya dapat mengedit postingan Anda sendiri.');
+        }
+
+        // load categories and jobtypes for select
+        $categories = DB::table('category')->get();
+        $jobtypes = DB::table('jobtype')->get();
+
+        return view('recruitment_edit', ['r' => $r, 'categories' => $categories, 'jobtypes' => $jobtypes]);
+    }
+
+    /**
+     * Update recruitment
+     */
+    public function update(Request $request, $id): RedirectResponse
+    {
+        $r = DB::table('recruitment')->where('id', $id)->first();
+        if (! $r) abort(404);
+
+        if (!Auth::check()) return redirect()->route('login');
+        $user = Auth::user();
+        if ($user->role === 'mahasiswa') {
+            return redirect()->route('recruitment')->with('error', 'Aksi tidak diizinkan.');
+        }
+        if ($user->role !== 'admin' && $r->user_id !== $user->id) {
+            return redirect()->route('recruitment')->with('error', 'Anda hanya dapat mengedit postingan Anda sendiri.');
+        }
+
+        $request->validate([
+            'company' => 'required|string|max:255',
+            'position' => 'required|string|max:255',
+            'lokasi' => 'nullable|string|max:255',
+            'deskripsi' => 'nullable|string',
+            'link' => 'nullable|string|max:1024',
+            'kategori' => 'nullable|string|max:255',
+            'tipe' => 'nullable|string|max:255',
+            'gambar' => 'nullable|image|max:2048',
+        ]);
+
+        // resolve category/jobtype similar to store
+        $categoryId = $r->category_id;
+        if ($request->filled('kategori')) {
+            $category = DB::table('category')->where('name', $request->kategori)->first();
+            if (!$category) {
+                $categoryId = DB::table('category')->insertGetId(['name' => $request->kategori, 'created_at' => now(), 'updated_at' => now()]);
+            } else {
+                $categoryId = $category->id;
+            }
+        }
+
+        $jobtypeId = $r->jobtype_id;
+        if ($request->filled('tipe')) {
+            $jobtype = DB::table('jobtype')->where('name', $request->tipe)->first();
+            if (!$jobtype) {
+                $jobtypeId = DB::table('jobtype')->insertGetId(['name' => $request->tipe, 'created_at' => now(), 'updated_at' => now()]);
+            } else {
+                $jobtypeId = $jobtype->id;
+            }
+        }
+
+        $imagePath = $r->image;
+        if ($request->hasFile('gambar')) {
+            $imagePath = $request->file('gambar')->store('recruitment', 'public');
+        }
+
+        DB::table('recruitment')->where('id', $id)->update([
+            'position' => $request->position,
+            'company_name' => $request->company,
+            'description' => $request->deskripsi ?? '',
+            'location' => $request->lokasi ?? '',
+            'link' => $request->link ?? '',
+            'image' => $imagePath,
+            'category_id' => $categoryId ?? 0,
+            'jobtype_id' => $jobtypeId ?? 0,
+            'updated_at' => now(),
+        ]);
+
+        return redirect()->route('recruitment')->with('success', 'Posting lowongan berhasil diperbarui.');
+    }
+
+    /**
+     * Delete recruitment
+     */
+    public function destroy($id): RedirectResponse
+    {
+        $r = DB::table('recruitment')->where('id', $id)->first();
+        if (! $r) abort(404);
+
+        if (!Auth::check()) return redirect()->route('login');
+        $user = Auth::user();
+        if ($user->role === 'mahasiswa') {
+            return redirect()->route('recruitment')->with('error', 'Aksi tidak diizinkan.');
+        }
+        if ($user->role !== 'admin' && $r->user_id !== $user->id) {
+            return redirect()->route('recruitment')->with('error', 'Anda hanya dapat menghapus postingan Anda sendiri.');
+        }
+
+        DB::table('recruitment')->where('id', $id)->delete();
+
+        return redirect()->route('recruitment')->with('success', 'Posting lowongan berhasil dihapus.');
     }
 }
