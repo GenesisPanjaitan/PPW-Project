@@ -46,20 +46,32 @@
                             <form action="{{ route('register.submit') }}" method="POST">
                                 @csrf
                                 <input type="hidden" name="role" value="alumni">
+                                @if ($errors->any())
+                                    <div class="alert alert-danger">
+                                        <ul class="mb-0">
+                                            @foreach ($errors->all() as $error)
+                                                <li>{{ $error }}</li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                @endif
                                 
                                 <h5 class="fw-bold mb-3 fs-6">Informasi Dasar</h5>
                                 <div class="row g-3">
                                     <div class="col-md-6">
                                         <label for="nama_lengkap" class="form-label-custom">Nama Lengkap</label>
-                                        <input type="text" class="form-control form-control-custom" id="nama_lengkap" name="name" placeholder="Nama lengkap Anda" required>
+                                        <input type="text" class="form-control form-control-custom" id="nama_lengkap" name="name" placeholder="Nama lengkap Anda" value="{{ old('name') }}" required>
+                                        @error('name') <div class="text-danger small mt-1">{{ $message }}</div> @enderror
                                     </div>
                                     <div class="col-md-6">
                                         <label for="email" class="form-label-custom">Email</label>
-                                        <input type="email" class="form-control form-control-custom" id="email" name="email" placeholder="nama@email.com" required>
+                                        <input type="email" class="form-control form-control-custom" id="email" name="email" placeholder="nama@email.com" value="{{ old('email') }}" required>
+                                        @error('email') <div class="text-danger small mt-1">{{ $message }}</div> @enderror
                                     </div>
                                     <div class="col-md-12">
                                         <label for="password" class="form-label-custom">Password</label>
                                         <input type="password" class="form-control form-control-custom" id="password" name="password" placeholder="Buat password yang kuat" required>
+                                        @error('password') <div class="text-danger small mt-1">{{ $message }}</div> @enderror
                                     </div>
                                     <div class="col-md-12">
                                         <label for="password_confirmation" class="form-label-custom">Konfirmasi Password</label>
@@ -73,23 +85,25 @@
                                 <div class="row g-3">
                                     <div class="col-md-6">
                                         <label for="angkatan" class="form-label-custom">Angkatan</label>
-                                        <input type="number" class="form-control form-control-custom" id="angkatan" name="class" placeholder="Isi Tahun Lulus" required>
+                                        <input type="number" class="form-control form-control-custom" id="angkatan" name="class" placeholder="Isi Tahun Lulus" value="{{ old('class') }}" required>
+                                        @error('class') <div class="text-danger small mt-1">{{ $message }}</div> @enderror
                                     </div>
                                     <div class="col-md-6">
                                         <label for="jurusan" class="form-label-custom">Jurusan / Program Studi</label>
                                         <select class="form-select form-control-custom" id="jurusan" name="study_program" required>
-                                            <option value="" selected disabled>Pilih Jurusan Anda</option>
-                                            <option value="if">S1-Informatika</option>
-                                            <option value="si">S1-Sistem Informasi</option>
-                                            <option value="te">S1-Teknik Elektro</option>
-                                            <option value="mr">S1-Manajemen Rekayasa</option>
-                                            <option value="tm">S1-Teknik Metalurgi</option>
-                                            <option value="bp">S1-Teknik Bioproses</option>
-                                            <option value="bt">S1-Bioteknologi</option>
-                                            <option value="trpl">D4-Teknologi Rekayasa Perangkat Lunak</option>
-                                            <option value="ti">D3-Teknologi Informasi</option>
-                                            <option value="nm">D3-Teknologi Komputer</option>
+                                            <option value="" {{ old('study_program') ? '' : 'selected' }} disabled>Pilih Jurusan Anda</option>
+                                            <option value="if" {{ old('study_program')=='if' ? 'selected' : '' }}>S1-Informatika</option>
+                                            <option value="si" {{ old('study_program')=='si' ? 'selected' : '' }}>S1-Sistem Informasi</option>
+                                            <option value="te" {{ old('study_program')=='te' ? 'selected' : '' }}>S1-Teknik Elektro</option>
+                                            <option value="mr" {{ old('study_program')=='mr' ? 'selected' : '' }}>S1-Manajemen Rekayasa</option>
+                                            <option value="tm" {{ old('study_program')=='tm' ? 'selected' : '' }}>S1-Teknik Metalurgi</option>
+                                            <option value="bp" {{ old('study_program')=='bp' ? 'selected' : '' }}>S1-Teknik Bioproses</option>
+                                            <option value="bt" {{ old('study_program')=='bt' ? 'selected' : '' }}>S1-Bioteknologi</option>
+                                            <option value="trpl" {{ old('study_program')=='trpl' ? 'selected' : '' }}>D4-Teknologi Rekayasa Perangkat Lunak</option>
+                                            <option value="ti" {{ old('study_program')=='ti' ? 'selected' : '' }}>D3-Teknologi Informasi</option>
+                                            <option value="nm" {{ old('study_program')=='nm' ? 'selected' : '' }}>D3-Teknologi Komputer</option>
                                         </select>
+                                        @error('study_program') <div class="text-danger small mt-1">{{ $message }}</div> @enderror
                                     </div>
                                 </div>
 
@@ -99,11 +113,13 @@
                                 <div class="row g-3">
                                     <div class="col-md-12">
                                         <label for="bidang_saat_ini" class="form-label-custom">Bidang Saat Ini</label>
-                                        <input type="text" class="form-control form-control-custom" id="bidang_saat_ini" name="field" placeholder="Isi bidang Anda">
+                                        <input type="text" class="form-control form-control-custom" id="bidang_saat_ini" name="field" placeholder="Isi bidang Anda" value="{{ old('field') }}">
+                                        @error('field') <div class="text-danger small mt-1">{{ $message }}</div> @enderror
                                     </div>
                                     <div class="col-md-12">
                                         <label for="kontak" class="form-label-custom">Kontak (Opsional)</label>
-                                        <input type="text" class="form-control form-control-custom" id="kontak" name="contact" placeholder="WhatsApp atau Kontak lain">
+                                        <input type="text" class="form-control form-control-custom" id="kontak" name="contact" placeholder="WhatsApp atau Kontak lain" value="{{ old('contact') }}">
+                                        @error('contact') <div class="text-danger small mt-1">{{ $message }}</div> @enderror
                                     </div>
                                 </div>
                                 

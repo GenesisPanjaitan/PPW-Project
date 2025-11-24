@@ -38,6 +38,11 @@ Route::middleware('auth')->group(function () {
 	// dynamic detail by id
 	Route::get('/recruitment/{id}', [RecruitmentController::class, 'detailById'])->name('recruitment.detail');
 
+	// edit/update/delete recruitment (protected)
+	Route::get('/recruitment/{id}/edit', [RecruitmentController::class, 'edit'])->name('recruitment.edit');
+	Route::match(['put','patch'],'/recruitment/{id}', [RecruitmentController::class, 'update'])->name('recruitment.update');
+	Route::delete('/recruitment/{id}', [RecruitmentController::class, 'destroy'])->name('recruitment.destroy');
+
 	// store new recruitment posting
 	Route::post('/recruitment', [RecruitmentController::class, 'store'])->name('recruitment.store');
 

@@ -37,17 +37,19 @@ class RegisterController extends Controller
         // determine role (default mahasiswa)
         $role = $request->input('role', 'mahasiswa');
 
+        // Provide DB-safe defaults for columns that are NOT NULL in migration
         $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
-            'nim' => $data['nim'] ?? null,
-            'study_program' => $data['study_program'] ?? null,
-            'class' => $data['class'] ?? null,
-            'image' => null,
-            'interest' => null,
-            'field' => null,
-            'contact' => null,
+            // migration requires these columns to be non-null; use empty string / 0 if absent
+            'nim' => $request->input('nim', ''),
+            'study_program' => $request->input('study_program', ''),
+            'class' => $request->input('class', ''),
+            'image' => $request->input('image', ''),
+            'interest' => $request->input('minat_karir', ''),
+            'field' => $request->input('field', ''),
+            'contact' => $request->input('contact', 0),
             'role' => $role,
         ]);
 
