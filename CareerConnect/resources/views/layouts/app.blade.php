@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CareerConnect - Alumni Del</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" xintegrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
@@ -13,12 +13,13 @@
         /* == Hero & Footer Styles == */
         :root {
             --del-dark-blue: #2A2F4F;
+            --primary-blue: #0d6efd;
         }
         .bg-del-dark-blue {
             background-color: var(--del-dark-blue);
         }
         
-        /* --- [UPDATE] Style Hero Section Baru (Slideshow Card) --- */
+        /* --- Style Hero Section Baru (Slideshow Card) --- */
         .hero-wrapper {
             padding: 1.5rem 0;
             background-color: #F8F7FF; /* Menyesuaikan warna body */
@@ -73,7 +74,6 @@
             color: #0d6efd; /* Biru Bootstrap */
             font-weight: 800;
         }
-        /* --- [END UPDATE] --- */
 
         .footer-logo {
             height: 80px;
@@ -355,11 +355,11 @@
         /* Warna Judul Utama */
         .text-recruitment-blue { color: #4F6BF0; }
         
-        /* Input Search & Filter (Background Abu-abu muda) */
+        /* Input Search & Filter */
         .bg-input-gray { background-color: #F3F4F6; border: none; color: #666; }
         .bg-input-gray:focus { background-color: #fff; border: 1px solid #ddd; box-shadow: none; }
 
-        /* Kotak Lowongan (Ungu Muda) */
+        /* Kotak Lowongan */
         .job-box {
             background-color: #EEF2FF;
             border-radius: 1rem;
@@ -382,9 +382,21 @@
             color: #374151;
             font-size: 0.75rem;
             font-weight: 600;
-            padding: 4px 12px;
+            padding: 6px 16px; 
             border-radius: 6px;
             border: none;
+            text-decoration: none; 
+            display: inline-block;
+            transition: all 0.2s ease-in-out; 
+        }
+
+        /* Efek Hover */
+        .btn-detail-gray:hover {
+            background-color: #d1d5db; 
+            color: #000; 
+            transform: translateY(-1px); 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
+            cursor: pointer; 
         }
 
         /* Komentar Box */
@@ -431,7 +443,7 @@
             background-color: #E5E7EB;
         }
 
-        /* Tombol Posting (Hitam & Bulat) */
+        /* Tombol Posting */
         .btn-posting-black {
             background-color: #9CA3AF; 
             color: #fff;
@@ -443,6 +455,55 @@
         }
         .btn-posting-black:hover {
             background-color: #6B7280; 
+        }
+
+        /* Style tambahan untuk Recruitment Page */
+        
+        /* === [UPDATE ANIMASI HOVER KARTU] === */
+        .hover-scale:hover {
+            transform: scale(1.02);
+            transition: transform 0.2s;
+        }
+
+        /* Class utama animasi untuk kartu lowongan */
+        .hover-shadow {
+            cursor: pointer; /* Mengubah kursor jadi jari telunjuk */
+            transition: all 0.3s ease-in-out;
+            border: 1px solid transparent; /* Supaya saat hover bordernya smooth */
+        }
+
+        .hover-shadow:hover {
+            transform: translateY(-7px) scale(1.01); /* Naik ke atas + Sedikit membesar */
+            box-shadow: 0 15px 35px rgba(13, 110, 253, 0.15) !important; /* Bayangan lebih soft dan besar */
+            border-color: #0d6efd !important; /* Border berubah jadi biru */
+            z-index: 5; /* Agar muncul di atas elemen lain */
+        }
+
+        .cursor-pointer {
+            cursor: pointer;
+        }
+
+        .upload-area {
+            border: 2px dashed #e0e0e0;
+            background-color: #f8f9fa;
+            position: relative;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .upload-area:hover {
+            border-color: #0d6efd;
+            background-color: #f1f5ff;
+        }
+
+        .file-input-hidden {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
         }
 
         /* Mengatur style kotak dropdown */
@@ -468,28 +529,22 @@
             color: #6B7280; 
         }
 
-        btn-detail-gray {
-    background-color: #E5E7EB;
-    color: #374151;
-    font-size: 0.75rem;
-    font-weight: 600;
-    padding: 6px 16px; /* Sedikit diperlebar padding-nya */
-    border-radius: 6px;
-    border: none;
-    text-decoration: none; /* Hapus garis bawah default */
-    display: inline-block;
-    transition: all 0.2s ease-in-out; /* Efek transisi halus */
-}
+        /* Animasi Tombol Bookmark */
+        .btn-bookmark-anim {
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            z-index: 10;
+            background-color: white;
+        }
 
-/* Efek Hover (Saat mouse mengarah) */
-.btn-detail-gray:hover {
-    background-color: #d1d5db; /* Warna background jadi lebih gelap sedikit */
-    color: #000; /* Warna teks jadi hitam */
-    transform: translateY(-1px); /* Efek naik sedikit */
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Tambah bayangan tipis */
-    cursor: pointer; /* Ubah kursor jadi jari tunjuk */
-}
-
+        .btn-bookmark-anim:hover {
+            transform: scale(1.25);
+            background-color: var(--primary-blue);
+            border-color: var(--primary-blue);
+            color: white;
+            box-shadow: 0 5px 15px rgba(13, 110, 253, 0.3);
+            cursor: pointer;
+        }
     </style>
 
 </head>
@@ -497,6 +552,6 @@
 
     @yield('content')
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" xintegrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>
