@@ -116,21 +116,12 @@
                     </div>
                     <h5 class="fw-bold mb-3">Deskripsi Pekerjaan</h5>
                     <div class="text-dark" style="line-height: 1.7; font-size: 0.95rem;">
-                        <p>
-                            Kami sedang mencari Frontend Developer yang passionate untuk bergabung dengan tim engineering kami. Kamu akan bekerja dengan teknologi modern seperti React, TypeScript, dan Next.js untuk membangun produk yang digunakan oleh jutaan pengguna.
-                        </p>
-                        <p>
-                            Sebagai Frontend Developer di TechCorp Indonesia, kamu akan bertanggung jawab untuk:
-                        </p>
-                        <ul class="mb-3 ps-3">
-                            <li>Mengembangkan dan memelihara aplikasi web menggunakan React dan TypeScript</li>
-                            <li>Berkolaborasi dengan tim design untuk mengimplementasikan UI/UX yang optimal</li>
-                            <li>Mengoptimalkan performa aplikasi untuk pengalaman pengguna terbaik</li>
-                            <li>Melakukan code review dan mentoring untuk junior developers</li>
-                        </ul>
-                        <p>
-                            Kami menawarkan lingkungan kerja yang dinamis, growth-oriented, dan kesempatan untuk berkembang bersama startup yang sedang scaling up.
-                        </p>
+                        @if(!empty($r->description))
+                            {{-- Render description from DB, preserve newlines --}}
+                            {!! nl2br(e($r->description)) !!}
+                        @else
+                            <p class="text-muted">Deskripsi pekerjaan belum tersedia untuk postingan ini.</p>
+                        @endif
                     </div>
 
                     <p class="mt-4 text-sm">

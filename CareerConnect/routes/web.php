@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProfileController;
@@ -30,6 +31,8 @@ Route::post('/register', [RegisterController::class, 'submit'])->name('register.
  */
 Route::middleware('auth')->group(function () {
 	Route::get('/home', [HomeController::class, 'index'])->name('home');
+
+
 	Route::get('/favorit', [FavoriteController::class, 'index'])->name('favorit');
 	Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
 	Route::get('/profile/academic', [ProfileController::class, 'academic'])->name('profile.academic');
@@ -45,6 +48,10 @@ Route::middleware('auth')->group(function () {
 
 	// store new recruitment posting
 	Route::post('/recruitment', [RecruitmentController::class, 'store'])->name('recruitment.store');
+
+	// favorite (save) and unfavorite
+	Route::post('/favorite/{id}', [FavoriteController::class, 'store'])->name('favorite.store');
+	Route::delete('/favorite/{id}', [FavoriteController::class, 'destroy'])->name('favorite.destroy');
 
 	// store comment for recruitment
 	Route::post('/recruitment/{id}/comment', [RecruitmentController::class, 'storeComment'])->name('recruitment.comment');
