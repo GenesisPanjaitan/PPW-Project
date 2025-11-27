@@ -21,7 +21,13 @@ class RecruitmentController extends Controller
             ->orderByDesc('r.date')
             ->get();
 
-        return view('recruitment', ['recruitments' => $recruitments]);
+        // also fetch favorite ids for the authenticated user so the view can show saved state
+        $favoriteIds = [];
+        if (Auth::check()) {
+            $favoriteIds = DB::table('favorite')->where('user_id', Auth::id())->pluck('recruitment_id')->toArray();
+        }
+
+        return view('recruitment', ['recruitments' => $recruitments, 'favoriteIds' => $favoriteIds]);
     }
 
     public function detail()
@@ -64,10 +70,15 @@ class RecruitmentController extends Controller
     {
         $request->validate(['comment' => 'required|string']);
 
+        if (!Auth::check()) {
+            return redirect()->route('login');
+        }
+
         DB::table('comment')->insert([
             'recruitment_id' => $id,
-            'user_id' => Auth::id() ?? 1,
+            'user_id' => Auth::id(),
             'content' => $request->comment,
+            'date' => now(),
             'created_at' => now(),
             'updated_at' => now(),
         ]);

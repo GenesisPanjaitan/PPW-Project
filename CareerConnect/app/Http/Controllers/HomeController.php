@@ -19,6 +19,9 @@ class HomeController extends Controller
             ->leftJoin('jobtype as j', 'r.jobtype_id', '=', 'j.id')
             ->leftJoin('user as u', 'r.user_id', '=', 'u.id')
             ->select('r.*', 'j.name as jobtype', 'u.name as author')
+            // only include postings with date not in the future and ensure date exists
+            ->whereNotNull('r.date')
+            ->where('r.date', '<=', now())
             ->orderByDesc('r.date')
             ->limit(3)
             ->get();

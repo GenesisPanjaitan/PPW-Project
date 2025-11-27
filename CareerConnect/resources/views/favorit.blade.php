@@ -96,21 +96,36 @@
                     tampilan "Kosong" (Empty State).
                     ========================
                     -->
-                    <div class="card shadow-sm border-0" style="border-radius: 1rem;">
-                        <div class="card-body p-5 text-center">
-                            <i class="bi bi-bookmark-x fs-1 text-muted"></i>
-                            <h5 class="mt-3 fw-bold text-dark">Anda belum memiliki favorit</h5>
-                            <p class="text-muted">Klik ikon bookmark pada lowongan untuk menyimpannya di sini.</p>
-                            
-                            <!-- 
-                              Tombol ini menggunakan style .btn-masuk (biru) 
-                              dari app.blade.php Anda agar konsisten 
-                            -->
-                            <a href="{{ route('recruitment') }}" class="btn btn-masuk text-white mt-3 px-4 py-2 fw-semibold">
-                                Jelajahi Lowongan
-                            </a>
+                    @if(!empty($favorites) && $favorites->count())
+                        @foreach($favorites as $r)
+                            <div class="card shadow-sm mb-3">
+                                <div class="card-body d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h5 class="fw-bold mb-1">{{ $r->position }}</h5>
+                                        <p class="mb-0 small text-muted">{{ $r->company_name }} • {{ $r->location }}</p>
+                                        <p class="mb-0 small text-secondary">{{ \Carbon\Carbon::parse($r->date)->diffForHumans() }}</p>
+                                    </div>
+                                    <div class="d-flex gap-2">
+                                        <a href="{{ route('recruitment.detail', ['id'=>$r->id]) }}" class="btn btn-sm btn-primary">Detail</a>
+                                        <form action="{{ route('favorite.destroy', ['id'=>$r->id]) }}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button class="btn btn-sm btn-outline-danger">Hapus</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    @else
+                        <div class="card shadow-sm border-0" style="border-radius: 1rem;">
+                            <div class="card-body p-5 text-center">
+                                <i class="bi bi-bookmark-x fs-1 text-muted"></i>
+                                <h5 class="mt-3 fw-bold text-dark">Anda belum memiliki favorit</h5>
+                                <p class="text-muted">Klik ikon bookmark pada lowongan untuk menyimpannya di sini.</p>
+                                <a href="{{ route('recruitment') }}" class="btn btn-masuk text-white mt-3 px-4 py-2 fw-semibold">Jelajahi Lowongan</a>
+                            </div>
                         </div>
-                    </div>
+                    @endif
 
                 </div>
             </div>
