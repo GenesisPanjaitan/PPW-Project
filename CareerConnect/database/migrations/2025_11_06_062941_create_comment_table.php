@@ -10,18 +10,28 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up(): void
-    {
-        Schema::create('comment', function (Blueprint $table) {
-            $table->id();
-            $table->text('content');
-            $table->dateTime('date');
-            $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('user');
-            $table->unsignedBigInteger('recruitment_id');
-            $table->foreign('recruitment_id')->references('id')->on('recruitment');
-            $table->timestamps();
-        });
-    }
+{
+    Schema::create('comment', function (Blueprint $table) {
+        $table->id();
+        $table->text('content');
+        $table->dateTime('date');
+        
+        $table->unsignedBigInteger('user_id');
+        // Tambahkan onDelete cascade juga untuk user (opsional, biar aman kalau user dihapus)
+        $table->foreign('user_id')->references('id')->on('user')->onDelete('cascade'); 
+        
+        $table->unsignedBigInteger('recruitment_id');
+        
+        // === PERBAIKAN UTAMA DI SINI ===
+        $table->foreign('recruitment_id')
+              ->references('id')
+              ->on('recruitment')
+              ->onDelete('cascade'); // <--- INI KUNCINYA
+        // ===============================
+        
+        $table->timestamps();
+    });
+}
 
     /**
      * Reverse the migrations.
