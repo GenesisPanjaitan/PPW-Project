@@ -321,7 +321,7 @@
                             </div>
                         </div>
 
-                        <button type="submit" class="btn btn-dark w-100 rounded-pill fw-bold py-2 shadow-sm">Posting Sekarang 🚀</button>
+                        <button type="submit" class="btn btn-dark w-100 rounded-pill fw-bold py-2 shadow-sm">Posting Sekarang</button>
                     </form>
                 </div>
             </div>

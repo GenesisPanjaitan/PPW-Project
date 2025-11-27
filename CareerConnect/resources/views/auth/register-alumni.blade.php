@@ -3,34 +3,27 @@
 @section('content')
 
     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm navbar-section">
-    <div class="container">
-        
-       <a class="navbar-brand fw-bold fs-4" href="/">
-           <img src="{{ asset('images/logokita.png') }}" 
-                alt="CareerConnect Logo" 
-                style="height: 30px;" 
-                class="ms-2"> CareerConnect
-       </a>
-
-       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-           <span class="navbar-toggler-icon"></span>
-       </button>
-       
-       <div class="collapse navbar-collapse" id="navbarNav">
-           <div class="navbar-nav ms-auto">
-               <a href="{{ route('login') }}" class="btn btn-light btn-sm px-4 py-2 me-2 mb-2 mb-lg-0 rounded-pill fw-semibold">Login</a>
-               
-               <a href="{{ route('register') }}" class="btn btn-dark btn-sm px-4 py-2 rounded-pill fw-semibold">Register</a>
-           </div>
-       </div>
-    </div>
-</nav>
-
+        <div class="container">
+            <a class="navbar-brand fw-bold fs-4" href="/">
+                <img src="{{ asset('images/logokita.png') }}" alt="CareerConnect Logo" style="height: 30px;" class="ms-2"> CareerConnect
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="navbar-nav ms-auto">
+                    <a href="{{ route('login') }}" class="btn btn-light btn-sm px-4 py-2 me-2 mb-2 mb-lg-0 rounded-pill fw-semibold">Login</a>
+                    <a href="{{ route('register') }}" class="btn btn-dark btn-sm px-4 py-2 rounded-pill fw-semibold">Register</a>
+                </div>
+            </div>
+        </div>
+    </nav>
 
     <main class="py-5" style="margin-top: 1rem; margin-bottom: 3rem;">
         <div class="container">
             <div class="row justify-content-center">
-                <div class="col-md-8 col-lg-7"> <div class="card register-card">
+                <div class="col-md-8 col-lg-7"> 
+                    <div class="card register-card">
                         <div class="card-body p-4 p-sm-5">
                             
                             <div class="text-center mb-4">
@@ -46,6 +39,7 @@
                             <form action="{{ route('register.submit') }}" method="POST">
                                 @csrf
                                 <input type="hidden" name="role" value="alumni">
+                                
                                 @if ($errors->any())
                                     <div class="alert alert-danger">
                                         <ul class="mb-0">
@@ -68,14 +62,28 @@
                                         <input type="email" class="form-control form-control-custom" id="email" name="email" placeholder="nama@email.com" value="{{ old('email') }}" required>
                                         @error('email') <div class="text-danger small mt-1">{{ $message }}</div> @enderror
                                     </div>
+                                    
+                                    <!-- PASSWORD -->
                                     <div class="col-md-12">
                                         <label for="password" class="form-label-custom">Password</label>
-                                        <input type="password" class="form-control form-control-custom" id="password" name="password" placeholder="Buat password yang kuat" required>
+                                        <div class="input-group">
+                                            <input type="password" class="form-control form-control-custom border-end-0" id="password" name="password" placeholder="Buat password yang kuat" required style="border-right: none; border-top-right-radius: 0; border-bottom-right-radius: 0;">
+                                            <span class="input-group-text bg-light border-0" style="cursor: pointer; background-color: #F3F4F6 !important; border-top-left-radius: 0; border-bottom-left-radius: 0;" onclick="togglePassword('password', 'icon-password')">
+                                                <i class="bi bi-eye-slash" id="icon-password"></i>
+                                            </span>
+                                        </div>
                                         @error('password') <div class="text-danger small mt-1">{{ $message }}</div> @enderror
                                     </div>
+
+                                    <!-- KONFIRMASI PASSWORD -->
                                     <div class="col-md-12">
                                         <label for="password_confirmation" class="form-label-custom">Konfirmasi Password</label>
-                                        <input type="password" class="form-control form-control-custom" id="password_confirmation" name="password_confirmation" placeholder="Konfirmasi password" required>
+                                        <div class="input-group">
+                                            <input type="password" class="form-control form-control-custom border-end-0" id="password_confirmation" name="password_confirmation" placeholder="Konfirmasi password" required style="border-right: none; border-top-right-radius: 0; border-bottom-right-radius: 0;">
+                                            <span class="input-group-text bg-light border-0" style="cursor: pointer; background-color: #F3F4F6 !important; border-top-left-radius: 0; border-bottom-left-radius: 0;" onclick="togglePassword('password_confirmation', 'icon-confirm-password')">
+                                                <i class="bi bi-eye-slash" id="icon-confirm-password"></i>
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -85,7 +93,18 @@
                                 <div class="row g-3">
                                     <div class="col-md-6">
                                         <label for="angkatan" class="form-label-custom">Angkatan</label>
-                                        <input type="number" class="form-control form-control-custom" id="angkatan" name="class" placeholder="Isi Tahun Lulus" value="{{ old('class') }}" required>
+                                        
+                                        <!-- PERUBAHAN DI SINI: Added min="2001" -->
+                                        <input type="number" 
+                                               class="form-control form-control-custom" 
+                                               id="angkatan" 
+                                               name="class" 
+                                               placeholder="Contoh: 2023" 
+                                               value="{{ old('class') }}" 
+                                               min="2001" 
+                                               max="{{ date('Y') + 5 }}"
+                                               required>
+                                               
                                         @error('class') <div class="text-danger small mt-1">{{ $message }}</div> @enderror
                                     </div>
                                     <div class="col-md-6">
@@ -135,10 +154,27 @@
                             </form>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
     </main>
+
+    <!-- Script Toggle Password -->
+    <script>
+        function togglePassword(inputId, iconId) {
+            const passwordInput = document.getElementById(inputId);
+            const icon = document.getElementById(iconId);
+
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.remove('bi-eye-slash');
+                icon.classList.add('bi-eye');
+            } else {
+                passwordInput.type = 'password';
+                icon.classList.remove('bi-eye');
+                icon.classList.add('bi-eye-slash');
+            }
+        }
+    </script>
 
 @endsection
