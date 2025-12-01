@@ -42,6 +42,11 @@ class FavoriteController extends Controller
             ]);
         }
 
+        // If AJAX request, return JSON for client-side toggle
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json(['status' => 'ok', 'action' => 'stored', 'recruitment_id' => $recruitmentId]);
+        }
+
         return back();
     }
 
@@ -52,6 +57,10 @@ class FavoriteController extends Controller
         if (! $userId || ! $recruitmentId) return back();
 
         DB::table('favorite')->where('user_id', $userId)->where('recruitment_id', $recruitmentId)->delete();
+
+        if (request()->ajax() || request()->wantsJson()) {
+            return response()->json(['status' => 'ok', 'action' => 'deleted', 'recruitment_id' => $recruitmentId]);
+        }
 
         return back();
     }

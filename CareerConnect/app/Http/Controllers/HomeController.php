@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -26,6 +27,13 @@ class HomeController extends Controller
             ->limit(3)
             ->get();
 
-        return view('home', ['latestRecruitments' => $latestRecruitments]);
+        // If user is authenticated, collect their favorite recruitment ids to toggle bookmark UI
+        $favoriteIds = [];
+        if (Auth::check()) {
+            $favRows = DB::table('favorite')->where('user_id', Auth::id())->pluck('recruitment_id')->toArray();
+            $favoriteIds = $favRows ?: [];
+        }
+
+        return view('home', ['latestRecruitments' => $latestRecruitments, 'favoriteIds' => $favoriteIds]);
     }
 }

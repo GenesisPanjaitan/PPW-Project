@@ -553,5 +553,72 @@
     @yield('content')
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" xintegrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script>
+        // Handle favorite form submissions via AJAX to avoid full page reload and toggle icon
+        document.addEventListener('DOMContentLoaded', function() {
+            const favForms = document.querySelectorAll('form.favorite-form');
+            favForms.forEach(form => {
+                form.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    const submitButton = form.querySelector('button');
+                    const icon = submitButton ? submitButton.querySelector('i') : null;
+                    const formData = new FormData(form);
+
+                    try {
+                        const resp = await fetch(form.action, {
+                            method: 'POST',
+                            headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                            body: formData,
+                            credentials: 'same-origin'
+                        });
+
+                        if (!resp.ok) {
+                            // fallback: submit normally
+                            form.submit();
+                            return;
+                        }
+
+                        const data = await resp.json().catch(() => null);
+                        if (!data) { form.submit(); return; }
+
+                        // toggle icon based on action
+                        if (data.action === 'stored') {
+                            if (icon) {
+                                icon.classList.remove('bi-bookmark');
+                                icon.classList.add('bi-bookmark-fill');
+                            }
+                            if (submitButton) submitButton.classList.add('text-danger');
+                            // change form to now point to destroy (so next click removes)
+                            const newAction = form.action.replace(/favorite\/(\d+)$/,'favorite/$1');
+                            // keep the same action; server handles delete via DELETE method when form has a method field
+                            // swap hidden _method if any
+                            if (!form.querySelector('input[name="_method"]')) {
+                                // add _method delete
+                                const input = document.createElement('input');
+                                input.type = 'hidden'; input.name = '_method'; input.value = 'DELETE';
+                                form.appendChild(input);
+                            } else {
+                                form.querySelector('input[name="_method"]').value = 'DELETE';
+                            }
+                        }
+                        else if (data.action === 'deleted') {
+                            if (icon) {
+                                icon.classList.remove('bi-bookmark-fill');
+                                icon.classList.add('bi-bookmark');
+                            }
+                            if (submitButton) submitButton.classList.remove('text-danger');
+                            // ensure method is POST for adding back
+                            const methodInput = form.querySelector('input[name="_method"]');
+                            if (methodInput) methodInput.value = 'POST';
+                        }
+
+                    } catch (err) {
+                        console.error('Favorite toggle failed', err);
+                        form.submit();
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>
