@@ -8,6 +8,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RecruitmentController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\AdminController;
 
 /**
  * Public (unauthenticated) routes
@@ -58,6 +59,22 @@ Route::middleware('auth')->group(function () {
 
 	// Logout should be a POST; keep it protected
 	Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+
+
+	Route::prefix('admin')->middleware('admin')->group(function () {
+    
+    // Dashboard Admin
+    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+    
+    // Data Master Routes
+    Route::get('/mahasiswa', [AdminController::class, 'mahasiswa'])->name('admin.mahasiswa');
+    Route::get('/alumni', [AdminController::class, 'alumni'])->name('admin.alumni');
+    Route::get('/lowongan', [AdminController::class, 'lowongan'])->name('admin.lowongan');
+    Route::get('/lowongan/{id}/detail', [AdminController::class, 'lowonganDetail'])->name('admin.lowongan.detail');
+    Route::get('/mahasiswa/{id}/detail', [AdminController::class, 'mahasiswaDetail'])->name('admin.mahasiswa.detail');
+    Route::get('/alumni/{id}/detail', [AdminController::class, 'alumniDetail'])->name('admin.alumni.detail');
+
 });
 
-// Fallback: if any other route is defined later, make sure middleware is applied accordingly.
+});
