@@ -177,7 +177,7 @@
 
                         @if(!empty($latestRecruitments) && $latestRecruitments->count())
                             @foreach($latestRecruitments as $r)
-                                <div class="card job-card mb-3 border-0 bg-light">
+                                <div class="card job-card mb-3 border-0 bg-light" style="cursor:pointer;" onclick="if(!event.target.closest('.favorite-form') && !event.target.closest('a')){ window.location='{{ route('recruitment.detail', ['id' => $r->id]) }}'; }">
                                     <div class="card-body">
                                         <div class="d-flex justify-content-between align-items-start">
                                             <div class="d-flex">
@@ -193,7 +193,33 @@
                                                     </p>
                                                 </div>
                                             </div>
-                                            <button class="btn btn-sm btn-outline-secondary rounded-circle"><i class="bi bi-bookmark"></i></button>
+                                            <div>
+                                                @auth
+                                                    @php
+                                                        $isFav = \Illuminate\Support\Facades\DB::table('favorite')
+                                                            ->where('user_id', auth()->id())
+                                                            ->where('recruitment_id', $r->id)
+                                                            ->exists();
+                                                    @endphp
+                                                    @if($isFav)
+                                                        <form action="{{ route('favorite.destroy', ['id'=>$r->id]) }}" method="POST" class="d-inline favorite-form">
+                                                            @csrf @method('DELETE')
+                                                            <button class="btn btn-sm btn-outline-secondary rounded-circle text-danger" title="Hapus Favorit">
+                                                                <i class="bi bi-bookmark-fill"></i>
+                                                            </button>
+                                                        </form>
+                                                    @else
+                                                        <form action="{{ route('favorite.store', ['id'=>$r->id]) }}" method="POST" class="d-inline favorite-form">
+                                                            @csrf
+                                                            <button class="btn btn-sm btn-outline-secondary rounded-circle" title="Simpan Favorit">
+                                                                <i class="bi bi-bookmark"></i>
+                                                            </button>
+                                                        </form>
+                                                    @endif
+                                                @else
+                                                    <a href="{{ route('login') }}" class="btn btn-sm btn-outline-secondary rounded-circle" title="Login untuk menyimpan"><i class="bi bi-bookmark"></i></a>
+                                                @endauth
+                                            </div>
                                         </div>
                                         <div class="mt-3">
                                             <span class="badge bg-success bg-opacity-10 text-success border border-success rounded-pill px-3">{{ $r->jobtype ?? 'Full-time' }}</span>
