@@ -2,186 +2,233 @@
 
 @section('content')
 
-    <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom sticky-top">
         <div class="container">
-            
-            <!-- Logo -->
             <a class="navbar-brand fw-bold fs-4" href="{{ route('home') }}">
-                <img src="{{ asset('images/logokita.png') }}" 
-                     alt="CareerConnect Logo" 
-                     style="height: 30px;" 
-                     class="ms-2"> CareerConnect
+                <img src="{{ asset('images/logokita.png') }}" alt="CareerConnect Logo" style="height: 30px;" class="ms-2"> CareerConnect
             </a>
-            
-            <!-- Tombol Mobile Toggle -->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navDashboard" aria-controls="navDashboard" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            
-            <!-- Menu -->
             <div class="collapse navbar-collapse" id="navDashboard">
-                
-                <!-- Menu Tengah -->
                 <ul class="navbar-nav mx-auto">
-                    <li class="nav-item mx-3">
-                        <a class="nav-link {{ Request::is('home') ? 'active fw-semibold' : '' }}" href="{{ route('home') }}">Home</a>
-                    </li>
-                    <li class="nav-item mx-3">
-                        <a class="nav-link {{ Request::is('recruitment*') ? 'active fw-semibold' : '' }}" href="/recruitment">Recruitment</a>
-                    </li>
-                    <li class="nav-item mx-3">
-                        <a class="nav-link {{ Request::is('profile*') ? 'active fw-semibold' : '' }}" href="/profile">My Profile</a>
-                    </li>
+                    <li class="nav-item mx-3"><a class="nav-link {{ Request::is('home') ? 'active fw-semibold' : '' }}" href="{{ route('home') }}">Home</a></li>
+                    <li class="nav-item mx-3"><a class="nav-link {{ Request::is('recruitment*') ? 'active fw-semibold' : '' }}" href="/recruitment">Recruitment</a></li>
+                    <li class="nav-item mx-3"><a class="nav-link {{ Request::is('profile*') ? 'active fw-semibold' : '' }}" href="/profile">My Profile</a></li>
                 </ul>
-                
-                <!-- Menu Kanan (Dropdown Profil) -->
                 <ul class="navbar-nav">
                     <li class="nav-item dropdown">
-                        <!-- Tombol Pemicu Dropdown -->
                         <a class="nav-link dropdown-toggle fw-semibold" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="bi bi-person-circle me-1"></i>
-                            @auth
-                                {{ auth()->user()->name }}
-                            @else
-                                {{ optional(auth()->user())->name ?? 'Kevin Gultom' }}
-                            @endauth
+                            @auth {{ auth()->user()->name }} @else {{ optional(auth()->user())->name ?? 'Kevin Gultom' }} @endauth
                         </a>
-                        
-                        <!-- Isi Dropdown -->
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                            <li>
-                                <a class="dropdown-item" href="{{ route('favorit') }}">
-                                    <i class="bi bi-bookmark-fill me-2"></i> Favorit Anda
-                                </a>
-                            </li>
+                            <li><a class="dropdown-item" href="{{ route('favorit') }}"><i class="bi bi-bookmark-fill me-2"></i> Favorit Anda</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li>
-                                <!-- Link Logout -->
-                                <a class="dropdown-item" href="{{ route('logout') }}"
-                                   onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                     <i class="bi bi-box-arrow-right me-2"></i> Keluar Akun
                                 </a>
-                                <!-- Form Logout (Tersembunyi) -->
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                    @csrf
-                                </form>
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">@csrf</form>
                             </li>
                         </ul>
                     </li>
                 </ul>
-
             </div>
         </div>
     </nav>
-    <main class="py-5">
+
+    <!-- MAIN CONTENT (Background Lavender) -->
+    <main class="py-5" style="background-color: #F8F7FF; min-height: 100vh;">
         <div class="container">
 
+            <!-- Breadcrumb -->
             <div class="mb-4">
-                <h2 class="fw-bold mb-1 text-header-blue">Detail Lengkap</h2>
-                <p class="text-muted">Lowongan pekerjaan yang dibagikan langsung oleh alumni di berbagai perusahaan</p>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{ route('recruitment') }}" class="text-decoration-none text-muted">Recruitment</a></li>
+                        <li class="breadcrumb-item active fw-semibold text-primary" aria-current="page">Detail Lowongan</li>
+                    </ol>
+                </nav>
             </div>
 
-            <div class="row g-5">
+            <div class="row g-4">
                 
-                <div class="col-lg-5">
-                        @if(!empty($r->image))
-                            <img src="{{ asset('storage/' . $r->image) }}" alt="Gambar Perusahaan" class="img-building">
-                        @else
-                            <img src="{{ asset('images/jwmarriot.jpg') }}" alt="Gambar Perusahaan" class="img-building">
-                        @endif
-
-                        <div class="job-info-card p-4 shadow-sm">
-                            <h5 class="fw-bold mb-1">{{ $r->position }}</h5>
-                            <p class="text-muted mb-4 fw-medium">{{ $r->company_name }}</p>
+                <!-- KOLOM KIRI: GAMBAR & INFO UTAMA -->
+                <div class="col-lg-4">
+                    <div class="sticky-sidebar" style="top: 90px; z-index: 1;">
                         
-                            <div class="d-flex justify-content-between align-items-center text-muted small">
-                                <span><i class="bi bi-geo-alt me-1"></i> {{ $r->location }}</span>
-                                <span>{{ \Carbon\Carbon::parse($r->date)->diffForHumans() }}</span>
+                        <!-- Card Gambar -->
+                        <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-4">
+                            <div class="position-relative">
+                                @if(!empty($r->image))
+                                    <img src="{{ asset('storage/' . $r->image) }}" 
+                                         alt="Gambar Perusahaan" 
+                                         class="w-100" 
+                                         style="height: 220px; object-fit: cover;"
+                                         onerror="this.onerror=null; this.src='{{ asset('images/jwmarriot.jpg') }}';">
+                                @else
+                                    <div class="bg-white d-flex align-items-center justify-content-center text-secondary" style="height: 220px;">
+                                        <div class="text-center">
+                                            <i class="bi bi-building display-1 opacity-25"></i>
+                                            <p class="small mt-2 mb-0 opacity-50">Tidak ada gambar</p>
+                                        </div>
+                                    </div>
+                                @endif
+                                <span class="position-absolute top-0 end-0 m-3 badge bg-white text-dark shadow-sm px-3 py-2 rounded-pill">
+                                    {{ \Carbon\Carbon::parse($r->date)->diffForHumans() }}
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Card Info Singkat -->
+                        <div class="card border-0 shadow-sm rounded-4">
+                            <div class="card-body p-4">
+                                <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill mb-3">{{ $r->category ?? 'Umum' }}</span>
+                                
+                                <h4 class="fw-bold mb-1 text-dark">{{ $r->position }}</h4>
+                                <p class="text-muted fw-medium mb-4">{{ $r->company_name }}</p>
+                            
+                                <hr class="border-dashed opacity-50 my-4">
+
+                                <div class="vstack gap-3">
+                                    <div class="d-flex align-items-center">
+                                        <div class="icon-box bg-light rounded-circle p-2 me-3 text-primary">
+                                            <i class="bi bi-geo-alt fs-5"></i>
+                                        </div>
+                                        <div>
+                                            <small class="d-block text-muted" style="font-size: 0.75rem;">Lokasi</small>
+                                            <span class="fw-semibold text-dark">{{ $r->location }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        <div class="icon-box bg-light rounded-circle p-2 me-3 text-success">
+                                            <i class="bi bi-briefcase fs-5"></i>
+                                        </div>
+                                        <div>
+                                            <small class="d-block text-muted" style="font-size: 0.75rem;">Tipe Pekerjaan</small>
+                                            <span class="fw-semibold text-dark">{{ $r->jobtype ?? 'Full-time' }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        <div class="icon-box bg-light rounded-circle p-2 me-3 text-warning">
+                                            <i class="bi bi-person-circle fs-5"></i>
+                                        </div>
+                                        <div>
+                                            <small class="d-block text-muted" style="font-size: 0.75rem;">Diposting Oleh</small>
+                                            <span class="fw-semibold text-dark">{{ $r->author ?? 'Alumni' }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Tombol Apply / Link -->
+                                @if(!empty($r->link))
+                                    <div class="d-grid mt-4">
+                                        <a href="{{ $r->link }}" target="_blank" class="btn btn-primary rounded-pill py-2 fw-bold shadow-sm hover-scale">
+                                            Lamar Sekarang 🚀
+                                        </a>
+                                    </div>
+                                @endif
                             </div>
                         </div>
                     </div>
-
-                <div class="col-lg-7">
-                    <div class="d-flex justify-content-end mb-3">
-                        @auth
-                            @if(auth()->user()->role === 'admin' || auth()->user()->id === $r->user_id)
-                                <a href="{{ route('recruitment.edit', ['id'=>$r->id]) }}" class="btn btn-sm btn-outline-primary me-2">Edit</a>
-                                <form action="{{ route('recruitment.destroy', ['id'=>$r->id]) }}" method="POST" class="d-inline">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button class="btn btn-sm btn-outline-danger" onclick="return confirm('Hapus postingan ini?')">Hapus</button>
-                                </form>
-                            @endif
-                        @endauth
-                    </div>
-                    <h5 class="fw-bold mb-3">Deskripsi Pekerjaan</h5>
-                    <div class="text-dark" style="line-height: 1.7; font-size: 0.95rem;">
-                        @if(!empty($r->description))
-                            {{-- Render description from DB, preserve newlines --}}
-                            {!! nl2br(e($r->description)) !!}
-                        @else
-                            <p class="text-muted">Deskripsi pekerjaan belum tersedia untuk postingan ini.</p>
-                        @endif
-                    </div>
-
-                    <p class="mt-4 text-sm">
-                        Detail : <a href="https://id.jobstreet.com/id/jw-marriot-jobs/in-Medan-Sumatera-Utara" class="text-primary text-decoration-none fw-semibold">Lihat Selengkapnya..</a>
-                    </p>
                 </div>
 
-            </div>
-
-            <div class="mt-5">
-                <div class="card shadow-sm border-0" style="border-radius: 1.5rem;">
-                    <div class="card-body p-4 p-md-5">
-                        
-                        <h5 class="fw-bold mb-1">Diskusi & Pertanyaan</h5>
-                            <p class="text-muted small mb-4">Tanyakan hal-hal yang ingin kamu ketahui tentang posisi ini</p>
-
-                            <div class="comments-list mb-5">
-                                @if(!empty($comments) && $comments->count())
-                                    @foreach($comments as $c)
-                                        <div class="comment-bubble">
-                                            <div class="d-flex justify-content-between mb-1">
-                                                <span class="fw-bold text-dark">{{ $c->author ?? 'Anon' }}</span>
-                                                <span class="text-muted small">{{ \Carbon\Carbon::parse($c->created_at)->diffForHumans() }}</span>
-                                            </div>
-                                            <p class="mb-0 text-secondary small">{{ $c->content }}</p>
-                                        </div>
-                                    @endforeach
-                                @else
-                                    <div class="alert alert-info">Belum ada komentar.</div>
+                <!-- KOLOM KANAN: DESKRIPSI & KOMENTAR -->
+                <div class="col-lg-8">
+                    
+                    <!-- Card Deskripsi -->
+                    <div class="card border-0 shadow-sm rounded-4 p-4 p-lg-5 mb-4">
+                        <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom">
+                            <h5 class="fw-bold mb-0 text-dark">Deskripsi Pekerjaan</h5>
+                            
+                            <!-- TOMBOL KELOLA (HANYA ADMIN/OWNER) -->
+                            @auth
+                                @if(auth()->user()->role === 'admin' || auth()->user()->id === $r->user_id)
+                                    <a href="{{ route('recruitment') }}" class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-semibold">
+                                        <i class="bi bi-pencil-square me-1"></i> Kelola di Recruitment
+                                    </a>
                                 @endif
-                            </div>
+                            @endauth
+                        </div>
 
-                            <div>
-                                <label class="fw-bold small mb-2">Tambah Komentar</label>
-                                <form method="POST" action="{{ route('recruitment.comment', ['id' => $r->id]) }}">
-                                    @csrf
-                                    <input type="text" name="comment" class="form-control input-comment mb-3" placeholder="Tulis komentar ..." required>
-                                    <div class="d-flex justify-content-end">
-                                        <button type="submit" class="btn-send-comment d-flex align-items-center btn btn-primary">
-                                            <i class="bi bi-send-fill me-2"></i> Kirim Komentar
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
-
+                        <div class="text-secondary" style="line-height: 1.8; font-size: 1rem;">
+                            @if(!empty($r->description))
+                                {!! nl2br(e($r->description)) !!}
+                            @else
+                                <div class="alert alert-light border-dashed text-center text-muted">
+                                    <i class="bi bi-text-paragraph fs-1 d-block mb-2 opacity-50"></i>
+                                    Deskripsi pekerjaan belum tersedia.
+                                </div>
+                            @endif
+                        </div>
                     </div>
+
+                    <!-- Card Komentar -->
+                    <div class="card border-0 shadow-sm rounded-4 p-4 p-lg-5">
+                        <div class="d-flex align-items-center justify-content-between mb-4">
+                            <h5 class="fw-bold mb-0 text-dark">Diskusi <span class="text-muted fw-normal">({{ $comments->count() }})</span></h5>
+                            <span class="badge bg-light text-dark border rounded-pill px-3">Q&A</span>
+                        </div>
+
+                        <div class="comments-list mb-4">
+                            @forelse($comments as $c)
+                                <div class="d-flex gap-3 mb-4 animate-fade-in">
+                                    <!-- Avatar Inisial -->
+                                    <div class="avatar-comment flex-shrink-0 bg-gradient-primary text-white rounded-circle d-flex align-items-center justify-content-center shadow-sm" 
+                                         style="width: 45px; height: 45px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                                        <span class="fw-bold">{{ substr($c->author, 0, 1) }}</span>
+                                    </div>
+                                    
+                                    <div class="flex-grow-1">
+                                        <div class="bg-light p-3 rounded-4 rounded-top-left-0" style="border-top-left-radius: 0 !important;">
+                                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                                <span class="fw-bold text-dark" style="font-size: 0.95rem;">{{ $c->author ?? 'Anon' }}</span>
+                                                <small class="text-muted" style="font-size: 0.75rem;">{{ \Carbon\Carbon::parse($c->created_at)->diffForHumans() }}</small>
+                                            </div>
+                                            <p class="mb-0 text-secondary" style="font-size: 0.9rem;">{{ $c->content }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            @empty
+                                <div class="text-center py-5 bg-light rounded-4 border border-dashed mb-3">
+                                    <i class="bi bi-chat-square-quote fs-1 text-muted opacity-25 mb-2"></i>
+                                    <p class="text-muted mb-0">Belum ada diskusi. Jadilah yang pertama bertanya!</p>
+                                </div>
+                            @endforelse
+                        </div>
+
+                        <!-- Form Tambah Komentar -->
+                        <div class="mt-auto">
+                            <form method="POST" action="{{ route('recruitment.comment', ['id' => $r->id]) }}">
+                                @csrf
+                                <div class="d-flex gap-3 align-items-start">
+                                    <div class="avatar-comment flex-shrink-0 bg-dark text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 45px; height: 45px;">
+                                        <i class="bi bi-person-fill fs-5"></i>
+                                    </div>
+                                    <div class="w-100">
+                                        <div class="position-relative">
+                                            <textarea name="comment" class="form-control bg-light border-0 ps-3 pt-3" rows="2" placeholder="Tulis pertanyaan atau komentar..." required style="resize: none; border-radius: 1rem; padding-right: 60px;"></textarea>
+                                            <button type="submit" class="btn btn-primary btn-sm rounded-circle position-absolute bottom-0 end-0 m-2 shadow-sm" style="width: 32px; height: 32px;">
+                                                <i class="bi bi-send-fill" style="font-size: 0.8rem;"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Tombol Kembali -->
+                    <div class="mt-5 text-center">
+                        <a href="{{ route('recruitment') }}" class="btn btn-light border px-4 py-2 rounded-pill fw-semibold shadow-sm text-muted hover-scale">
+                            <i class="bi bi-arrow-left me-1"></i> Kembali ke Daftar
+                        </a>
+                    </div>
+
                 </div>
             </div>
-            <div class="mt-5">
-                </div>
-
-
-            <div class="mt-5 mb-5 text-center">
-                <a href="{{ route('recruitment') }}" class="btn btn-light border px-4 py-2 rounded-pill fw-semibold shadow-sm text-muted" style="font-size: 0.85rem; transition: all 0.2s;">
-                    <i class="bi bi-arrow-left me-1"></i> Kembali
-                </a>
-            </div>
-                </a>
-            </div>
-            </div> </main>
         </div>
     </main>
 

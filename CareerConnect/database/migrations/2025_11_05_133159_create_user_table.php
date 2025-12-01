@@ -14,15 +14,21 @@ return new class extends Migration
         Schema::create('user', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('email');
+            $table->string('email')->unique(); // Tambahkan unique agar email tidak duplikat
             $table->string('password');
-            $table->string('nim');
-            $table->string('study_program');
-            $table->string('class');
-            $table->string('image');
-            $table->string('interest');
-            $table->string('field');
-            $table->integer('contact');
+            
+            // Jadikan nullable jika data ini opsional saat register awal
+            $table->string('nim')->nullable(); 
+            $table->string('study_program')->nullable();
+            $table->string('class')->nullable();
+            
+            $table->string('image')->nullable(); // Foto profil biasanya opsional di awal
+            $table->string('interest')->nullable();
+            $table->string('field')->nullable();
+            
+            // PERBAIKAN UTAMA: Ganti integer jadi string
+            $table->string('contact')->nullable(); 
+            
             $table->enum('role', ['admin', 'mahasiswa', 'alumni']);
             $table->timestamps();
         });
