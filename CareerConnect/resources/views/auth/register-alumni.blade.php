@@ -108,6 +108,19 @@
                                         @error('class') <div class="text-danger small mt-1">{{ $message }}</div> @enderror
                                     </div>
                                     <div class="col-md-6">
+                                        <label for="graduation_year" class="form-label-custom">Tahun Lulus</label>
+                                        <input type="number" 
+                                               class="form-control form-control-custom" 
+                                               id="graduation_year" 
+                                               name="graduation_year" 
+                                               placeholder="Contoh: 2024" 
+                                               value="{{ old('graduation_year') }}" 
+                                               min="2005" 
+                                               max="{{ date('Y') }}"
+                                               required>
+                                        @error('graduation_year') <div class="text-danger small mt-1">{{ $message }}</div> @enderror
+                                    </div>
+                                    <div class="col-md-12">
                                         <label for="jurusan" class="form-label-custom">Jurusan / Program Studi</label>
                                         <select class="form-select form-control-custom" id="jurusan" name="study_program" required>
                                             <option value="" {{ old('study_program') ? '' : 'selected' }} disabled>Pilih Jurusan Anda</option>
@@ -132,8 +145,19 @@
                                 <div class="row g-3">
                                     <div class="col-md-12">
                                         <label for="bidang_saat_ini" class="form-label-custom">Bidang Saat Ini</label>
-                                        <input type="text" class="form-control form-control-custom" id="bidang_saat_ini" name="field" placeholder="Isi bidang Anda" value="{{ old('field') }}">
-                                        @error('field') <div class="text-danger small mt-1">{{ $message }}</div> @enderror
+                                        <select class="form-select form-control-custom" id="bidang_saat_ini" name="current_field" required>
+                                            <option value="" {{ old('current_field') ? '' : 'selected' }} disabled>Pilih bidang Anda saat ini</option>
+                                            <option value="Software Engineering" {{ old('current_field')=='Software Engineering' ? 'selected' : '' }}>Software Engineering</option>
+                                            <option value="UI/UX Design" {{ old('current_field')=='UI/UX Design' ? 'selected' : '' }}>UI/UX Design</option>
+                                            <option value="Data Science" {{ old('current_field')=='Data Science' ? 'selected' : '' }}>Data Science</option>
+                                            <option value="Product Management" {{ old('current_field')=='Product Management' ? 'selected' : '' }}>Product Management</option>
+                                            <option value="Digital Marketing" {{ old('current_field')=='Digital Marketing' ? 'selected' : '' }}>Digital Marketing</option>
+                                            <option value="QA & Testing" {{ old('current_field')=='QA & Testing' ? 'selected' : '' }}>QA & Testing</option>
+                                            <option value="Cybersecurity" {{ old('current_field')=='Cybersecurity' ? 'selected' : '' }}>Cybersecurity</option>
+                                            <option value="Operations" {{ old('current_field')=='Operations' ? 'selected' : '' }}>Operations</option>
+                                            <option value="Lainnya" {{ old('current_field')=='Lainnya' ? 'selected' : '' }}>Lainnya</option>
+                                        </select>
+                                        @error('current_field') <div class="text-danger small mt-1">{{ $message }}</div> @enderror
                                     </div>
                                     <div class="col-md-12">
                                         <label for="kontak" class="form-label-custom">Kontak (Opsional)</label>

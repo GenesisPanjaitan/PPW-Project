@@ -32,6 +32,11 @@ class RegisterController extends Controller
             'nim' => 'nullable|string|max:50',
             'study_program' => 'nullable|string|max:255',
             'class' => 'nullable|string|max:100',
+            'interest' => 'nullable|string|max:255',
+            'current_field' => 'nullable|string|max:255',
+            'field' => 'nullable|string|max:255',
+            'contact' => 'nullable|string|max:255',
+            'graduation_year' => 'nullable|integer|min:2005|max:' . date('Y'),
         ]);
 
         // determine role (default mahasiswa)
@@ -47,8 +52,10 @@ class RegisterController extends Controller
             'study_program' => $request->input('study_program', ''),
             'class' => $request->input('class', ''),
             'image' => $request->input('image', ''),
-            'interest' => $request->input('minat_karir', ''),
+            'interest' => $request->input('interest', ''),
             'field' => $request->input('field', ''),
+            'current_field' => $request->input('current_field', ''),
+            'graduation_year' => $request->input('graduation_year', null),
             'contact' => $request->input('contact', 0),
             'role' => $role,
         ]);

@@ -39,8 +39,12 @@
                 <ul class="navbar-nav">
                     <li class="nav-item dropdown">
                         <!-- Tombol Pemicu Dropdown -->
-                        <a class="nav-link dropdown-toggle fw-semibold" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-person-circle me-1"></i>
+                        <a class="nav-link dropdown-toggle d-flex align-items-center fw-semibold" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            @if(auth()->user() && auth()->user()->image && file_exists(public_path('storage/profile_photos/' . auth()->user()->image)))
+                                <img src="{{ asset('storage/profile_photos/' . auth()->user()->image) }}" class="rounded-circle me-2" width="32" height="32" style="object-fit: cover;">
+                            @else
+                                <i class="bi bi-person-circle me-1"></i>
+                            @endif
                             {{ optional(auth()->user())->name ?? 'Kevin Gultom' }}
                         </a>
                         
@@ -100,76 +104,24 @@
         </div>
     </div>
 
-    <div class="container mt-4" id="lowongan-section"> {{-- Penyesuaian margin top untuk konten di bawah hero --}}
+
+
+    <div class="container mt-4" id="lowongan-section">
 
         @if (session('login_success'))
             <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
                 <i class="bi bi-check-circle-fill me-2"></i> {{ session('login_success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                <button type="type" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         @endif
         
-        <h2 class="fw-bold mb-1">Selamat datang, {{ optional(auth()->user())->name ?? 'Kevin Gultom' }} 👋</h2>
-        <p class="text-muted mb-4">Siap untuk mencari peluang karir hari ini?</p>
+        <div class="text-center mb-5">
+            <h2 class="fw-bold mb-3">Halo, {{ optional(auth()->user())->name ?? 'Pencari Kerja' }} 👋</h2>
+            <p class="text-muted lead">Siap untuk menemukan peluang karir terbaik hari ini?</p>
+        </div>
 
         <div class="row g-4">
             <div class="col-lg-8">
-                <div class="card shadow-sm border-0 mb-4" style="border-radius: 1rem;">
-                    <div class="card-body p-4">
-                        <h5 class="fw-bold mb-1">Rekomendasi Lowongan</h5>
-                        <p class="text-muted small mb-3">Berdasarkan minat dan skill Anda</p>
-
-                        <div class="card job-card mb-3 border-0 bg-light">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between align-items-start">
-                                    <div class="d-flex">
-                                        <div class="me-3 d-flex align-items-center justify-content-center bg-white rounded shadow-sm" style="width:50px; height:50px;">
-                                           <i class="bi bi-code-slash fs-4 text-primary"></i>
-                                        </div>
-                                        <div>
-                                            <h6 class="fw-bold mb-0">Frontend Developer Intern</h6>
-                                            <p class="small mb-1 text-dark">Techstart Indonesia</p>
-                                            <p class="small text-muted mb-0">
-                                                <i class="bi bi-geo-alt me-1"></i> Bandung 
-                                                <i class="bi bi-clock ms-2 me-1"></i> 2 hari lalu
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <button class="btn btn-sm btn-outline-secondary rounded-circle"><i class="bi bi-bookmark"></i></button>
-                                </div>
-                                <div class="mt-3">
-                                    <span class="badge bg-info bg-opacity-10 text-info border border-info rounded-pill px-3">Internship</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="card job-card mb-3 border-0 bg-light">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between align-items-start">
-                                    <div class="d-flex">
-                                        <div class="me-3 d-flex align-items-center justify-content-center bg-white rounded shadow-sm" style="width:50px; height:50px;">
-                                           <i class="bi bi-palette fs-4 text-warning"></i>
-                                        </div>
-                                        <div>
-                                            <h6 class="fw-bold mb-0">UI/UX Designer</h6>
-                                            <p class="small mb-1 text-dark">Creative Studio</p>
-                                            <p class="small text-muted mb-0">
-                                                <i class="bi bi-geo-alt me-1"></i> Bandung 
-                                                <i class="bi bi-clock ms-2 me-1"></i> 4 hari lalu
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <button class="btn btn-sm btn-outline-secondary rounded-circle"><i class="bi bi-bookmark"></i></button>
-                                </div>
-                                <div class="mt-3">
-                                    <span class="badge bg-warning bg-opacity-10 text-warning border border-warning rounded-pill px-3">Part-time</span>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-
                 <div class="card shadow-sm border-0" style="border-radius: 1rem;">
                     <div class="card-body p-4">
                         <h5 class="fw-bold mb-1">Lowongan Terbaru</h5>
@@ -177,29 +129,31 @@
 
                         @if(!empty($latestRecruitments) && $latestRecruitments->count())
                             @foreach($latestRecruitments as $r)
-                                <div class="card job-card mb-3 border-0 bg-light">
-                                    <div class="card-body">
-                                        <div class="d-flex justify-content-between align-items-start">
-                                            <div class="d-flex">
-                                                <div class="me-3 d-flex align-items-center justify-content-center bg-white rounded shadow-sm" style="width:50px; height:50px;">
-                                                   <i class="bi bi-building fs-4 text-danger"></i>
+                                <a href="{{ route('recruitment.detail', $r->id) }}" class="text-decoration-none">
+                                    <div class="card job-card mb-3 border-0 bg-light hover-shadow" style="cursor: pointer; transition: transform 0.2s;">
+                                        <div class="card-body">
+                                            <div class="d-flex justify-content-between align-items-start">
+                                                <div class="d-flex">
+                                                    <div class="me-3 d-flex align-items-center justify-content-center bg-white rounded shadow-sm" style="width:50px; height:50px;">
+                                                       <i class="bi bi-building fs-4 text-danger"></i>
+                                                    </div>
+                                                    <div>
+                                                        <h6 class="fw-bold mb-0 text-dark">{{ $r->position }}</h6>
+                                                        <p class="small mb-1 text-dark">{{ $r->company_name }}</p>
+                                                        <p class="small text-muted mb-0">
+                                                            <i class="bi bi-geo-alt me-1"></i> {{ $r->location }} 
+                                                            <i class="bi bi-clock ms-2 me-1"></i> {{ \Carbon\Carbon::parse($r->date)->diffForHumans() }}
+                                                        </p>
+                                                    </div>
                                                 </div>
-                                                <div>
-                                                    <h6 class="fw-bold mb-0">{{ $r->position }}</h6>
-                                                    <p class="small mb-1 text-dark">{{ $r->company_name }}</p>
-                                                    <p class="small text-muted mb-0">
-                                                        <i class="bi bi-geo-alt me-1"></i> {{ $r->location }} 
-                                                        <i class="bi bi-clock ms-2 me-1"></i> {{ \Carbon\Carbon::parse($r->date)->diffForHumans() }}
-                                                    </p>
-                                                </div>
+                                                <button class="btn btn-sm btn-outline-secondary rounded-circle" onclick="event.preventDefault(); event.stopPropagation();"><i class="bi bi-bookmark"></i></button>
                                             </div>
-                                            <button class="btn btn-sm btn-outline-secondary rounded-circle"><i class="bi bi-bookmark"></i></button>
-                                        </div>
-                                        <div class="mt-3">
-                                            <span class="badge bg-success bg-opacity-10 text-success border border-success rounded-pill px-3">{{ $r->jobtype ?? 'Full-time' }}</span>
+                                            <div class="mt-3">
+                                                <span class="badge bg-success bg-opacity-10 text-success border border-success rounded-pill px-3">{{ $r->jobtype ?? 'Full-time' }}</span>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                </a>
                             @endforeach
                         @else
                             <div class="alert alert-info">Belum ada lowongan terbaru.</div>
@@ -216,20 +170,59 @@
 
                         <div class="mb-3">
                             <label class="small text-muted d-block">Jurusan</label>
-                            <span class="fw-semibold text-dark">Sistem Informasi</span>
+                            <span class="fw-semibold text-dark">
+                                @if(auth()->user()->study_program)
+                                    @switch(auth()->user()->study_program)
+                                        @case('if') S1-Informatika @break
+                                        @case('si') S1-Sistem Informasi @break
+                                        @case('te') S1-Teknik Elektro @break
+                                        @case('mr') S1-Manajemen Rekayasa @break
+                                        @case('tm') S1-Teknik Metalurgi @break
+                                        @case('bp') S1-Teknik Bioproses @break
+                                        @case('bt') S1-Bioteknologi @break
+                                        @case('trpl') D4-Teknologi Rekayasa Perangkat Lunak @break
+                                        @case('ti') D3-Teknologi Informasi @break
+                                        @case('nm') D3-Teknologi Komputer @break
+                                        @default {{ auth()->user()->study_program }}
+                                    @endswitch
+                                @else
+                                    <span class="text-muted">Belum diatur</span>
+                                @endif
+                            </span>
                         </div>
 
                         <div class="mb-3">
                             <label class="small text-muted d-block">Minat Karir</label>
-                            <span class="fw-semibold text-dark">Software Development</span>
+                            <span class="fw-semibold text-dark">
+                                @if(auth()->user()->interest)
+                                    @switch(auth()->user()->interest)
+                                        @case('swe') Software Engineering @break
+                                        @case('uiux') UI/UX Design @break
+                                        @case('data') Data Science @break
+                                        @case('product') Product Management @break
+                                        @case('digital_marketing') Digital Marketing @break
+                                        @case('qa_testing') QA & Testing @break
+                                        @case('cybersecurity') Cybersecurity @break
+                                        @case('operations') Operations @break
+                                        @case('lainnya') Lainnya @break
+                                        @default {{ auth()->user()->interest }}
+                                    @endswitch
+                                @else
+                                    <span class="text-muted">Belum diatur</span>
+                                @endif
+                            </span>
                         </div>
 
                         <div class="mb-4">
                             <label class="small text-muted d-block mb-1">Skills</label>
                             <div>
-                                <span class="badge bg-secondary bg-opacity-10 text-dark me-1 mb-1">Python</span>
-                                <span class="badge bg-secondary bg-opacity-10 text-dark me-1 mb-1">JavaScript</span>
-                                <span class="badge bg-secondary bg-opacity-10 text-dark me-1 mb-1">C++</span>
+                                @if(auth()->user()->field)
+                                    @foreach(explode(',', auth()->user()->field) as $skill)
+                                        <span class="badge bg-secondary bg-opacity-10 text-dark me-1 mb-1">{{ trim($skill) }}</span>
+                                    @endforeach
+                                @else
+                                    <span class="text-muted">Belum ada skills yang diatur</span>
+                                @endif
                             </div>
                         </div>
 
@@ -244,6 +237,9 @@
             </div>
         </div>
     </div>
+
+
+
 </main>
 
 <script>
@@ -264,6 +260,38 @@
             slides[currentSlide].classList.add('active');
         }, intervalTime);
     });
+
+
 </script>
+
+<style>
+    .job-card:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.1) !important;
+    }
+    .hover-shadow:hover {
+        transition: all 0.3s ease;
+    }
+
+
+    /* Smooth animations */
+    * {
+        transition: all 0.3s ease;
+    }
+    
+    /* Enhanced hero section styling */
+    .hero-section {
+        position: relative;
+        border-radius: 1rem;
+        overflow: hidden;
+    }
+    
+    .text-highlight {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+</style>
 
 @endsection

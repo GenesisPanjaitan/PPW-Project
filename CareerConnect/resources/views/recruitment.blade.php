@@ -19,8 +19,12 @@
                 </ul>
                 <ul class="navbar-nav">
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle fw-semibold" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-person-circle me-1"></i>
+                        <a class="nav-link dropdown-toggle d-flex align-items-center fw-semibold" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            @if(auth()->user() && auth()->user()->image && file_exists(public_path('storage/profile_photos/' . auth()->user()->image)))
+                                <img src="{{ asset('storage/profile_photos/' . auth()->user()->image) }}" class="rounded-circle me-2" width="32" height="32" style="object-fit: cover;">
+                            @else
+                                <i class="bi bi-person-circle me-1"></i>
+                            @endif
                             @auth {{ auth()->user()->name }} @else {{ optional(auth()->user())->name ?? 'Kevin Gultom' }} @endauth
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
@@ -46,16 +50,21 @@
             <!-- HEADER SECTION -->
             <div class="d-flex flex-column flex-md-row justify-content-between align-items-end mb-4">
                 <div>
-                    <h2 class="fw-bold mb-1 text-primary">Recruitment Hub</h2>
+                    <h2 class="fw-bold mb-1" style="color: #6b5ce7;">Recruitment Hub</h2>
                     <p class="text-muted mb-0 small">Temukan peluang karir terbaik dari alumni.</p>
                 </div>
                 
                 <div class="mt-3 mt-md-0">
                     @auth
                         @if(auth()->user()->role === 'alumni' || auth()->user()->role === 'admin')
-                            <button id="openPostingBtn" class="btn btn-dark btn-sm rounded-pill px-4 py-2 shadow-sm hover-scale fw-bold">
-                                <i class="bi bi-plus-lg me-1"></i> Posting Lowongan
-                            </button>
+                            <div class="d-flex gap-2">
+                                <button id="openPostingBtn" class="btn btn-dark btn-sm rounded-pill px-4 py-2 shadow-sm hover-scale fw-bold">
+                                    <i class="bi bi-plus-lg me-1"></i> Posting Lowongan
+                                </button>
+                                <a href="{{ route('recruitment.my-posts') }}" class="btn btn-outline-dark btn-sm rounded-pill px-4 py-2 shadow-sm hover-scale fw-bold">
+                                    <i class="bi bi-file-text me-1"></i> Lihat Postingan Anda
+                                </a>
+                            </div>
                         @endif
                     @else
                         <a href="{{ route('login') }}" class="btn btn-dark btn-sm rounded-pill px-4 py-2 shadow-sm hover-scale fw-bold">
@@ -82,9 +91,9 @@
                             <div class="col-lg-3">
                                 <select name="type" class="form-select border-0 shadow-none text-muted cursor-pointer" style="background-position: right 0.75rem center;">
                                     <option value="">Semua Tipe Pekerjaan</option>
-                                    <option value="Full-time">Full-time</option>
-                                    <option value="Part-time">Part-time</option>
-                                    <option value="Internship">Internship</option>
+                                    <option value="Full-time" {{ request('type') == 'Full-time' ? 'selected' : '' }}>Full-time</option>
+                                    <option value="Part-time" {{ request('type') == 'Part-time' ? 'selected' : '' }}>Part-time</option>
+                                    <option value="Internship" {{ request('type') == 'Internship' ? 'selected' : '' }}>Internship</option>
                                 </select>
                             </div>
                             <div class="col-auto d-none d-lg-block">
@@ -93,9 +102,9 @@
                             <div class="col-lg-2">
                                 <select name="category" class="form-select border-0 shadow-none text-muted cursor-pointer">
                                     <option value="">Semua Kategori</option>
-                                    <option value="Teknologi">Teknologi</option>
-                                    <option value="Bisnis">Bisnis</option>
-                                    <option value="Desain">Desain</option>
+                                    <option value="Teknologi" {{ request('category') == 'Teknologi' ? 'selected' : '' }}>Teknologi</option>
+                                    <option value="Bisnis" {{ request('category') == 'Bisnis' ? 'selected' : '' }}>Bisnis</option>
+                                    <option value="Desain" {{ request('category') == 'Desain' ? 'selected' : '' }}>Desain</option>
                                 </select>
                             </div>
                             <div class="col-lg-1 d-grid">
@@ -105,6 +114,41 @@
                     </form>
                 </div>
             </div>
+
+            <!-- SEARCH RESULTS INFO -->
+            @if(request()->hasAny(['q', 'type', 'category']))
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h6 class="mb-1">
+                            <span class="fw-bold text-primary">{{ $recruitments->count() }}</span> 
+                            lowongan ditemukan
+                            @if(request('q'))
+                                untuk "<span class="fw-semibold">{{ request('q') }}</span>"
+                            @endif
+                        </h6>
+                        <div class="d-flex flex-wrap gap-2 mt-2">
+                            @if(request('q'))
+                                <span class="badge bg-light text-dark border">
+                                    <i class="bi bi-search me-1"></i>{{ request('q') }}
+                                </span>
+                            @endif
+                            @if(request('type'))
+                                <span class="badge bg-light text-dark border">
+                                    <i class="bi bi-briefcase me-1"></i>{{ request('type') }}
+                                </span>
+                            @endif
+                            @if(request('category'))
+                                <span class="badge bg-light text-dark border">
+                                    <i class="bi bi-tag me-1"></i>{{ request('category') }}
+                                </span>
+                            @endif
+                        </div>
+                    </div>
+                    <a href="{{ route('recruitment') }}" class="btn btn-outline-secondary btn-sm">
+                        <i class="bi bi-x-circle me-1"></i>Reset Filter
+                    </a>
+                </div>
+            @endif
 
             <!-- LIST LOWONGAN -->
             <div class="row">
@@ -194,10 +238,22 @@
                     <div class="col-12">
                         <div class="text-center py-5 text-muted">
                             <div class="mb-3 opacity-25">
-                                <i class="bi bi-briefcase fs-1"></i>
+                                @if(request()->hasAny(['q', 'type', 'category']))
+                                    <i class="bi bi-search fs-1"></i>
+                                @else
+                                    <i class="bi bi-briefcase fs-1"></i>
+                                @endif
                             </div>
-                            <h5>Belum ada lowongan tersedia</h5>
-                            <p>Jadilah yang pertama memposting peluang karir!</p>
+                            @if(request()->hasAny(['q', 'type', 'category']))
+                                <h5>Tidak ada lowongan yang ditemukan</h5>
+                                <p>Coba ubah kata kunci pencarian atau filter yang digunakan</p>
+                                <a href="{{ route('recruitment') }}" class="btn btn-outline-primary">
+                                    <i class="bi bi-arrow-clockwise me-1"></i>Lihat Semua Lowongan
+                                </a>
+                            @else
+                                <h5>Belum ada lowongan tersedia</h5>
+                                <p>Jadilah yang pertama memposting peluang karir!</p>
+                            @endif
                         </div>
                     </div>
                 @endforelse
@@ -227,7 +283,55 @@
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label small fw-bold text-secondary">Posisi</label>
-                                <input type="text" name="position" class="form-control bg-light border-0" placeholder="Frontend Dev..." required>
+                                <select name="position" class="form-select form-select-sm bg-light border-0" required>
+                                    <option value="" selected disabled>Pilih posisi...</option>
+                                    <optgroup label="Software Engineering">
+                                        <option value="Frontend Developer">Frontend Developer</option>
+                                        <option value="Backend Developer">Backend Developer</option>
+                                        <option value="Fullstack Developer">Fullstack Developer</option>
+                                        <option value="Software Engineer">Software Engineer</option>
+                                        <option value="Mobile Developer">Mobile Developer</option>
+                                    </optgroup>
+                                    <optgroup label="UI/UX Design">
+                                        <option value="UI Designer">UI Designer</option>
+                                        <option value="UX Designer">UX Designer</option>
+                                        <option value="Product Designer">Product Designer</option>
+                                        <option value="Graphic Designer">Graphic Designer</option>
+                                    </optgroup>
+                                    <optgroup label="Data Science">
+                                        <option value="Data Scientist">Data Scientist</option>
+                                        <option value="Data Analyst">Data Analyst</option>
+                                        <option value="Business Intelligence">Business Intelligence</option>
+                                        <option value="Machine Learning Engineer">Machine Learning Engineer</option>
+                                    </optgroup>
+                                    <optgroup label="Product Management">
+                                        <option value="Product Manager">Product Manager</option>
+                                        <option value="Project Manager">Project Manager</option>
+                                        <option value="Business Analyst">Business Analyst</option>
+                                    </optgroup>
+                                    <optgroup label="Digital Marketing">
+                                        <option value="Digital Marketing Specialist">Digital Marketing Specialist</option>
+                                        <option value="Social Media Manager">Social Media Manager</option>
+                                        <option value="Content Creator">Content Creator</option>
+                                        <option value="SEO Specialist">SEO Specialist</option>
+                                    </optgroup>
+                                    <optgroup label="QA & Testing">
+                                        <option value="QA Engineer">QA Engineer</option>
+                                        <option value="Software Tester">Software Tester</option>
+                                        <option value="Quality Assurance">Quality Assurance</option>
+                                    </optgroup>
+                                    <optgroup label="Cybersecurity">
+                                        <option value="Security Engineer">Security Engineer</option>
+                                        <option value="Cybersecurity Analyst">Cybersecurity Analyst</option>
+                                        <option value="Information Security">Information Security</option>
+                                    </optgroup>
+                                    <optgroup label="Operations">
+                                        <option value="DevOps Engineer">DevOps Engineer</option>
+                                        <option value="System Administrator">System Administrator</option>
+                                        <option value="IT Support">IT Support</option>
+                                        <option value="Operations Manager">Operations Manager</option>
+                                    </optgroup>
+                                </select>
                             </div>
                         </div>
                         <div class="row g-3 mb-3">
@@ -299,7 +403,55 @@
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label small fw-bold text-secondary">Posisi</label>
-                                <input type="text" id="edit_position" name="position" class="form-control bg-light border-0" required>
+                                <select id="edit_position" name="position" class="form-select form-select-sm bg-light border-0" required>
+                                    <option value="">Pilih posisi...</option>
+                                    <optgroup label="Software Engineering">
+                                        <option value="Frontend Developer">Frontend Developer</option>
+                                        <option value="Backend Developer">Backend Developer</option>
+                                        <option value="Fullstack Developer">Fullstack Developer</option>
+                                        <option value="Software Engineer">Software Engineer</option>
+                                        <option value="Mobile Developer">Mobile Developer</option>
+                                    </optgroup>
+                                    <optgroup label="UI/UX Design">
+                                        <option value="UI Designer">UI Designer</option>
+                                        <option value="UX Designer">UX Designer</option>
+                                        <option value="Product Designer">Product Designer</option>
+                                        <option value="Graphic Designer">Graphic Designer</option>
+                                    </optgroup>
+                                    <optgroup label="Data Science">
+                                        <option value="Data Scientist">Data Scientist</option>
+                                        <option value="Data Analyst">Data Analyst</option>
+                                        <option value="Business Intelligence">Business Intelligence</option>
+                                        <option value="Machine Learning Engineer">Machine Learning Engineer</option>
+                                    </optgroup>
+                                    <optgroup label="Product Management">
+                                        <option value="Product Manager">Product Manager</option>
+                                        <option value="Project Manager">Project Manager</option>
+                                        <option value="Business Analyst">Business Analyst</option>
+                                    </optgroup>
+                                    <optgroup label="Digital Marketing">
+                                        <option value="Digital Marketing Specialist">Digital Marketing Specialist</option>
+                                        <option value="Social Media Manager">Social Media Manager</option>
+                                        <option value="Content Creator">Content Creator</option>
+                                        <option value="SEO Specialist">SEO Specialist</option>
+                                    </optgroup>
+                                    <optgroup label="QA & Testing">
+                                        <option value="QA Engineer">QA Engineer</option>
+                                        <option value="Software Tester">Software Tester</option>
+                                        <option value="Quality Assurance">Quality Assurance</option>
+                                    </optgroup>
+                                    <optgroup label="Cybersecurity">
+                                        <option value="Security Engineer">Security Engineer</option>
+                                        <option value="Cybersecurity Analyst">Cybersecurity Analyst</option>
+                                        <option value="Information Security">Information Security</option>
+                                    </optgroup>
+                                    <optgroup label="Operations">
+                                        <option value="DevOps Engineer">DevOps Engineer</option>
+                                        <option value="System Administrator">System Administrator</option>
+                                        <option value="IT Support">IT Support</option>
+                                        <option value="Operations Manager">Operations Manager</option>
+                                    </optgroup>
+                                </select>
                             </div>
                         </div>
                         <div class="row g-3 mb-3">

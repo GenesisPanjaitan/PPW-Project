@@ -46,7 +46,11 @@
                                     </td>
                                     <td>
                                         <a href="{{ route('admin.mahasiswa.detail', $mhs->id ?? 1) }}" class="btn btn-sm btn-info">Detail</a>
-                                        <a href="#" class="btn btn-sm btn-danger">Hapus</a>
+                                        <form action="{{ route('admin.mahasiswa.delete', $mhs->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus akun mahasiswa {{ $mhs->name }}? Tindakan ini tidak dapat dibatalkan!')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-sm btn-danger">Hapus</button>
+                                        </form>
                                     </td>
                                 </tr>
                                 @endforeach

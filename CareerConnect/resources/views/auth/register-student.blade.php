@@ -112,19 +112,19 @@
                                 <div class="row g-3">
                                     <div class="col-md-12">
     <label for="minat_karir" class="form-label-custom">Minat Karir</label>
-    <select class="form-select form-control-custom" id="minat_karir" name="minat_karir">
-        <option value="" {{ old('minat_karir') ? '' : 'selected' }} disabled>Pilih bidang yang diminati</option>
-        <option value="swe" {{ old('minat_karir')=='swe' ? 'selected' : '' }}>Software Engineering</option>
-        <option value="uiux" {{ old('minat_karir')=='uiux' ? 'selected' : '' }}>UI/UX Design</option>
-        <option value="data" {{ old('minat_karir')=='data' ? 'selected' : '' }}>Data Science</option>
-        <option value="product" {{ old('minat_karir')=='product' ? 'selected' : '' }}>Product Management</option>
-        <option value="digital_marketing" {{ old('minat_karir')=='digital_marketing' ? 'selected' : '' }}>Digital Marketing</option>
-        <option value="qa_testing" {{ old('minat_karir')=='qa_testing' ? 'selected' : '' }}>QA & Testing</option>
-        <option value="cybersecurity" {{ old('minat_karir')=='cybersecurity' ? 'selected' : '' }}>Cybersecurity</option>
-        <option value="operations" {{ old('minat_karir')=='operations' ? 'selected' : '' }}>Operations</option>
-        <option value="lainnya" {{ old('minat_karir')=='lainnya' ? 'selected' : '' }}>Lainnya</option>
+    <select class="form-select form-control-custom" id="minat_karir" name="interest" required>
+        <option value="" {{ old('interest') ? '' : 'selected' }} disabled>Pilih bidang yang diminati</option>
+        <option value="Software Engineering" {{ old('interest')=='Software Engineering' ? 'selected' : '' }}>Software Engineering</option>
+        <option value="UI/UX Design" {{ old('interest')=='UI/UX Design' ? 'selected' : '' }}>UI/UX Design</option>
+        <option value="Data Science" {{ old('interest')=='Data Science' ? 'selected' : '' }}>Data Science</option>
+        <option value="Product Management" {{ old('interest')=='Product Management' ? 'selected' : '' }}>Product Management</option>
+        <option value="Digital Marketing" {{ old('interest')=='Digital Marketing' ? 'selected' : '' }}>Digital Marketing</option>
+        <option value="QA & Testing" {{ old('interest')=='QA & Testing' ? 'selected' : '' }}>QA & Testing</option>
+        <option value="Cybersecurity" {{ old('interest')=='Cybersecurity' ? 'selected' : '' }}>Cybersecurity</option>
+        <option value="Operations" {{ old('interest')=='Operations' ? 'selected' : '' }}>Operations</option>
+        <option value="Lainnya" {{ old('interest')=='Lainnya' ? 'selected' : '' }}>Lainnya</option>
     </select>
-    @error('minat_karir') <div class="text-danger small mt-1">{{ $message }}</div> @enderror
+    @error('interest') <div class="text-danger small mt-1">{{ $message }}</div> @enderror
 </div>
                                     <div class="col-md-12">
                                         <label for="skill" class="form-label-custom">Skill & Keahlian <small class="text-muted">(Pisahkan setiap skill dengan koma)</small></label>

@@ -144,6 +144,31 @@
             opacity: 0.9;
         }
 
+        /* Notification dropdown styles */
+        .dropdown-item:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .dropdown-item.notification-item {
+            border-left: 3px solid transparent;
+            transition: all 0.2s ease;
+        }
+        
+        .dropdown-item.notification-item:hover {
+            border-left-color: var(--primary-color);
+            background-color: #f0f0ff;
+        }
+        
+        .notification-badge {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
         @yield('custom-styles')
     </style>
 </head>
@@ -176,9 +201,8 @@
 
                 <!-- Menu Kelola -->
                 <div class="sidebar-label">KELOLA</div>
-                <a href="{{ route('admin.lowongan') }}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center {{ Request::is('admin/lowongan') ? 'active' : '' }}">
+                <a href="{{ route('admin.lowongan') }}" class="list-group-item list-group-item-action {{ Request::is('admin/lowongan') ? 'active' : '' }}">
                     <span><i class="bi bi-briefcase-fill"></i> Lowongan</span>
-                    <span class="badge bg-danger rounded-pill">{{ $lowonganCount ?? 0 }}</span>
                 </a>
 
                 <div class="mt-4"></div>
@@ -203,29 +227,186 @@
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav ms-auto mt-2 mt-lg-0 align-items-center">
                             
-                            <!-- Notifikasi Icon -->
-                            <li class="nav-item me-3">
-                                <a class="nav-link position-relative text-secondary" href="#">
+                            <!-- Notifikasi Dropdown -->
+                            <li class="nav-item dropdown me-3">
+                                <a class="nav-link dropdown-toggle position-relative text-secondary" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown">
                                     <i class="bi bi-bell fs-5"></i>
-                                    <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle">
-                                        <span class="visually-hidden">New alerts</span>
+                                    @if(isset($newNotifications) && $newNotifications > 0)
+                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="notification-badge">
+                                        {{ $newNotifications > 99 ? '99+' : $newNotifications }}
+                                        <span class="visually-hidden">notifikasi baru</span>
                                     </span>
+                                    @endif
                                 </a>
+                                <div class="dropdown-menu dropdown-menu-end border-0 shadow" style="width: 350px; max-height: 400px; overflow-y: auto;">
+                                    <div class="dropdown-header d-flex justify-content-between align-items-center">
+                                        <h6 class="mb-0">Notifikasi Terbaru</h6>
+                                        <small class="text-muted">{{ isset($newNotifications) ? $newNotifications : 0 }} baru</small>
+                                    </div>
+                                    <div class="dropdown-divider"></div>
+                                    
+                                    @if(isset($recentMahasiswa) && $recentMahasiswa->count() > 0)
+                                    <div class="px-3 py-2">
+                                        <small class="text-muted fw-bold d-block mb-2">
+                                            <i class="bi bi-mortarboard-fill text-primary me-1"></i>MAHASISWA TERBARU
+                                        </small>
+                                        @foreach($recentMahasiswa as $mahasiswa)
+                                        <a href="{{ route('admin.mahasiswa.detail', $mahasiswa->id) }}" class="dropdown-item py-2 border-0">
+                                            <div class="d-flex align-items-center">
+                                                <img src="https://ui-avatars.com/api/?name={{ urlencode($mahasiswa->name) }}&background=667eea&color=fff&size=32" 
+                                                     class="rounded-circle me-2" width="32" height="32">
+                                                <div class="flex-grow-1">
+                                                    <div class="fw-semibold small">{{ $mahasiswa->name }}</div>
+                                                    <div class="text-muted" style="font-size: 0.75rem;">{{ $mahasiswa->created_at->diffForHumans() }}</div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        @endforeach
+                                    </div>
+                                    <div class="dropdown-divider"></div>
+                                    @endif
+                                    
+                                    @if(isset($recentAlumni) && $recentAlumni->count() > 0)
+                                    <div class="px-3 py-2">
+                                        <small class="text-muted fw-bold d-block mb-2">
+                                            <i class="bi bi-people-fill text-success me-1"></i>ALUMNI TERBARU
+                                        </small>
+                                        @foreach($recentAlumni as $alumni)
+                                        <a href="{{ route('admin.alumni.detail', $alumni->id) }}" class="dropdown-item py-2 border-0">
+                                            <div class="d-flex align-items-center">
+                                                <img src="https://ui-avatars.com/api/?name={{ urlencode($alumni->name) }}&background=48c78e&color=fff&size=32" 
+                                                     class="rounded-circle me-2" width="32" height="32">
+                                                <div class="flex-grow-1">
+                                                    <div class="fw-semibold small">{{ $alumni->name }}</div>
+                                                    <div class="text-muted" style="font-size: 0.75rem;">{{ $alumni->created_at->diffForHumans() }}</div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        @endforeach
+                                    </div>
+                                    <div class="dropdown-divider"></div>
+                                    @endif
+                                    
+                                    @if(isset($recentLowongan) && $recentLowongan->count() > 0)
+                                    <div class="px-3 py-2">
+                                        <small class="text-muted fw-bold d-block mb-2">
+                                            <i class="bi bi-briefcase-fill text-warning me-1"></i>LOWONGAN TERBARU
+                                        </small>
+                                        @foreach($recentLowongan as $lowongan)
+                                        <a href="{{ route('admin.lowongan.detail', $lowongan->id) }}" class="dropdown-item py-2 border-0">
+                                            <div class="d-flex align-items-center">
+                                                <div class="bg-warning bg-opacity-10 rounded-circle p-2 me-2">
+                                                    <i class="bi bi-briefcase-fill text-warning"></i>
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <div class="fw-semibold small">{{ Str::limit($lowongan->position ?? 'Lowongan Kerja', 25) }}</div>
+                                                    <div class="text-muted" style="font-size: 0.75rem;">{{ $lowongan->company_name ?? 'Perusahaan' }} • {{ \Carbon\Carbon::parse($lowongan->created_at)->diffForHumans() }}</div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        @endforeach
+                                    </div>
+                                    <div class="dropdown-divider"></div>
+                                    @endif
+                                    
+                                    <div class="text-center p-2">
+                                        <a href="{{ route('admin.registrations') }}" class="btn btn-primary btn-sm w-100">
+                                            <i class="bi bi-eye me-1"></i>Lihat Semua Notifikasi
+                                        </a>
+                                    </div>
+                                </div>
                             </li>
+
+                            <script>
+                            document.addEventListener('DOMContentLoaded', function() {
+                                const notificationDropdown = document.getElementById('notificationDropdown');
+                                const notificationBadge = document.getElementById('notification-badge');
+                                
+                                // Check if notifications are already marked as read from localStorage
+                                const notificationReadTime = localStorage.getItem('notifications_read_time');
+                                const currentTime = new Date().getTime();
+                                
+                                if (notificationReadTime && (currentTime - parseInt(notificationReadTime)) < 3600000) { // 1 hour
+                                    if (notificationBadge) {
+                                        notificationBadge.style.display = 'none';
+                                    }
+                                }
+                                
+                                if (notificationDropdown) {
+                                    // Mark notifications as read when dropdown is clicked
+                                    notificationDropdown.addEventListener('click', function(e) {
+                                        console.log('Marking notifications as read...');
+                                        
+                                        // Hide badge immediately for better UX
+                                        if (notificationBadge) {
+                                            notificationBadge.style.display = 'none';
+                                        }
+                                        
+                                        // Save to localStorage with timestamp
+                                        localStorage.setItem('notifications_read_time', new Date().getTime().toString());
+                                        
+                                        fetch('{{ route("admin.notifications.markRead") }}', {
+                                            method: 'POST',
+                                            headers: {
+                                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                                'Content-Type': 'application/json',
+                                            }
+                                        })
+                                        .then(response => response.json())
+                                        .then(data => {
+                                            console.log('Mark read response:', data);
+                                            if (data.success) {
+                                                console.log('Notifications marked as read successfully');
+                                            }
+                                        })
+                                        .catch(error => {
+                                            console.error('Error marking notifications as read:', error);
+                                            // Show badge again if request fails
+                                            if (notificationBadge) {
+                                                notificationBadge.style.display = 'block';
+                                            }
+                                            localStorage.removeItem('notifications_read_time');
+                                        });
+                                    });
+                                }
+                                
+                                // Reset localStorage if there are new notifications (check on page load)
+                                @if(isset($newNotifications) && $newNotifications > 0)
+                                    // If there are new notifications, remove the "read" status
+                                    localStorage.removeItem('notifications_read_time');
+                                @endif
+                            });
+                            </script>
 
                             <div class="vr h-50 mx-2 text-secondary"></div>
 
                             <!-- Admin Profile Dropdown -->
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle d-flex align-items-center text-dark fw-semibold" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
-                                    <img src="https://ui-avatars.com/api/?name=Admin+CC&background=6b5ce7&color=fff" class="rounded-circle me-2" width="32" height="32">
-                                    Administrator
+                                    @if(auth()->user()->image && file_exists(public_path('storage/profile_photos/' . auth()->user()->image)))
+                                        <img src="{{ asset('storage/profile_photos/' . auth()->user()->image) }}" class="rounded-circle me-2" width="32" height="32" style="object-fit: cover;">
+                                    @else
+                                        <img src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->name ?? 'Admin') }}&background=6b5ce7&color=fff" class="rounded-circle me-2" width="32" height="32">
+                                    @endif
+                                    {{ auth()->user()->name ?? 'Administrator' }}
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end border-0 shadow" aria-labelledby="navbarDropdown">
-                                    <li><a class="dropdown-item" href="#">Profil</a></li>
-                                    <li><a class="dropdown-item" href="#">Pengaturan</a></li>
+                                    <li>
+                                        <a class="dropdown-item" href="{{ route('admin.profile') }}">
+                                            <i class="bi bi-person me-2"></i>Profil
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="{{ route('admin.settings') }}">
+                                            <i class="bi bi-gear me-2"></i>Pengaturan
+                                        </a>
+                                    </li>
                                     <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item text-danger" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a></li>
+                                    <li>
+                                        <a class="dropdown-item text-danger" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                            <i class="bi bi-box-arrow-right me-2"></i>Logout
+                                        </a>
+                                    </li>
                                 </ul>
                                 <!-- Form Logout -->
                                 <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">

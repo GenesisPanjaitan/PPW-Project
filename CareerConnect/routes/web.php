@@ -25,6 +25,8 @@ Route::get('/register/student', [RegisterController::class, 'student'])->name('r
 Route::get('/register/alumni', [RegisterController::class, 'alumni'])->name('register.alumni');
 Route::post('/register', [RegisterController::class, 'submit'])->name('register.submit');
 
+
+
 /**
  * Protected routes — requires authentication
  * Any attempt to access these routes when not authenticated will be
@@ -36,9 +38,18 @@ Route::middleware('auth')->group(function () {
 
 	Route::get('/favorit', [FavoriteController::class, 'index'])->name('favorit');
 	Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
+	Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
 	Route::get('/profile/academic', [ProfileController::class, 'academic'])->name('profile.academic');
+	Route::post('/profile/academic', [ProfileController::class, 'updateAcademic'])->name('profile.academic.update');
+	Route::get('/profile/alumni', [ProfileController::class, 'alumni'])->name('profile.alumni');
+	Route::post('/profile/alumni', [ProfileController::class, 'updateAlumni'])->name('profile.alumni.update');
 	Route::get('/profile/settings', [ProfileController::class, 'settings'])->name('profile.settings');
+	Route::post('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password.update');
 	Route::get('/recruitment', [RecruitmentController::class, 'index'])->name('recruitment');
+	
+	// my posts for alumni (harus sebelum route dinamis)
+	Route::get('/recruitment/my-posts', [RecruitmentController::class, 'myPosts'])->name('recruitment.my-posts');
+
 	// dynamic detail by id
 	Route::get('/recruitment/{id}', [RecruitmentController::class, 'detailById'])->name('recruitment.detail');
 
@@ -72,8 +83,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/alumni', [AdminController::class, 'alumni'])->name('admin.alumni');
     Route::get('/lowongan', [AdminController::class, 'lowongan'])->name('admin.lowongan');
     Route::get('/lowongan/{id}/detail', [AdminController::class, 'lowonganDetail'])->name('admin.lowongan.detail');
+    Route::delete('/lowongan/{id}', [AdminController::class, 'lowonganDelete'])->name('admin.lowongan.delete');
     Route::get('/mahasiswa/{id}/detail', [AdminController::class, 'mahasiswaDetail'])->name('admin.mahasiswa.detail');
+    Route::delete('/mahasiswa/{id}', [AdminController::class, 'mahasiswaDelete'])->name('admin.mahasiswa.delete');
     Route::get('/alumni/{id}/detail', [AdminController::class, 'alumniDetail'])->name('admin.alumni.detail');
+    Route::delete('/alumni/{id}', [AdminController::class, 'alumniDelete'])->name('admin.alumni.delete');
+    Route::get('/registrations', [AdminController::class, 'registrations'])->name('admin.registrations');
+    Route::get('/profile', [AdminController::class, 'profile'])->name('admin.profile');
+    Route::post('/profile', [AdminController::class, 'updateProfile'])->name('admin.profile.update');
+    Route::get('/settings', [AdminController::class, 'settings'])->name('admin.settings');
+    Route::post('/notifications/mark-read', [AdminController::class, 'markNotificationsRead'])->name('admin.notifications.markRead');
 
 });
 
