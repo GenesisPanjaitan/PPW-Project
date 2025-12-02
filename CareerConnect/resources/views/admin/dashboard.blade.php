@@ -71,29 +71,23 @@
                                 <h6 class="m-0 font-weight-bold text-primary">Aksi Cepat</h6>
                             </div>
                             <div class="card-body">
-                                <div class="row">
-                                    <div class="col-md-3 mb-3">
-                                        <a href="{{ route('admin.mahasiswa') }}" class="btn btn-outline-primary w-100">
+                                <div class="row justify-content-center">
+                                    <div class="col-md-4 mb-3">
+                                        <a href="{{ route('admin.mahasiswa') }}" class="btn btn-outline-primary w-100 py-3">
                                             <i class="bi bi-mortarboard-fill d-block mb-2" style="font-size: 2rem;"></i>
                                             Kelola Mahasiswa
                                         </a>
                                     </div>
-                                    <div class="col-md-3 mb-3">
-                                        <a href="{{ route('admin.alumni') }}" class="btn btn-outline-success w-100">
+                                    <div class="col-md-4 mb-3">
+                                        <a href="{{ route('admin.alumni') }}" class="btn btn-outline-success w-100 py-3">
                                             <i class="bi bi-people-fill d-block mb-2" style="font-size: 2rem;"></i>
                                             Kelola Alumni
                                         </a>
                                     </div>
-                                    <div class="col-md-3 mb-3">
-                                        <a href="{{ route('admin.lowongan') }}" class="btn btn-outline-warning w-100">
+                                    <div class="col-md-4 mb-3">
+                                        <a href="{{ route('admin.lowongan') }}" class="btn btn-outline-warning w-100 py-3">
                                             <i class="bi bi-briefcase-fill d-block mb-2" style="font-size: 2rem;"></i>
                                             Kelola Lowongan
-                                        </a>
-                                    </div>
-                                    <div class="col-md-3 mb-3">
-                                        <a href="#" class="btn btn-outline-info w-100">
-                                            <i class="bi bi-graph-up d-block mb-2" style="font-size: 2rem;"></i>
-                                            Laporan
                                         </a>
                                     </div>
                                 </div>
@@ -121,31 +115,41 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            @forelse($recentRegistrations as $registration)
                                             <tr>
-                                                <td>Kevin Gultom</td>
-                                                <td><span class="badge bg-primary">Mahasiswa</span></td>
-                                                <td>1 Des 2025</td>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <img src="https://ui-avatars.com/api/?name={{ urlencode($registration->name) }}&background={{ $registration->role == 'mahasiswa' ? '667eea' : '48c78e' }}&color=fff&size=32" 
+                                                             class="rounded-circle me-2" width="32" height="32" alt="Avatar">
+                                                        <span>{{ $registration->name }}</span>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    @if($registration->role == 'mahasiswa')
+                                                        <span class="badge bg-primary">Mahasiswa</span>
+                                                    @else
+                                                        <span class="badge bg-success">Alumni</span>
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    <small class="text-muted">{{ $registration->created_at->format('d M Y') }}</small>
+                                                    @if($registration->created_at->isToday())
+                                                        <span class="badge bg-warning bg-opacity-25 text-warning ms-1">Baru</span>
+                                                    @endif
+                                                </td>
                                             </tr>
+                                            @empty
                                             <tr>
-                                                <td>Budi Santoso</td>
-                                                <td><span class="badge bg-success">Alumni</span></td>
-                                                <td>30 Nov 2025</td>
+                                                <td colspan="3" class="text-center text-muted py-3">
+                                                    <i class="bi bi-inbox me-2"></i>Belum ada pendaftaran terbaru
+                                                </td>
                                             </tr>
-                                            <tr>
-                                                <td>Sari Dewi</td>
-                                                <td><span class="badge bg-primary">Mahasiswa</span></td>
-                                                <td>29 Nov 2025</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Ahmad Rahman</td>
-                                                <td><span class="badge bg-success">Alumni</span></td>
-                                                <td>28 Nov 2025</td>
-                                            </tr>
+                                            @endforelse
                                         </tbody>
                                     </table>
                                 </div>
                                 <div class="text-center">
-                                    <a href="{{ route('admin.mahasiswa') }}" class="btn btn-sm btn-primary">Lihat Semua</a>
+                                    <a href="{{ route('admin.registrations') }}" class="btn btn-sm btn-primary">Lihat Semua</a>
                                 </div>
                             </div>
                         </div>
@@ -154,39 +158,91 @@
                     <!-- Job Categories Chart -->
                     <div class="col-xl-6 col-lg-6 mb-4">
                         <div class="card shadow h-100">
-                            <div class="card-header py-3">
+                            <div class="card-header py-3 d-flex justify-content-between align-items-center">
                                 <h6 class="m-0 font-weight-bold text-primary">Kategori Lowongan</h6>
+                                <span class="badge bg-light text-dark">{{ $lowonganCount ?? 0 }} Total</span>
                             </div>
                             <div class="card-body">
-                                <div class="mb-3">
-                                    <div class="d-flex justify-content-between align-items-center mb-2">
-                                        <span>Full-time</span>
-                                        <span class="fw-bold">{{ $lowonganCount ? round(($lowonganCount * 0.6)) : 2 }}</span>
+                                @php
+                                    // Hitung data aktual dari database
+                                    $actualFulltime = DB::table('recruitment')
+                                        ->join('jobtype', 'recruitment.jobtype_id', '=', 'jobtype.id')
+                                        ->where('jobtype.name', 'Full-time')
+                                        ->count();
+                                    
+                                    $actualParttime = DB::table('recruitment')
+                                        ->join('jobtype', 'recruitment.jobtype_id', '=', 'jobtype.id')
+                                        ->where('jobtype.name', 'Part-time')
+                                        ->count();
+                                    
+                                    $actualInternship = DB::table('recruitment')
+                                        ->join('jobtype', 'recruitment.jobtype_id', '=', 'jobtype.id')
+                                        ->where('jobtype.name', 'Internship')
+                                        ->count();
+                                    
+                                    $actualMaxValue = max($actualFulltime, $actualParttime, $actualInternship, 1);
+                                @endphp
+                                
+                                <div class="chart-container d-flex align-items-end justify-content-around" style="height: 140px; padding: 15px 0;">
+                                    <!-- Full-time Bar -->
+                                    <div class="bar-item text-center" style="width: 30%;">
+                                        <div class="bar-value mb-1">
+                                            <span class="badge bg-primary rounded-pill px-2 py-1 fw-bold" style="font-size: 0.75rem;">{{ $actualFulltime }}</span>
+                                        </div>
+                                        <div class="bar" style="
+                                            height: {{ $actualMaxValue > 0 ? ($actualFulltime / $actualMaxValue) * 90 : 15 }}px;
+                                            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                                            border-radius: 6px 6px 0 0;
+                                            position: relative;
+                                            transition: all 0.3s ease;
+                                            box-shadow: 0 3px 10px rgba(102, 126, 234, 0.3);
+                                        "></div>
+                                        <div class="bar-label mt-1">
+                                            <small class="fw-bold text-primary" style="font-size: 0.75rem;">Full-time</small>
+                                        </div>
                                     </div>
-                                    <div class="progress mb-3">
-                                        <div class="progress-bar bg-primary" role="progressbar" style="width: 60%"></div>
+                                    
+                                    <!-- Part-time Bar -->
+                                    <div class="bar-item text-center" style="width: 30%;">
+                                        <div class="bar-value mb-1">
+                                            <span class="badge bg-success rounded-pill px-2 py-1 fw-bold" style="font-size: 0.75rem;">{{ $actualParttime }}</span>
+                                        </div>
+                                        <div class="bar" style="
+                                            height: {{ $actualMaxValue > 0 ? ($actualParttime / $actualMaxValue) * 90 : 15 }}px;
+                                            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+                                            border-radius: 6px 6px 0 0;
+                                            position: relative;
+                                            transition: all 0.3s ease;
+                                            box-shadow: 0 3px 10px rgba(17, 153, 142, 0.3);
+                                        "></div>
+                                        <div class="bar-label mt-1">
+                                            <small class="fw-bold text-success" style="font-size: 0.75rem;">Part-time</small>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Internship Bar -->
+                                    <div class="bar-item text-center" style="width: 30%;">
+                                        <div class="bar-value mb-1">
+                                            <span class="badge bg-warning rounded-pill px-2 py-1 fw-bold text-dark" style="font-size: 0.75rem;">{{ $actualInternship }}</span>
+                                        </div>
+                                        <div class="bar" style="
+                                            height: {{ $actualMaxValue > 0 ? ($actualInternship / $actualMaxValue) * 90 : 15 }}px;
+                                            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+                                            border-radius: 6px 6px 0 0;
+                                            position: relative;
+                                            transition: all 0.3s ease;
+                                            box-shadow: 0 3px 10px rgba(240, 147, 251, 0.3);
+                                        "></div>
+                                        <div class="bar-label mt-1">
+                                            <small class="fw-bold text-warning" style="font-size: 0.75rem;">Internship</small>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="mb-3">
-                                    <div class="d-flex justify-content-between align-items-center mb-2">
-                                        <span>Part-time</span>
-                                        <span class="fw-bold">{{ $lowonganCount ? round(($lowonganCount * 0.3)) : 1 }}</span>
-                                    </div>
-                                    <div class="progress mb-3">
-                                        <div class="progress-bar bg-success" role="progressbar" style="width: 30%"></div>
-                                    </div>
-                                </div>
-                                <div class="mb-3">
-                                    <div class="d-flex justify-content-between align-items-center mb-2">
-                                        <span>Internship</span>
-                                        <span class="fw-bold">{{ $lowonganCount ? round(($lowonganCount * 0.1)) : 0 }}</span>
-                                    </div>
-                                    <div class="progress mb-3">
-                                        <div class="progress-bar bg-warning" role="progressbar" style="width: 10%"></div>
-                                    </div>
-                                </div>
-                                <div class="text-center">
-                                    <a href="{{ route('admin.lowongan') }}" class="btn btn-sm btn-primary">Lihat Detail</a>
+                                
+                                <div class="text-center mt-3">
+                                    <a href="{{ route('admin.lowongan') }}" class="btn btn-sm btn-primary rounded-pill px-4">
+                                        <i class="bi bi-eye me-1"></i> Lihat Detail
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -235,5 +291,91 @@
                         </div>
                     </div>
                 </div>
+
+<style>
+    .chart-container .bar {
+        position: relative;
+        animation: growUp 1s ease-out;
+    }
+    
+    .chart-container .bar-item:hover .bar {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.2) !important;
+    }
+    
+    .chart-container .bar::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(255,255,255,0.1);
+        border-radius: 8px 8px 0 0;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+    
+    .chart-container .bar-item:hover .bar::before {
+        opacity: 1;
+    }
+    
+    .bar-value .badge {
+        animation: fadeInDown 1.2s ease-out;
+    }
+    
+    .bar-label {
+        animation: fadeInUp 1.4s ease-out;
+    }
+    
+    @keyframes growUp {
+        from {
+            height: 0 !important;
+        }
+        to {
+            height: var(--final-height);
+        }
+    }
+    
+    @keyframes fadeInDown {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .stats-card {
+        transition: transform 0.3s ease;
+    }
+    
+    .stats-card:hover {
+        transform: translateY(-5px);
+    }
+    
+    .stats-number {
+        font-size: 2rem;
+        font-weight: bold;
+    }
+    
+    .stats-label {
+        font-size: 0.9rem;
+        opacity: 0.9;
+    }
+</style>
 
 @endsection

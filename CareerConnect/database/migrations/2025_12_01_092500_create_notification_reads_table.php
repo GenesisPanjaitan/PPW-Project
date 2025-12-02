@@ -11,13 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('userskill', function (Blueprint $table) {
+        Schema::create('notification_reads', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('user');
-            $table->unsignedBigInteger('skill_id');
-            $table->foreign('skill_id')->references('id')->on('skill');
+            $table->timestamp('last_read_mahasiswa')->nullable();
+            $table->timestamp('last_read_alumni')->nullable();
+            $table->timestamp('last_read_lowongan')->nullable();
             $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('user')->onDelete('cascade');
+            $table->unique('user_id');
         });
     }
 
@@ -26,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('userskill');
+        Schema::dropIfExists('notification_reads');
     }
-};
+};  

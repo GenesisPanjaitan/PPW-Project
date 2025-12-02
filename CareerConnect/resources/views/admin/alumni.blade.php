@@ -48,7 +48,11 @@
                                     </td>
                                     <td>
                                         <a href="{{ route('admin.alumni.detail', $alum->id ?? 1) }}" class="btn btn-sm btn-info">Detail</a>
-                                        <a href="#" class="btn btn-sm btn-danger">Hapus</a>
+                                        <form action="{{ route('admin.alumni.delete', $alum->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus akun alumni {{ $alum->name }}? Tindakan ini tidak dapat dibatalkan!')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-sm btn-danger">Hapus</button>
+                                        </form>
                                     </td>
                                 </tr>
                                 @endforeach

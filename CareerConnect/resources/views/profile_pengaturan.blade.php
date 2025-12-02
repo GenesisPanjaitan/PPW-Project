@@ -24,8 +24,12 @@
                 </ul>
                 <ul class="navbar-nav">
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle fw-semibold" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-person-circle me-1"></i>
+                        <a class="nav-link dropdown-toggle d-flex align-items-center fw-semibold" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            @if(auth()->user() && auth()->user()->image && file_exists(public_path('storage/profile_photos/' . auth()->user()->image)))
+                                <img src="{{ asset('storage/profile_photos/' . auth()->user()->image) }}" class="rounded-circle me-2" width="32" height="32" style="object-fit: cover;">
+                            @else
+                                <i class="bi bi-person-circle me-1"></i>
+                            @endif
                             @auth {{ auth()->user()->name }} @else {{ optional(auth()->user())->name ?? 'Kevin Gultom' }} @endauth
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
@@ -53,7 +57,11 @@
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div class="profile-tabs-container">
                     <a href="/profile" class="tab-link {{ Request::is('profile') ? 'active' : '' }}">Informasi Dasar</a>
-                    <a href="/profile/academic" class="tab-link {{ Request::is('profile/academic') ? 'active' : '' }}">Akademik & Karir</a>
+                    @if(auth()->user()->role === 'alumni')
+                        <a href="/profile/alumni" class="tab-link {{ Request::is('profile/alumni') ? 'active' : '' }}">Akademik & Karir</a>
+                    @else
+                        <a href="/profile/academic" class="tab-link {{ Request::is('profile/academic') ? 'active' : '' }}">Akademik & Karir</a>
+                    @endif
                     <a href="{{ route('profile.settings') }}" class="tab-link {{ Request::is('profile/settings') ? 'active' : '' }}">Pengaturan</a>
                 </div>
             </div>
@@ -132,5 +140,138 @@
             </div>
         </div>
     </div>
+
+<style>
+    /* Form Styling */
+    .form-control-custom {
+        border-radius: 0.75rem !important;
+        border: 1px solid #dee2e6;
+        padding: 0.75rem 1rem;
+        background-color: #f8f9fa;
+        transition: all 0.3s ease;
+    }
+    
+    .form-control-custom:focus {
+        border-color: #6b5ce7;
+        box-shadow: 0 0 0 0.2rem rgba(107, 92, 231, 0.25);
+        background-color: #fff;
+    }
+    
+    .form-label-custom {
+        font-weight: 600;
+        color: #495057;
+        margin-bottom: 0.5rem;
+    }
+    
+    /* Tab Navigation Styling */
+    .profile-tabs-container {
+        display: flex;
+        gap: 0.5rem;
+        background: #f8f9fa;
+        padding: 0.375rem;
+        border-radius: 0.75rem;
+        border: 1px solid #e9ecef;
+        position: relative;
+    }
+    
+    .tab-link {
+        padding: 0.5rem 1rem;
+        text-decoration: none;
+        color: #6c757d;
+        font-weight: 500;
+        border-radius: 0.5rem;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        white-space: nowrap;
+        position: relative;
+        z-index: 2;
+    }
+    
+    .tab-link:hover {
+        color: #495057;
+        background-color: #e9ecef;
+        transform: translateY(-1px);
+    }
+    
+    .tab-link.active {
+        background-color: white;
+        color: #6b5ce7;
+        box-shadow: 0 4px 12px rgba(107, 92, 231, 0.15);
+        font-weight: 600;
+        transform: translateY(-2px);
+    }
+    
+    /* Card Animation */
+    .card {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1) !important;
+    }
+    
+    /* Button Animations */
+    .btn {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border-radius: 0.5rem;
+    }
+    
+    .btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+    
+    .btn:active {
+        transform: translateY(0);
+    }
+    
+    /* Alert Animation */
+    .alert {
+        animation: slideInDown 0.5s ease-out;
+        border-radius: 0.75rem;
+    }
+    
+    @keyframes slideInDown {
+        from {
+            transform: translateY(-20px);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+    
+    /* Form Input Animation */
+    .form-select, .form-control {
+        transition: all 0.3s ease;
+    }
+    
+    .form-select:focus, .form-control:focus {
+        transform: scale(1.02);
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .profile-tabs-container {
+            flex-direction: column;
+            width: 100%;
+        }
+        
+        .d-flex.justify-content-between {
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .card {
+            margin-bottom: 1rem;
+        }
+        
+        .tab-link:hover,
+        .tab-link.active {
+            transform: none;
+        }
+    }
+</style>
 
 @endsection

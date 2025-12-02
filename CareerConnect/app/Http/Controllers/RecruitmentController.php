@@ -10,24 +10,52 @@ use Illuminate\Support\Str;
 
 class RecruitmentController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        // fetch all recruitments with related category, jobtype, and author
-        $recruitments = DB::table('recruitment as r')
+        // Start building the query
+        $query = DB::table('recruitment as r')
             ->leftJoin('category as c', 'r.category_id', '=', 'c.id')
             ->leftJoin('jobtype as j', 'r.jobtype_id', '=', 'j.id')
             ->leftJoin('user as u', 'r.user_id', '=', 'u.id')
-            ->select('r.*', 'c.name as category', 'j.name as jobtype', 'u.name as author')
-            ->orderByDesc('r.date')
-            ->get();
+            ->select('r.*', 'c.name as category', 'j.name as jobtype', 'u.name as author');
 
-        // also fetch favorite ids for the authenticated user so the view can show saved state
+        // Apply search filters if provided
+        if ($request->filled('q')) {
+            $searchTerm = $request->get('q');
+            $query->where(function($q) use ($searchTerm) {
+                $q->where('r.position', 'LIKE', '%' . $searchTerm . '%')
+                  ->orWhere('r.company_name', 'LIKE', '%' . $searchTerm . '%')
+                  ->orWhere('r.location', 'LIKE', '%' . $searchTerm . '%')
+                  ->orWhere('r.description', 'LIKE', '%' . $searchTerm . '%');
+            });
+        }
+
+        // Filter by job type
+        if ($request->filled('type')) {
+            $query->where('j.name', $request->get('type'));
+        }
+
+        // Filter by category
+        if ($request->filled('category')) {
+            $query->where('c.name', $request->get('category'));
+        }
+
+        // Get the results
+        $recruitments = $query->orderByDesc('r.date')->get();
+
+        // Fetch favorite ids for the authenticated user
         $favoriteIds = [];
         if (Auth::check()) {
             $favoriteIds = DB::table('favorite')->where('user_id', Auth::id())->pluck('recruitment_id')->toArray();
         }
 
-        return view('recruitment', ['recruitments' => $recruitments, 'favoriteIds' => $favoriteIds]);
+        return view('recruitment', [
+            'recruitments' => $recruitments, 
+            'favoriteIds' => $favoriteIds,
+            'searchQuery' => $request->get('q'),
+            'selectedType' => $request->get('type'),
+            'selectedCategory' => $request->get('category')
+        ]);
     }
 
     public function detail()
@@ -282,5 +310,20 @@ class RecruitmentController extends Controller
         DB::table('recruitment')->where('id', $id)->delete();
 
         return redirect()->route('recruitment')->with('success', 'Posting lowongan berhasil dihapus.');
+    }
+
+    public function myPosts()
+    {
+        // Get all posts by the authenticated user (alumni)
+        $userPosts = DB::table('recruitment as r')
+            ->leftJoin('category as c', 'r.category_id', '=', 'c.id')
+            ->leftJoin('jobtype as j', 'r.jobtype_id', '=', 'j.id')
+            ->leftJoin('user as u', 'r.user_id', '=', 'u.id')
+            ->select('r.*', 'c.name as category', 'j.name as jobtype', 'u.name as author')
+            ->where('r.user_id', Auth::id())
+            ->orderByDesc('r.date')
+            ->get();
+
+        return view('recruitment_my_posts', compact('userPosts'));
     }
 }

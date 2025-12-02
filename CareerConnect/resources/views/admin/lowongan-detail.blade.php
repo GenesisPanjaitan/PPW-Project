@@ -25,38 +25,36 @@
                     <div class="col-md-8">
                         <table class="table table-borderless">
                             <tr>
-                                <td class="fw-bold" style="width: 200px;">Judul Lowongan:</td>
-                                <td>{{ $lowongan->title ?? 'N/A' }}</td>
+                                <td class="fw-bold" style="width: 200px;">Posisi:</td>
+                                <td>{{ $lowongan->position ?? 'N/A' }}</td>
                             </tr>
                             <tr>
                                 <td class="fw-bold">Perusahaan:</td>
-                                <td>{{ $lowongan->company ?? 'N/A' }}</td>
+                                <td>{{ $lowongan->company_name ?? 'N/A' }}</td>
                             </tr>
                             <tr>
                                 <td class="fw-bold">Lokasi:</td>
                                 <td>{{ $lowongan->location ?? 'N/A' }}</td>
                             </tr>
                             <tr>
-                                <td class="fw-bold">Tipe Pekerjaan:</td>
+                                <td class="fw-bold">Kategori:</td>
                                 <td>
-                                    <span class="badge bg-info">{{ $lowongan->job_type ?? 'Full-time' }}</span>
+                                    <span class="badge bg-primary">{{ $lowongan->category_name ?? 'N/A' }}</span>
                                 </td>
                             </tr>
                             <tr>
-                                <td class="fw-bold">Kategori:</td>
-                                <td>{{ $lowongan->category ?? 'N/A' }}</td>
+                                <td class="fw-bold">Tipe Pekerjaan:</td>
+                                <td>
+                                    <span class="badge bg-info">{{ $lowongan->jobtype_name ?? 'Full-time' }}</span>
+                                </td>
                             </tr>
                             <tr>
-                                <td class="fw-bold">Gaji:</td>
-                                <td>{{ isset($lowongan->salary) && $lowongan->salary ? 'Rp ' . number_format($lowongan->salary) : 'Negosiasi' }}</td>
+                                <td class="fw-bold">Diposting oleh:</td>
+                                <td>{{ $lowongan->posted_by ?? 'N/A' }}</td>
                             </tr>
                             <tr>
                                 <td class="fw-bold">Tanggal Posting:</td>
                                 <td>{{ $lowongan->created_at ? \Carbon\Carbon::parse($lowongan->created_at)->format('d M Y H:i') : 'N/A' }}</td>
-                            </tr>
-                            <tr>
-                                <td class="fw-bold">Deadline:</td>
-                                <td>{{ isset($lowongan->deadline) && $lowongan->deadline ? \Carbon\Carbon::parse($lowongan->deadline)->format('d M Y') : 'N/A' }}</td>
                             </tr>
                         </table>
                     </div>
@@ -67,12 +65,13 @@
                                 <span class="badge bg-success fs-6">Aktif</span>
                                 <hr>
                                 <div class="d-grid gap-2">
-                                    <a href="#" class="btn btn-danger btn-sm">
-                                        <i class="bi bi-trash me-2"></i>Hapus Lowongan
-                                    </a>
-                                    <a href="#" class="btn btn-warning btn-sm">
-                                        <i class="bi bi-eye-slash me-2"></i>Nonaktifkan
-                                    </a>
+                                    <form action="{{ route('admin.lowongan.delete', $lowongan->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus lowongan ini? Semua komentar yang terkait juga akan terhapus!')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger btn-sm">
+                                            <i class="bi bi-trash me-2"></i>Hapus Lowongan
+                                        </button>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -121,36 +120,30 @@
     </div>
 </div>
 
-<!-- Statistik Pelamar (jika ada) -->
+<!-- Statistik Lowongan -->
 <div class="row mt-4">
     <div class="col-12">
         <div class="card shadow">
             <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Statistik Pelamar</h6>
+                <h6 class="m-0 font-weight-bold text-primary">Statistik Lowongan</h6>
             </div>
             <div class="card-body">
                 <div class="row text-center">
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <div class="border-end">
-                            <h4 class="text-primary">0</h4>
-                            <small class="text-muted">Total Pelamar</small>
+                            <h4 class="text-primary">{{ $commentCount ?? 0 }}</h4>
+                            <small class="text-muted">Total Komentar</small>
                         </div>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <div class="border-end">
-                            <h4 class="text-warning">0</h4>
-                            <small class="text-muted">Dalam Review</small>
+                            <h4 class="text-warning">{{ $favoriteCount ?? 0 }}</h4>
+                            <small class="text-muted">Dijadikan Favorit</small>
                         </div>
                     </div>
-                    <div class="col-md-3">
-                        <div class="border-end">
-                            <h4 class="text-success">0</h4>
-                            <small class="text-muted">Diterima</small>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <h4 class="text-danger">0</h4>
-                        <small class="text-muted">Ditolak</small>
+                    <div class="col-md-4">
+                        <h4 class="text-info">{{ $lowongan->created_at ? \Carbon\Carbon::parse($lowongan->created_at)->diffForHumans() : 'N/A' }}</h4>
+                        <small class="text-muted">Waktu Rilis</small>
                     </div>
                 </div>
             </div>

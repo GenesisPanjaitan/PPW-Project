@@ -38,8 +38,12 @@
                 <ul class="navbar-nav">
                     <li class="nav-item dropdown">
                         <!-- Tombol Pemicu Dropdown -->
-                        <a class="nav-link dropdown-toggle fw-semibold" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-person-circle me-1"></i>
+                        <a class="nav-link dropdown-toggle d-flex align-items-center fw-semibold" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            @if(auth()->user() && auth()->user()->image && file_exists(public_path('storage/profile_photos/' . auth()->user()->image)))
+                                <img src="{{ asset('storage/profile_photos/' . auth()->user()->image) }}" class="rounded-circle me-2" width="32" height="32" style="object-fit: cover;">
+                            @else
+                                <i class="bi bi-person-circle me-1"></i>
+                            @endif
                             @auth
                                 {{ auth()->user()->name }}
                             @else
@@ -84,28 +88,52 @@
                 
                 <div class="profile-tabs-container">
                     <a href="/profile" class="tab-link {{ Request::is('profile') ? 'active' : '' }}">Informasi Dasar</a>
-                    <a href="/profile/academic" class="tab-link {{ Request::is('profile/academic') ? 'active' : '' }}">Akademik & Karir</a>
+                    @if(auth()->user()->role === 'alumni')
+                        <a href="/profile/alumni" class="tab-link {{ Request::is('profile/alumni') ? 'active' : '' }}">Akademik & Karir</a>
+                    @else
+                        <a href="/profile/academic" class="tab-link {{ Request::is('profile/academic') ? 'active' : '' }}">Akademik & Karir</a>
+                    @endif
                     <a href="{{ route('profile.settings') }}" class="tab-link {{ Request::is('profile/settings') ? 'active' : '' }}">Pengaturan</a>
                 </div>
                 
                 @if(request('mode') == 'edit')
                     <div class="d-flex gap-2">
-                        <button type="submit" form="academicForm" class="btn btn-dark btn-sm fw-semibold">
+                        <button type="submit" form="academicForm" class="btn btn-primary btn-sm fw-semibold">
                             <i class="bi bi-save me-1"></i> Simpan
                         </button>
-                        <a href="/profile/academic" class="btn btn-danger btn-sm fw-semibold">
-                            <i class="bi bi-x-lg me-1"></i> Batal
+                        <a href="/profile/academic" class="btn btn-outline-secondary btn-sm fw-semibold">
+                            <i class="bi bi-x me-1"></i> Batal
                         </a>
                     </div>
                 @else
-                    <a href="/profile/academic?mode=edit" class="btn btn-dark btn-sm fw-semibold">
+                    <a href="/profile/academic?mode=edit" class="btn btn-outline-primary btn-sm fw-semibold">
                         <i class="bi bi-pencil-fill me-1"></i> Edit Profil
                     </a>
                 @endif
 
             </div>
 
-            <form action="#" method="POST" id="academicForm">
+            <!-- Alert Messages -->
+            @if(session('success'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="bi bi-check-circle me-2"></i>{{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            @endif
+
+            @if($errors->any())
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="bi bi-exclamation-circle me-2"></i>
+                    <ul class="mb-0">
+                        @foreach($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            @endif
+
+            <form action="{{ route('profile.academic.update') }}" method="POST" id="academicForm" enctype="multipart/form-data">
                 @csrf
                 <div class="card shadow-sm border-0 mb-4" style="border-radius: 1rem;">
                     <div class="card-body p-4 p-md-5">
@@ -115,22 +143,40 @@
                         <label class="form-label-custom">Jurusan / Program Studi</label>
                         
                         @if(request('mode') == 'edit')
-                            <select class="form-select form-control-custom" id="jurusan" name="jurusan" required>
-                                <option value="if">S1-Informatika</option>
-                                <option value="si" selected>S1-Sistem Informasi</option>
-                                <option value="te">S1-Teknik Elektro</option>
-                                <option value="mr">S1-Manajemen Rekayasa</option>
-                                <option value="tm">S1-Teknik Metalurgi</option>
-                                <option value="bp">S1-Teknik Bioproses</option>
-                                <option value="bt">S1-Bioteknologi</option>
-                                <option value="trpl">D4-Teknologi Rekayasa Perangkat Lunak</option>
-                                <option value="ti">D3-Teknologi Informasi</option>
-                                <option value="nm">D3-Teknologi Komputer</option>
+                            <select class="form-select form-control-custom" id="study_program" name="study_program" required>
+                                <option value="if" {{ (old('study_program', auth()->user()->study_program) == 'if') ? 'selected' : '' }}>S1-Informatika</option>
+                                <option value="si" {{ (old('study_program', auth()->user()->study_program) == 'si') ? 'selected' : '' }}>S1-Sistem Informasi</option>
+                                <option value="te" {{ (old('study_program', auth()->user()->study_program) == 'te') ? 'selected' : '' }}>S1-Teknik Elektro</option>
+                                <option value="mr" {{ (old('study_program', auth()->user()->study_program) == 'mr') ? 'selected' : '' }}>S1-Manajemen Rekayasa</option>
+                                <option value="tm" {{ (old('study_program', auth()->user()->study_program) == 'tm') ? 'selected' : '' }}>S1-Teknik Metalurgi</option>
+                                <option value="bp" {{ (old('study_program', auth()->user()->study_program) == 'bp') ? 'selected' : '' }}>S1-Teknik Bioproses</option>
+                                <option value="bt" {{ (old('study_program', auth()->user()->study_program) == 'bt') ? 'selected' : '' }}>S1-Bioteknologi</option>
+                                <option value="trpl" {{ (old('study_program', auth()->user()->study_program) == 'trpl') ? 'selected' : '' }}>D4-Teknologi Rekayasa Perangkat Lunak</option>
+                                <option value="ti" {{ (old('study_program', auth()->user()->study_program) == 'ti') ? 'selected' : '' }}>D3-Teknologi Informasi</option>
+                                <option value="nm" {{ (old('study_program', auth()->user()->study_program) == 'nm') ? 'selected' : '' }}>D3-Teknologi Komputer</option>
                             </select>
                         @else
                             <div class="form-control-custom d-flex align-items-center">
                                 <i class="bi bi-mortarboard me-2 text-muted"></i>
-                                <span class="fw-medium">Sistem Informasi</span>
+                                <span class="fw-medium">
+                                    @if(auth()->user()->study_program)
+                                        @switch(auth()->user()->study_program)
+                                            @case('if') S1-Informatika @break
+                                            @case('si') S1-Sistem Informasi @break
+                                            @case('te') S1-Teknik Elektro @break
+                                            @case('mr') S1-Manajemen Rekayasa @break
+                                            @case('tm') S1-Teknik Metalurgi @break
+                                            @case('bp') S1-Teknik Bioproses @break
+                                            @case('bt') S1-Bioteknologi @break
+                                            @case('trpl') D4-Teknologi Rekayasa Perangkat Lunak @break
+                                            @case('ti') D3-Teknologi Informasi @break
+                                            @case('nm') D3-Teknologi Komputer @break
+                                            @default {{ auth()->user()->study_program }}
+                                        @endswitch
+                                    @else
+                                        Belum diatur
+                                    @endif
+                                </span>
                             </div>
                         @endif
                     </div>
@@ -144,22 +190,39 @@
                         <label class="form-label-custom">Minat Karir</label>
 
                         @if(request('mode') == 'edit')
-                            <select class="form-select form-control-custom" id="minat_karir" name="minat_karir">
-                                <option value="" disabled>Pilih bidang yang diminati</option>
-                                <option value="swe" selected>Software Engineering</option>
-                                <option value="uiux">UI/UX Design</option>
-                                <option value="data">Data Science</option>
-                                <option value="product">Product Management</option>
-                                <option value="digital_marketing">Digital Marketing</option>
-                                <option value="qa_testing">QA & Testing</option>
-                                <option value="cybersecurity">Cybersecurity</option>
-                                <option value="operations">Operations</option>
-                                <option value="lainnya">Lainnya</option>
+                            <select class="form-select form-control-custom" id="interest" name="interest">
+                                <option value="" disabled {{ !old('interest', auth()->user()->interest) ? 'selected' : '' }}>Pilih bidang yang diminati</option>
+                                <option value="swe" {{ (old('interest', auth()->user()->interest) == 'swe') ? 'selected' : '' }}>Software Engineering</option>
+                                <option value="uiux" {{ (old('interest', auth()->user()->interest) == 'uiux') ? 'selected' : '' }}>UI/UX Design</option>
+                                <option value="data" {{ (old('interest', auth()->user()->interest) == 'data') ? 'selected' : '' }}>Data Science</option>
+                                <option value="product" {{ (old('interest', auth()->user()->interest) == 'product') ? 'selected' : '' }}>Product Management</option>
+                                <option value="digital_marketing" {{ (old('interest', auth()->user()->interest) == 'digital_marketing') ? 'selected' : '' }}>Digital Marketing</option>
+                                <option value="qa_testing" {{ (old('interest', auth()->user()->interest) == 'qa_testing') ? 'selected' : '' }}>QA & Testing</option>
+                                <option value="cybersecurity" {{ (old('interest', auth()->user()->interest) == 'cybersecurity') ? 'selected' : '' }}>Cybersecurity</option>
+                                <option value="operations" {{ (old('interest', auth()->user()->interest) == 'operations') ? 'selected' : '' }}>Operations</option>
+                                <option value="lainnya" {{ (old('interest', auth()->user()->interest) == 'lainnya') ? 'selected' : '' }}>Lainnya</option>
                             </select>
                         @else
                             <div class="form-control-custom d-flex align-items-center">
                                 <i class="bi bi-briefcase me-2 text-muted"></i>
-                                <span class="fw-medium">Software Development</span>
+                                <span class="fw-medium">
+                                    @if(auth()->user()->interest)
+                                        @switch(auth()->user()->interest)
+                                            @case('swe') Software Engineering @break
+                                            @case('uiux') UI/UX Design @break
+                                            @case('data') Data Science @break
+                                            @case('product') Product Management @break
+                                            @case('digital_marketing') Digital Marketing @break
+                                            @case('qa_testing') QA & Testing @break
+                                            @case('cybersecurity') Cybersecurity @break
+                                            @case('operations') Operations @break
+                                            @case('lainnya') Lainnya @break
+                                            @default {{ auth()->user()->interest }}
+                                        @endswitch
+                                    @else
+                                        Belum diatur
+                                    @endif
+                                </span>
                             </div>
                         @endif
                     </div>
@@ -172,17 +235,174 @@
                         
                         @if(request('mode') == 'edit')
                             <label class="form-label-custom">Skills <small class="text-muted">(Pisahkan dengan koma)</small></label>
-                            <input type="text" class="form-control form-control-custom" name="skills" value="Python, Javascript, C++">
+                            <input type="text" class="form-control form-control-custom" name="field" value="{{ old('field', auth()->user()->field ?? '') }}">
                         @else
-                            <div class="d-flex flex-wrap gap-2">
-                                <span class="skill-pill">Python</span>
-                                <span class="skill-pill">Javascript</span>
-                                <span class="skill-pill">C++</span>
-                            </div>
+                            @if(auth()->user()->field)
+                                <div class="d-flex flex-wrap gap-2">
+                                    @foreach(explode(',', auth()->user()->field) as $skill)
+                                        <span class="skill-pill">{{ trim($skill) }}</span>
+                                    @endforeach
+                                </div>
+                            @else
+                                <div class="text-muted">Belum ada skills yang diatur</div>
+                            @endif
                         @endif
                     </div>
                 </div>
+
+
             
             </form> </div> </main>
+
+<style>
+    /* Skill Pills */
+    .skill-pill {
+        display: inline-block;
+        background: #f8f9fa;
+        border: 1px solid #dee2e6;
+        color: #495057;
+        padding: 0.375rem 0.75rem;
+        border-radius: 1rem;
+        font-size: 0.875rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+    
+    .skill-pill:hover {
+        background: #e9ecef;
+        transform: translateY(-1px);
+    }
+    
+    /* Form Styling */
+    .form-control-custom {
+        border-radius: 0.75rem !important;
+        border: 1px solid #dee2e6;
+        padding: 0.75rem 1rem;
+        background-color: #f8f9fa;
+        transition: all 0.3s ease;
+    }
+    
+    .form-control-custom:focus {
+        border-color: #6b5ce7;
+        box-shadow: 0 0 0 0.2rem rgba(107, 92, 231, 0.25);
+        background-color: #fff;
+    }
+    
+    .form-label-custom {
+        font-weight: 600;
+        color: #495057;
+        margin-bottom: 0.5rem;
+    }
+    
+    /* Tab Navigation Styling */
+    .profile-tabs-container {
+        display: flex;
+        gap: 0.5rem;
+        background: #f8f9fa;
+        padding: 0.375rem;
+        border-radius: 0.75rem;
+        border: 1px solid #e9ecef;
+        position: relative;
+    }
+    
+    .tab-link {
+        padding: 0.5rem 1rem;
+        text-decoration: none;
+        color: #6c757d;
+        font-weight: 500;
+        border-radius: 0.5rem;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        white-space: nowrap;
+        position: relative;
+        z-index: 2;
+    }
+    
+    .tab-link:hover {
+        color: #495057;
+        background-color: #e9ecef;
+        transform: translateY(-1px);
+    }
+    
+    .tab-link.active {
+        background-color: white;
+        color: #6b5ce7;
+        box-shadow: 0 4px 12px rgba(107, 92, 231, 0.15);
+        font-weight: 600;
+        transform: translateY(-2px);
+    }
+    
+    /* Card Animation */
+    .card {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1) !important;
+    }
+    
+    /* Button Animations */
+    .btn {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border-radius: 0.5rem;
+    }
+    
+    .btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+    
+    .btn:active {
+        transform: translateY(0);
+    }
+    
+    /* Alert Animation */
+    .alert {
+        animation: slideInDown 0.5s ease-out;
+        border-radius: 0.75rem;
+    }
+    
+    @keyframes slideInDown {
+        from {
+            transform: translateY(-20px);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+    
+    /* Form Input Animation */
+    .form-select, .form-control {
+        transition: all 0.3s ease;
+    }
+    
+    .form-select:focus, .form-control:focus {
+        transform: scale(1.02);
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .profile-tabs-container {
+            flex-direction: column;
+            width: 100%;
+        }
+        
+        .d-flex.justify-content-between {
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .card {
+            margin-bottom: 1rem;
+        }
+        
+        .tab-link:hover,
+        .tab-link.active {
+            transform: none;
+        }
+    }
+</style>
 
 @endsection
