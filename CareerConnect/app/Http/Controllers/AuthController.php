@@ -18,7 +18,17 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            // Use intended redirect so users return to the page they originally requested
+            
+            // Check if user is admin
+            $adminEmails = ['kevin@admin.com', 'genesis@admin.com', 'tiffani@admin.com', 'ariela@admin.com'];
+            $user = Auth::user();
+            
+            if (in_array($user->email, $adminEmails)) {
+                // Redirect admin to admin dashboard
+                return redirect()->route('admin.dashboard')->with('login_success', 'Selamat datang, Administrator!');
+            }
+            
+            // Regular user redirect
             return redirect()->intended(route('home'))->with('login_success', 'Selamat datang!');
         }
 

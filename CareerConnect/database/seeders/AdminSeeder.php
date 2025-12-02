@@ -13,34 +13,38 @@ class AdminSeeder extends Seeder
      */
     public function run(): void
     {
-        $admins = [
-            ['name' => 'Admin One', 'email' => 'admin1@example.com'],
-            ['name' => 'Admin Two', 'email' => 'admin2@example.com'],
-            ['name' => 'Admin Three', 'email' => 'admin3@example.com'],
-            ['name' => 'Admin Four', 'email' => 'admin4@example.com'],
+        // Admin accounts yang akan dibuat
+        $adminAccounts = [
+            [
+                'name' => 'Kevin Admin',
+                'email' => 'kevin@admin.com',
+                'password' => 'admin2'
+            ],
+            [
+                'name' => 'Genesis Admin', 
+                'email' => 'genesis@admin.com',
+                'password' => 'admin1'
+            ],
+            [
+                'name' => 'Tiffani Admin',
+                'email' => 'tiffani@admin.com', 
+                'password' => 'admin3'
+            ],
+            [
+                'name' => 'Ariela Admin',
+                'email' => 'ariela@admin.com',
+                'password' => 'admin4'
+            ]
         ];
 
-        // Map existing admin placeholders to requested usernames and passwords
-        $map = [
-            'admin1@example.com' => ['username' => 'genesis',  'name' => 'Genesis',  'password' => 'admin1'],
-            'admin2@example.com' => ['username' => 'kevin',    'name' => 'Kevin',    'password' => 'admin2'],
-            'admin3@example.com' => ['username' => 'tiffani',  'name' => 'Tiffani',  'password' => 'admin3'],
-            'admin4@example.com' => ['username' => 'ariella',  'name' => 'Ariella',  'password' => 'admin4'],
-        ];
+        foreach ($adminAccounts as $admin) {
+            // Cek apakah admin sudah ada
+            $existing = DB::table('user')->where('email', $admin['email'])->first();
 
-        foreach ($map as $oldEmail => $data) {
-            $targetEmail = $data['username'] . '@admin.com';
-
-            // Find existing by old placeholder email OR by the plain username (if previous seeder set plain username)
-            $existing = DB::table('user')
-                ->where('email', $oldEmail)
-                ->orWhere('email', $data['username'])
-                ->first();
-
-            $payload = [
-                'name' => $data['name'],
-                'password' => Hash::make($data['password']),
-                // ensure required columns are non-null
+            $userData = [
+                'name' => $admin['name'],
+                'email' => $admin['email'],
+                'password' => Hash::make($admin['password']),
                 'nim' => '',
                 'study_program' => '',
                 'class' => '',
@@ -53,11 +57,14 @@ class AdminSeeder extends Seeder
             ];
 
             if ($existing) {
-                // update email and other fields
-                DB::table('user')->where('id', $existing->id)->update(array_merge($payload, ['email' => $targetEmail, 'created_at' => $existing->created_at]));
+                // Update jika sudah ada
+                DB::table('user')->where('email', $admin['email'])->update($userData);
+                echo "Updated admin: " . $admin['email'] . "\n";
             } else {
-                // insert new admin if original not found
-                DB::table('user')->insert(array_merge($payload, ['email' => $targetEmail, 'created_at' => now()]));
+                // Insert baru jika belum ada
+                $userData['created_at'] = now();
+                DB::table('user')->insert($userData);
+                echo "Created admin: " . $admin['email'] . "\n";
             }
         }
     }
