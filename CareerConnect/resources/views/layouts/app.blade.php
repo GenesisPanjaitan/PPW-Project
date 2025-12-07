@@ -557,6 +557,55 @@
         // Handle favorite form submissions via AJAX to avoid full page reload and toggle icon
         document.addEventListener('DOMContentLoaded', function() {
             const favForms = document.querySelectorAll('form.favorite-form');
+
+            // Centralized ensureBookmarkedUI function which will run once on load
+            async function ensureBookmarkedUI() {
+                let favoriteIds = window.__favoriteIds || [];
+                if ((!favoriteIds || favoriteIds.length === 0) && window.location) {
+                    try {
+                        const resp = await fetch('/debug/my-favorites', { credentials: 'same-origin' });
+                        if (resp.ok) {
+                            const json = await resp.json().catch(() => null);
+                            if (json && Array.isArray(json.my_favorites)) {
+                                favoriteIds = json.my_favorites.map(n => Number(n));
+                                window.__favoriteIds = favoriteIds;
+                            }
+                        }
+                    } catch (e) {
+                        // ignore
+                    }
+                }
+
+                // Apply classes based on favoriteIds
+                document.querySelectorAll('form.favorite-form').forEach(f => {
+                    const btn = f.querySelector('button');
+                    if (!btn) return;
+                    const action = (f.action || '');
+                    const m = action.match(/\/favorite\/(\d+)(?:$|\?)/);
+                    if (!m) return;
+                    const id = Number(m[1]);
+                    if (favoriteIds && favoriteIds.includes(id)) {
+                        // mark as favorited
+                        btn.classList.remove('btn-outline-secondary', 'btn-light', 'border');
+                        btn.classList.add('btn-primary');
+                        const ic = btn.querySelector('i');
+                        if (ic) {
+                            ic.classList.remove('bi-bookmark');
+                            ic.classList.add('bi-bookmark-fill', 'text-white');
+                        }
+                        // ensure form will DELETE on next submit
+                        if (!f.querySelector('input[name="_method"]')) {
+                            const input = document.createElement('input');
+                            input.type = 'hidden'; input.name = '_method'; input.value = 'DELETE';
+                            f.appendChild(input);
+                        } else {
+                            f.querySelector('input[name="_method"]').value = 'DELETE';
+                        }
+                    }
+                });
+            }
+
+            // Add event listeners to each favorite form
             favForms.forEach(form => {
                 form.addEventListener('submit', async function(e) {
                     e.preventDefault();
@@ -585,15 +634,14 @@
                         if (data.action === 'stored') {
                             if (icon) {
                                 icon.classList.remove('bi-bookmark');
-                                icon.classList.add('bi-bookmark-fill');
+                                icon.classList.add('bi-bookmark-fill', 'text-white');
                             }
-                            if (submitButton) submitButton.classList.add('text-danger');
-                            // change form to now point to destroy (so next click removes)
-                            const newAction = form.action.replace(/favorite\/(\d+)$/,'favorite/$1');
-                            // keep the same action; server handles delete via DELETE method when form has a method field
-                            // swap hidden _method if any
+                            if (submitButton) {
+                                submitButton.classList.remove('btn-light', 'border');
+                                submitButton.classList.add('btn-primary');
+                            }
+                            // ensure form will send DELETE next time
                             if (!form.querySelector('input[name="_method"]')) {
-                                // add _method delete
                                 const input = document.createElement('input');
                                 input.type = 'hidden'; input.name = '_method'; input.value = 'DELETE';
                                 form.appendChild(input);
@@ -603,10 +651,15 @@
                         }
                         else if (data.action === 'deleted') {
                             if (icon) {
-                                icon.classList.remove('bi-bookmark-fill');
+                                icon.classList.remove('bi-bookmark-fill', 'text-white');
                                 icon.classList.add('bi-bookmark');
                             }
-                            if (submitButton) submitButton.classList.remove('text-danger');
+                            if (submitButton) {
+                                submitButton.classList.remove('btn-primary');
+                                // revert to outlined secondary style used in views
+                                submitButton.classList.remove('btn-light', 'border');
+                                submitButton.classList.add('btn-outline-secondary');
+                            }
                             // ensure method is POST for adding back
                             const methodInput = form.querySelector('input[name="_method"]');
                             if (methodInput) methodInput.value = 'POST';
@@ -618,6 +671,9 @@
                     }
                 });
             });
+
+            // run once on load to ensure bookmark UI is correct
+            ensureBookmarkedUI();
         });
     </script>
 </body>

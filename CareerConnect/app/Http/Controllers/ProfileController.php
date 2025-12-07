@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 
 class ProfileController extends Controller
@@ -26,12 +28,13 @@ class ProfileController extends Controller
     public function update(Request $request)
     {
         // Debug log
-        \Log::info('=== PROFILE UPDATE STARTED ===');
-        \Log::info('User ID: ' . auth()->id());
-        \Log::info('Request data: ' . json_encode($request->all()));
-        \Log::info('Has image file: ' . ($request->hasFile('image') ? 'YES' : 'NO'));
+        Log::info('=== PROFILE UPDATE STARTED ===');
+        Log::info('User ID: ' . Auth::id());
+        Log::info('Request data: ' . json_encode($request->all()));
+        Log::info('Has image file: ' . ($request->hasFile('image') ? 'YES' : 'NO'));
         
-        $user = auth()->user();
+        /** @var \App\Models\User|null $user */
+        $user = Auth::user();
 
         $request->validate([
             'name' => 'required|string|max:255',
@@ -57,35 +60,35 @@ class ProfileController extends Controller
 
         // Handle profile image upload
         if ($request->hasFile('image')) {
-            \Log::info('Processing image upload...');
+            Log::info('Processing image upload...');
             
             // Delete old image if exists
             if ($user->image && file_exists(public_path('storage/profile_photos/' . $user->image))) {
                 unlink(public_path('storage/profile_photos/' . $user->image));
-                \Log::info('Old image deleted: ' . $user->image);
+                Log::info('Old image deleted: ' . $user->image);
             }
 
             // Upload new image
             $image = $request->file('image');
             $imageName = time() . '_' . $user->id . '.' . $image->getClientOriginalExtension();
-            \Log::info('New image name: ' . $imageName);
+            Log::info('New image name: ' . $imageName);
             
             // Ensure directory exists
             $uploadPath = public_path('storage/profile_photos');
             if (!file_exists($uploadPath)) {
                 mkdir($uploadPath, 0755, true);
-                \Log::info('Directory created: ' . $uploadPath);
+                Log::info('Directory created: ' . $uploadPath);
             }
             
             $image->move($uploadPath, $imageName);
             $user->image = $imageName;
-            \Log::info('Image moved to: ' . $uploadPath . '/' . $imageName);
+            Log::info('Image moved to: ' . $uploadPath . '/' . $imageName);
         }
 
-        \Log::info('User before save: ' . json_encode($user->getAttributes()));
+        Log::info('User before save: ' . json_encode($user->toArray()));
         $user->save();
-        \Log::info('User saved successfully');
-        \Log::info('=== PROFILE UPDATE COMPLETED ===');
+        Log::info('User saved successfully');
+        Log::info('=== PROFILE UPDATE COMPLETED ===');
 
         return redirect()->route('profile')->with('success', 'Profile berhasil diperbarui!');
     }
@@ -97,7 +100,8 @@ class ProfileController extends Controller
             'new_password' => 'required|min:6|confirmed',
         ]);
 
-        $user = auth()->user();
+        /** @var \App\Models\User|null $user */
+        $user = Auth::user();
 
         // Verify current password
         if (!Hash::check($request->current_password, $user->password)) {
@@ -114,11 +118,12 @@ class ProfileController extends Controller
     public function updateAcademic(Request $request)
     {
         // Debug log
-        \Log::info('=== ACADEMIC UPDATE STARTED ===');
-        \Log::info('User ID: ' . auth()->id());
-        \Log::info('Request data: ' . json_encode($request->all()));
+        Log::info('=== ACADEMIC UPDATE STARTED ===');
+        Log::info('User ID: ' . Auth::id());
+        Log::info('Request data: ' . json_encode($request->all()));
         
-        $user = auth()->user();
+        /** @var \App\Models\User|null $user */
+        $user = Auth::user();
 
         $request->validate([
             'study_program' => 'nullable|string|max:255',
@@ -131,10 +136,10 @@ class ProfileController extends Controller
         $user->interest = $request->interest;
         $user->field = $request->field;
 
-        \Log::info('User before save: ' . json_encode($user->getAttributes()));
+        Log::info('User before save: ' . json_encode($user->toArray()));
         $user->save();
-        \Log::info('Academic data saved successfully');
-        \Log::info('=== ACADEMIC UPDATE COMPLETED ===');
+        Log::info('Academic data saved successfully');
+        Log::info('=== ACADEMIC UPDATE COMPLETED ===');
 
         return redirect()->route('profile.academic')->with('success', 'Data akademik berhasil diperbarui!');
     }
@@ -143,15 +148,19 @@ class ProfileController extends Controller
     {
         return view('profile_alumni');
     }
-
     public function updateAlumni(Request $request)
     {
         // Debug log
-        \Log::info('=== ALUMNI UPDATE STARTED ===');
-        \Log::info('User ID: ' . auth()->id());
-        \Log::info('Request data: ' . json_encode($request->all()));
+        Log::info('=== ALUMNI UPDATE STARTED ===');
+        Log::info('User ID: ' . Auth::id());
+        Log::info('Request data: ' . json_encode($request->all()));
         
-        $user = auth()->user();
+        /** @var \App\Models\User|null $user */
+        $user = Auth::user();
+        
+        if (!$user instanceof User) {
+            return redirect()->route('login');
+        }
 
         $request->validate([
             'graduation_year' => 'nullable|integer|min:2000|max:2030',
@@ -166,10 +175,10 @@ class ProfileController extends Controller
         $user->current_field = $request->current_field;
         $user->experience = $request->experience;
 
-        \Log::info('User before save: ' . json_encode($user->getAttributes()));
+        Log::info('User before save: ' . json_encode($user->toArray()));
         $user->save();
-        \Log::info('Alumni data saved successfully');
-        \Log::info('=== ALUMNI UPDATE COMPLETED ===');
+        Log::info('Alumni data saved successfully');
+        Log::info('=== ALUMNI UPDATE COMPLETED ===');
 
         return redirect()->route('profile.alumni')->with('success', 'Data alumni berhasil diperbarui!');
     }
