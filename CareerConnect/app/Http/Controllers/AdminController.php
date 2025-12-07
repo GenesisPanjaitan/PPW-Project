@@ -7,6 +7,9 @@ use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
 class AdminController extends Controller
@@ -73,28 +76,41 @@ class AdminController extends Controller
     // Method untuk menambahkan data notifikasi ke semua view admin
     private function addNotificationData()
     {
-        $userId = auth()->id();
-        
-        // Get atau create notification read status
-        $readStatus = DB::table('notification_reads')
-            ->where('user_id', $userId)
-            ->first();
-
-        if (!$readStatus) {
-            DB::table('notification_reads')->insert([
-                'user_id' => $userId,
-                'created_at' => now(),
-                'updated_at' => now()
-            ]);
+        /** @var \App\Models\User|null $authUser */
+            $authUser = Auth::user();
+        if (! $authUser) return; // nothing to do when no authenticated user
+        $userId = $authUser->id;
+        // If the notification_reads table doesn't exist (migrations not run),
+        // avoid querying it so the admin pages don't crash.
+        if (!Schema::hasTable('notification_reads')) {
             $readStatus = (object) [
                 'last_read_mahasiswa' => null,
                 'last_read_alumni' => null,
                 'last_read_lowongan' => null
             ];
-        }
+        } else {
+            // Get or create notification read status
+            $readStatus = DB::table('notification_reads')
+                ->where('user_id', $userId)
+                ->first();
 
-        // Log untuk debugging
-        \Log::info('Read status for user ' . $userId . ': ' . json_encode($readStatus));
+            if (!$readStatus) {
+                DB::table('notification_reads')->insert([
+                    'user_id' => $userId,
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ]);
+                $readStatus = (object) [
+                    'last_read_mahasiswa' => null,
+                    'last_read_alumni' => null,
+                    'last_read_lowongan' => null
+                ];
+            }
+
+            if (config('app.debug')) {
+                Log::info('Read status for user ' . $userId . ': ' . json_encode($readStatus));
+            }
+        }
 
         // Data untuk notifikasi - mahasiswa terbaru
         $recentMahasiswa = User::where('role', 'mahasiswa')
@@ -159,8 +175,9 @@ class AdminController extends Controller
 
         $newNotifications = $unreadMahasiswa + $unreadAlumni + $unreadLowongan;
 
-        // Log untuk debugging
-        \Log::info('Notification counts - Mahasiswa: ' . $unreadMahasiswa . ', Alumni: ' . $unreadAlumni . ', Lowongan: ' . $unreadLowongan . ', Total: ' . $newNotifications);
+        if (config('app.debug')) {
+            Log::info('Notification counts - Mahasiswa: ' . $unreadMahasiswa . ', Alumni: ' . $unreadAlumni . ', Lowongan: ' . $unreadLowongan . ', Total: ' . $newNotifications);
+        }
 
         // Share ke semua view
         view()->share([
@@ -344,7 +361,8 @@ class AdminController extends Controller
 
     public function profile()
     {
-        $admin = auth()->user();
+        /** @var \App\Models\User|null $admin */
+            $admin = Auth::user();
         $this->addNotificationData();
         return view('admin.profile', compact('admin'));
     }
@@ -352,7 +370,8 @@ class AdminController extends Controller
     public function updateProfile(Request $request)
     {
         try {
-            $admin = auth()->user();
+            /** @var \App\Models\User|null $admin */
+                $admin = Auth::user();
             
             $request->validate([
                 'name' => 'required|string|max:255',
@@ -415,11 +434,19 @@ class AdminController extends Controller
 
     public function markNotificationsRead()
     {
-        $userId = auth()->id();
-        
-        // Log untuk debugging
-        \Log::info('Marking notifications as read for user: ' . $userId);
-        
+        /** @var \App\Models\User|null $authUser */
+            $authUser = Auth::user();
+        if (! $authUser) return response()->json(['success' => false, 'message' => 'not authenticated']);
+        $userId = $authUser->id;
+        // If notification_reads table doesn't exist, skip update to avoid SQL errors.
+        if (!Schema::hasTable('notification_reads')) {
+            if (config('app.debug')) {
+                Log::warning('notification_reads table missing; skipping markNotificationsRead for user: ' . $userId);
+            }
+
+            return response()->json(['success' => false, 'message' => 'notification_reads table missing']);
+        }
+
         $result = DB::table('notification_reads')
             ->updateOrInsert(
                 ['user_id' => $userId],
@@ -431,7 +458,9 @@ class AdminController extends Controller
                 ]
             );
 
-        \Log::info('Update result: ' . ($result ? 'success' : 'failed'));
+        if (config('app.debug')) {
+            Log::info('Marking notifications as read for user: ' . $userId . ' result: ' . ($result ? 'success' : 'failed'));
+        }
 
         return response()->json(['success' => true, 'user_id' => $userId, 'timestamp' => now()]);
     }

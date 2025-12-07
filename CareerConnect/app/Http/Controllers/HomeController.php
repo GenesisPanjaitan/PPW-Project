@@ -15,7 +15,7 @@ class HomeController extends Controller
 
     public function index()
     {
-        // fetch latest 6 recruitments for the home page
+        // fetch latest 3 recruitments for the home page
         $latestRecruitments = DB::table('recruitment as r')
             ->leftJoin('jobtype as j', 'r.jobtype_id', '=', 'j.id')
             ->leftJoin('user as u', 'r.user_id', '=', 'u.id')
@@ -23,13 +23,8 @@ class HomeController extends Controller
             ->whereNotNull('r.date')
             ->where('r.date', '<=', now())
             ->orderByDesc('r.date')
-            ->limit(6)
+            ->limit(3)
             ->get();
-
-        return view('home', [
-            'latestRecruitments' => $latestRecruitments
-        ]);
-
         // If user is authenticated, collect their favorite recruitment ids to toggle bookmark UI
         $favoriteIds = [];
         if (Auth::check()) {

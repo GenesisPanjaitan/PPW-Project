@@ -68,6 +68,14 @@ Route::middleware('auth')->group(function () {
 	// store comment for recruitment
 	Route::post('/recruitment/{id}/comment', [RecruitmentController::class, 'storeComment'])->name('recruitment.comment');
 
+	// Debug: return current user's favorite recruitment ids (temporary)
+	Route::get('/debug/my-favorites', function () {
+	    $userId = auth()->id();
+	    $my = DB::table('favorite')->where('user_id', $userId)->pluck('recruitment_id');
+	    $all = DB::table('favorite')->get();
+	    return response()->json(['user_id' => $userId, 'my_favorites' => $my, 'all_favorites' => $all]);
+	});
+
 	// Logout should be a POST; keep it protected
 	Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 

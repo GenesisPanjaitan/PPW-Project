@@ -211,15 +211,15 @@
                                         @auth
                                             @php $isFav = in_array($r->id, $favoriteIds ?? []); @endphp
                                             @if($isFav)
-                                                <form action="{{ route('favorite.destroy', ['id'=>$r->id]) }}" method="POST" class="d-inline favorite-form">
+                                                <form action="{{ route('favorite.destroy', ['id'=>$r->id]) }}" method="POST" class="d-inline favorite-form" onsubmit="event.stopPropagation();">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button class="btn btn-light rounded-circle border mb-3 text-danger" data-bs-toggle="tooltip" title="Hapus dari Favorit">
-                                                        <i class="bi bi-bookmark-fill"></i>
+                                                    <button class="btn btn-primary rounded-circle mb-3" data-bs-toggle="tooltip" title="Hapus dari Favorit">
+                                                        <i class="bi bi-bookmark-fill text-white"></i>
                                                     </button>
                                                 </form>
                                             @else
-                                                <form action="{{ route('favorite.store', ['id'=>$r->id]) }}" method="POST" class="d-inline favorite-form">
+                                                <form action="{{ route('favorite.store', ['id'=>$r->id]) }}" method="POST" class="d-inline favorite-form" onsubmit="event.stopPropagation();">
                                                     @csrf
                                                     <button class="btn btn-light rounded-circle border mb-3" data-bs-toggle="tooltip" title="Simpan">
                                                         <i class="bi bi-bookmark"></i>
@@ -227,14 +227,10 @@
                                                 </form>
                                             @endif
                                         @else
-                                            <a href="{{ route('login') }}" class="btn btn-light rounded-circle border mb-3" data-bs-toggle="tooltip" title="Login untuk menyimpan">
+                                            <a href="{{ route('login') }}" class="btn btn-light rounded-circle border mb-3" data-bs-toggle="tooltip" title="Login untuk menyimpan" onclick="event.stopPropagation();">
                                                 <i class="bi bi-bookmark"></i>
                                             </a>
-                                        @endaut
-                                        
-                                        <button class="btn btn-light rounded-circle border mb-3 btn-bookmark-anim shadow-sm" data-bs-toggle="tooltip" title="Simpan">
-                                            <i class="bi bi-bookmark"></i>
-                                        </button>
+                                        @endauth
                                         
                                         <!-- Tombol Edit & Hapus (Hanya Admin/Owner) -->
                                         @auth
