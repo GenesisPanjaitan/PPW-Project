@@ -361,18 +361,18 @@
                                 <label class="form-label small fw-bold text-secondary">Kategori</label>
                                 <select name="kategori" class="form-select form-select-sm bg-light border-0" required>
                                     <option value="" selected disabled>Pilih...</option>
-                                    <option value="Teknologi">Teknologi</option>
-                                    <option value="Bisnis">Bisnis</option>
-                                    <option value="Desain">Desain</option>
+                                    @foreach($categories as $cat)
+                                        <option value="{{ $cat->id }}">{{ $cat->name }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label small fw-bold text-secondary">Tipe</label>
                                 <select name="tipe" class="form-select form-select-sm bg-light border-0" required>
                                     <option value="" selected disabled>Pilih Tipe</option>
-                                    <option value="Full-time">Full-time</option>
-                                    <option value="Part-time">Part-time</option>
-                                    <option value="Internship">Internship</option>
+                                    @foreach($jobtypes as $jt)
+                                        <option value="{{ $jt->id }}">{{ $jt->name }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
