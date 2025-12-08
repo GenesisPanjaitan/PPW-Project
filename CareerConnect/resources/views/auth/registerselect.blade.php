@@ -38,11 +38,16 @@
                                      class="img-fluid mb-4 d-block mx-auto" 
                                      style="max-height: 50px;">
                                 <h3 class="card-title text-center fw-bold mb-2 mt-2">
-                                    Daftar CareerConnect
+                                    {{ Auth::check() ? 'Lengkapi Profil Anda' : 'Daftar CareerConnect' }}
                                 </h3>
                                 <p class="card-text text-center text-muted">
-                                    Lengkapi profil Anda untuk mendapatkan peluang karir terbaik
+                                    {{ Auth::check() ? 'Pilih tipe akun untuk melanjutkan' : 'Lengkapi profil Anda untuk mendapatkan peluang karir terbaik' }}
                                 </p>
+                                @if(Auth::check())
+                                <div class="alert alert-info mt-3">
+                                    <i class="bi bi-info-circle"></i> Anda login dengan Google sebagai <strong>{{ Auth::user()->email }}</strong>
+                                </div>
+                                @endif
                             </div>
 
                             <div class="mb-3">

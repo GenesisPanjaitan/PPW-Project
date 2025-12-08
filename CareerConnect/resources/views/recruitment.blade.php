@@ -209,7 +209,9 @@
                                         <!-- Tombol Bookmark: POST to save, DELETE to remove -->
                                         
                                         @auth
-                                            @php $isFav = in_array($r->id, $favoriteIds ?? []); @endphp
+                                            @php 
+                                                $isFav = in_array((int)$r->id, array_map('intval', $favoriteIds ?? [])); 
+                                            @endphp
                                             @if($isFav)
                                                 <form action="{{ route('favorite.destroy', ['id'=>$r->id]) }}" method="POST" class="d-inline favorite-form" onsubmit="event.stopPropagation();">
                                                     @csrf
@@ -361,18 +363,22 @@
                                 <label class="form-label small fw-bold text-secondary">Kategori</label>
                                 <select name="kategori" class="form-select form-select-sm bg-light border-0" required>
                                     <option value="" selected disabled>Pilih...</option>
-                                    @foreach($categories as $cat)
-                                        <option value="{{ $cat->id }}">{{ $cat->name }}</option>
-                                    @endforeach
+                                    @if(isset($categories))
+                                        @foreach($categories as $cat)
+                                            <option value="{{ $cat->id }}">{{ $cat->name }}</option>
+                                        @endforeach
+                                    @endif
                                 </select>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label small fw-bold text-secondary">Tipe</label>
                                 <select name="tipe" class="form-select form-select-sm bg-light border-0" required>
                                     <option value="" selected disabled>Pilih Tipe</option>
-                                    @foreach($jobtypes as $jt)
-                                        <option value="{{ $jt->id }}">{{ $jt->name }}</option>
-                                    @endforeach
+                                    @if(isset($jobtypes))
+                                        @foreach($jobtypes as $jt)
+                                            <option value="{{ $jt->id }}">{{ $jt->name }}</option>
+                                        @endforeach
+                                    @endif
                                 </select>
                             </div>
                         </div>
