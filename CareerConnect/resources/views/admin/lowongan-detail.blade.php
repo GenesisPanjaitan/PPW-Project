@@ -22,6 +22,22 @@
             </div>
             <div class="card-body">
                 <div class="row">
+                    <div class="col-md-4">
+                        <div class="card bg-light mb-3">
+                            <div class="card-body text-center">
+                                <h6 class="card-title mb-3">Foto Perusahaan</h6>
+                                @if($lowongan->company_image && file_exists(public_path('storage/company_photos/' . $lowongan->company_image)))
+                                    <img src="{{ asset('storage/company_photos/' . $lowongan->company_image) }}" 
+                                         class="img-fluid rounded" alt="Foto Perusahaan" style="max-height: 200px; object-fit: cover;">
+                                @else
+                                    <div class="bg-secondary bg-opacity-10 rounded p-5">
+                                        <i class="bi bi-building" style="font-size: 3rem; color: #6c757d;"></i>
+                                        <p class="text-muted mt-2">Tidak ada foto perusahaan</p>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
                     <div class="col-md-8">
                         <table class="table table-borderless">
                             <tr>

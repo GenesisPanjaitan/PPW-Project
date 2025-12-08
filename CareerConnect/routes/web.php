@@ -76,6 +76,30 @@ Route::middleware('auth')->group(function () {
 	    return response()->json(['user_id' => $userId, 'my_favorites' => $my, 'all_favorites' => $all]);
 	});
 
+	// Debug: check current user role and switch role (for testing only)
+	Route::get('/debug/role', function () {
+	    $user = auth()->user();
+	    return response()->json([
+	        'user_id' => $user->id,
+	        'name' => $user->name,
+	        'email' => $user->email,
+	        'current_role' => $user->role
+	    ]);
+	});
+
+	// Debug: switch user role (for testing - development only)
+	Route::get('/debug/switch-role/{role}', function ($role) {
+	    if (!in_array($role, ['mahasiswa', 'alumni', 'admin'])) {
+	        return response()->json(['error' => 'Invalid role'], 400);
+	    }
+	    $user = auth()->user();
+	    $user->update(['role' => $role]);
+	    return response()->json([
+	        'message' => 'Role changed successfully',
+	        'new_role' => $user->role
+	    ]);
+	});
+
 	// Logout should be a POST; keep it protected
 	Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 

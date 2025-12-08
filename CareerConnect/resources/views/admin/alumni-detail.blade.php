@@ -66,8 +66,13 @@
                         <div class="card bg-gradient-light shadow-sm border-0">
                             <div class="card-body text-center p-4">
                                 <div class="position-relative mb-3">
-                                    <img src="https://ui-avatars.com/api/?name={{ urlencode($alumni->name ?? 'User') }}&background=48c78e&color=fff&size=120" 
-                                         class="rounded-circle shadow-sm" width="120" height="120" alt="Avatar">
+                                    @if($alumni->image && file_exists(public_path('storage/profile_photos/' . $alumni->image)))
+                                        <img src="{{ asset('storage/profile_photos/' . $alumni->image) }}" 
+                                             class="rounded-circle shadow-sm" width="120" height="120" alt="Foto Profil" style="object-fit: cover;">
+                                    @else
+                                        <img src="https://ui-avatars.com/api/?name={{ urlencode($alumni->name ?? 'User') }}&background=48c78e&color=fff&size=120" 
+                                             class="rounded-circle shadow-sm" width="120" height="120" alt="Avatar">
+                                    @endif
                                     <div class="position-absolute bottom-0 end-0 bg-success rounded-circle d-flex align-items-center justify-content-center" style="width: 30px; height: 30px;">
                                         <i class="bi bi-check-lg text-white"></i>
                                     </div>
