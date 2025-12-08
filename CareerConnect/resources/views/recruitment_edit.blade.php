@@ -28,7 +28,7 @@
                 <select name="kategori" class="form-select">
                     <option value="">-- Pilih Kategori --</option>
                     @foreach($categories as $cat)
-                        <option value="{{ $cat->name }}" {{ (old('kategori') == $cat->name) || ($r->category_id == $cat->id && !old('kategori')) ? 'selected' : '' }}>{{ $cat->name }}</option>
+                        <option value="{{ $cat->id }}" {{ (old('kategori') == $cat->id) || ($r->category_id == $cat->id && !old('kategori')) ? 'selected' : '' }}>{{ $cat->name }}</option>
                     @endforeach
                 </select>
             </div>
@@ -38,7 +38,7 @@
                 <select name="tipe" class="form-select">
                     <option value="">-- Pilih Tipe --</option>
                     @foreach($jobtypes as $jt)
-                        <option value="{{ $jt->name }}" {{ (old('tipe') == $jt->name) || ($r->jobtype_id == $jt->id && !old('tipe')) ? 'selected' : '' }}>{{ $jt->name }}</option>
+                        <option value="{{ $jt->id }}" {{ (old('tipe') == $jt->id) || ($r->jobtype_id == $jt->id && !old('tipe')) ? 'selected' : '' }}>{{ $jt->name }}</option>
                     @endforeach
                 </select>
             </div>

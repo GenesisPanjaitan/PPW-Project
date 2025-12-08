@@ -16,9 +16,9 @@ class RecruitmentSeeder extends Seeder
     {
         // Ensure some categories and job types exist
         $categories = [
-            'Teknologi Informasi',
+            'Teknologi',
             'Desain',
-            'Pemasaran'
+            'Bisnis'
         ];
 
         $jobtypes = [
@@ -92,7 +92,7 @@ class RecruitmentSeeder extends Seeder
                 'link' => 'https://teknosolusi.example.com/careers',
                 'image' => 'tekno-solusi-logo.jpg',
                 'date' => $now->copy()->subDays(2)->toDateTimeString(),
-                'category' => 'Teknologi Informasi',
+                'category' => 'Teknologi',
                 'jobtype' => 'Full Time',
             ],
             [
@@ -114,7 +114,7 @@ class RecruitmentSeeder extends Seeder
                 'link' => 'https://agensipemasaran.example.com/intern',
                 'image' => 'agensi-pemasaran-logo.jpg',
                 'date' => $now->copy()->subDays(10)->toDateTimeString(),
-                'category' => 'Pemasaran',
+                'category' => 'Bisnis',
                 'jobtype' => 'Magang',
             ],
         ];
