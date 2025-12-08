@@ -218,11 +218,6 @@
             <!-- Top Navbar -->
             <nav class="navbar navbar-expand-lg admin-navbar">
                 <div class="container-fluid">
-                    <!-- Tombol Toggle Sidebar -->
-                    <button class="btn btn-light text-primary" id="menu-toggle">
-                        <i class="bi bi-list fs-4"></i>
-                    </button>
-
                     <!-- Menu Kanan Navbar -->
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav ms-auto mt-2 mt-lg-0 align-items-center">
@@ -378,8 +373,6 @@
                             });
                             </script>
 
-                            <div class="vr h-50 mx-2 text-secondary"></div>
-
                             <!-- Admin Profile Dropdown -->
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle d-flex align-items-center text-dark fw-semibold" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
@@ -394,11 +387,6 @@
                                     <li>
                                         <a class="dropdown-item" href="{{ route('admin.profile') }}">
                                             <i class="bi bi-person me-2"></i>Profil
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" href="{{ route('admin.settings') }}">
-                                            <i class="bi bi-gear me-2"></i>Pengaturan
                                         </a>
                                     </li>
                                     <li><hr class="dropdown-divider"></li>

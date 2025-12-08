@@ -15,6 +15,8 @@ class HomeController extends Controller
 
     public function index()
     {
+        $user = Auth::user();
+        
         // fetch latest 3 recruitments for the home page
         $latestRecruitments = DB::table('recruitment as r')
             ->leftJoin('jobtype as j', 'r.jobtype_id', '=', 'j.id')
@@ -25,6 +27,7 @@ class HomeController extends Controller
             ->orderByDesc('r.date')
             ->limit(3)
             ->get();
+        
         // If user is authenticated, collect their favorite recruitment ids to toggle bookmark UI
         $favoriteIds = [];
         if (Auth::check()) {
@@ -32,8 +35,22 @@ class HomeController extends Controller
             $favoriteIds = $favRows ?: [];
         }
 
-        return view('home', ['latestRecruitments' => $latestRecruitments, 'favoriteIds' => $favoriteIds]);
-
+        // Tampilkan view berbeda berdasarkan role
+        if ($user->role === 'alumni') {
+            // Data tambahan untuk alumni
+            $myPostings = DB::table('recruitment')->where('user_id', $user->id)->get();
+            return view('home-alumni', [
+                'latestRecruitments' => $latestRecruitments, 
+                'favoriteIds' => $favoriteIds,
+                'myPostings' => $myPostings
+            ]);
+        } else {
+            // View default untuk mahasiswa
+            return view('home-mahasiswa', [
+                'latestRecruitments' => $latestRecruitments, 
+                'favoriteIds' => $favoriteIds
+            ]);
+        }
     }
 
 
