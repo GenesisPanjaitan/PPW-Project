@@ -72,9 +72,22 @@
                     <h5 class="fw-bold mb-1">Keamanan Akun</h5>
                     <p class="text-muted small mb-4">Kelola password dan keamanan akun Anda</p>
                     
-                    <button class="btn btn-light border fw-semibold" data-bs-toggle="modal" data-bs-target="#ubahPasswordModal">
-                        <i class="bi bi-key me-1"></i> Ubah Password
-                    </button>
+                    @if(auth()->user()->isGoogleUser())
+                        @if(session('password_set'))
+                            <div class="alert alert-success">
+                                <i class="bi bi-check-circle me-2"></i> Password sudah diatur! Anda bisa login dengan email dan password.
+                            </div>
+                        @else
+                            <button class="btn btn-light border fw-semibold" data-bs-toggle="modal" data-bs-target="#setPasswordModal">
+                                <i class="bi bi-key me-1"></i> Atur Password
+                            </button>
+                            <p class="text-muted small mt-2">Akun Anda login via Google. Atur password untuk bisa login dengan email dan password juga.</p>
+                        @endif
+                    @else
+                        <button class="btn btn-light border fw-semibold" data-bs-toggle="modal" data-bs-target="#ubahPasswordModal">
+                            <i class="bi bi-key me-1"></i> Ubah Password
+                        </button>
+                    @endif
                 </div>
             </div>
             
@@ -133,6 +146,45 @@
                         
                         <div class="d-grid mt-4">
                             <button type="submit" class="btn btn-masuk text-white fw-semibold py-2">Simpan Password</button>
+                        </div>
+                    </form>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Atur Password (untuk Google users) -->
+    <div class="modal fade" id="setPasswordModal" tabindex="-1" aria-labelledby="setPasswordModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="border-radius: 1rem; border: 0;">
+                
+                <div class="modal-header border-0 text-center d-block pb-0">
+                    <h4 class="modal-title fw-bold" id="setPasswordModalLabel">Atur Password</h4>
+                    <p class="text-muted small">Buat password untuk login manual dengan email Anda</p>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="position: absolute; top: 1.5rem; right: 1.5rem;"></button>
+                </div>
+                
+                <div class="modal-body p-4">
+                    <form action="{{ route('profile.set-password') }}" method="POST">
+                        @csrf
+                        
+                        <div class="mb-3">
+                            <label for="new_password_1" class="form-label-custom">Password Baru:</label>
+                            <input type="password" class="form-control form-control-custom" id="new_password_1" name="new_password" placeholder="••••••••" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="new_password_confirmation" class="form-label-custom">Konfirmasi Password Baru:</label>
+                            <input type="password" class="form-control form-control-custom" id="new_password_confirmation" name="new_password_confirmation" placeholder="••••••••" required>
+                        </div>
+                        
+                        <div class="alert alert-info small">
+                            <i class="bi bi-info-circle me-2"></i> Setelah password diatur, Anda bisa login dengan email: <strong>{{ auth()->user()->email }}</strong>
+                        </div>
+                        
+                        <div class="d-grid mt-4">
+                            <button type="submit" class="btn btn-masuk text-white fw-semibold py-2">Atur Password</button>
                         </div>
                     </form>
                 </div>

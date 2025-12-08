@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class HomeController extends Controller
 {
@@ -27,13 +28,25 @@ class HomeController extends Controller
             ->orderByDesc('r.date')
             ->limit(3)
             ->get();
+
+        // gather favorite ids for the authenticated user
         
         // If user is authenticated, collect their favorite recruitment ids to toggle bookmark UI
+
         $favoriteIds = [];
-        if (Auth::check()) {
-            $favRows = DB::table('favorite')->where('user_id', Auth::id())->pluck('recruitment_id')->toArray();
-            $favoriteIds = $favRows ?: [];
+        $userId = auth()->id();
+
+        if ($userId) {
+            $favoriteIds = DB::table('favorite')
+                ->where('user_id', $userId)
+                ->pluck('recruitment_id')
+                ->toArray();
         }
+
+        return view('home', [
+            'latestRecruitments' => $latestRecruitments,
+            'favoriteIds' => $favoriteIds
+        ]);
 
         // Tampilkan view berbeda berdasarkan role
         if ($user->role === 'alumni') {

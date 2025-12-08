@@ -115,6 +115,22 @@ class ProfileController extends Controller
         return redirect()->route('profile')->with('success', 'Password berhasil diperbarui!');
     }
 
+    public function setPassword(Request $request)
+    {
+        $request->validate([
+            'new_password' => 'required|min:6|confirmed',
+        ]);
+
+        /** @var \App\Models\User|null $user */
+        $user = Auth::user();
+
+        // Set password for first time (for Google OAuth users)
+        $user->password = Hash::make($request->new_password);
+        $user->save();
+
+        return redirect()->route('profile.settings')->with('success', 'Password berhasil dibuat! Anda sekarang bisa login dengan email dan password.');
+    }
+
     public function updateAcademic(Request $request)
     {
         // Debug log

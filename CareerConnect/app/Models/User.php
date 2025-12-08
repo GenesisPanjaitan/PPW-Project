@@ -32,6 +32,7 @@ class User extends Authenticatable
         'graduation_year',
         'contact',
         'role',
+        'login_method',
     ];
 
     /**
@@ -66,5 +67,13 @@ class User extends Authenticatable
     public function getTable(): string
     {
         return 'user';
+    }
+
+    /**
+     * Check if this is a Google OAuth user
+     */
+    public function isGoogleUser(): bool
+    {
+        return $this->login_method === 'google';
     }
 }

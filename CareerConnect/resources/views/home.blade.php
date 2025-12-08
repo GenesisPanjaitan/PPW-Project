@@ -154,7 +154,7 @@
                                                     <div>
                                                         @auth
                                                             @php
-                                                                $isFav = in_array($r->id, $favoriteIds ?? []);
+                                                                $isFav = in_array((int)$r->id, array_map('intval', $favoriteIds ?? []));
                                                             @endphp
                                                             @if($isFav)
                                                                 <form action="{{ route('favorite.destroy', ['id'=>$r->id]) }}" method="POST" class="d-inline favorite-form" onsubmit="event.stopPropagation();">

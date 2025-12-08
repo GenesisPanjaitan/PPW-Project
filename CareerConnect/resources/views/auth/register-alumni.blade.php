@@ -52,11 +52,12 @@
                                 
                                 <h5 class="fw-bold mb-3 fs-6">Informasi Dasar</h5>
                                 <div class="row g-3">
-                                    <div class="col-md-6">
+                                    <div class="col-md-{{ Auth::check() ? '12' : '6' }}">
                                         <label for="nama_lengkap" class="form-label-custom">Nama Lengkap</label>
-                                        <input type="text" class="form-control form-control-custom" id="nama_lengkap" name="name" placeholder="Nama lengkap Anda" value="{{ old('name') }}" required>
+                                        <input type="text" class="form-control form-control-custom" id="nama_lengkap" name="name" placeholder="Nama lengkap Anda" value="{{ old('name', Auth::check() ? Auth::user()->name : '') }}" required>
                                         @error('name') <div class="text-danger small mt-1">{{ $message }}</div> @enderror
                                     </div>
+                                    @if(!Auth::check())
                                     <div class="col-md-6">
                                         <label for="email" class="form-label-custom">Email</label>
                                         <input type="email" class="form-control form-control-custom" id="email" name="email" placeholder="nama@email.com" value="{{ old('email') }}" required>
@@ -85,6 +86,13 @@
                                             </span>
                                         </div>
                                     </div>
+                                    @else
+                                    <div class="col-md-12">
+                                        <div class="alert alert-info">
+                                            <i class="bi bi-info-circle"></i> Anda login dengan Google ({{ Auth::user()->email }}). Lengkapi data di bawah untuk melanjutkan.
+                                        </div>
+                                    </div>
+                                    @endif
                                 </div>
 
                                 <hr class="my-4">
@@ -167,13 +175,17 @@
                                 </div>
                                 
                                 <div class="d-grid mt-4">
-                                    <button type="submit" class="btn btn-masuk text-white fw-semibold py-2">Daftar dan Mulai Eksplorasi</button>
+                                    <button type="submit" class="btn btn-masuk text-white fw-semibold py-2">
+                                        {{ Auth::check() ? 'Simpan dan Lanjutkan' : 'Daftar dan Mulai Eksplorasi' }}
+                                    </button>
                                 </div>
                                 
+                                @if(!Auth::check())
                                 <p class="text-center text-muted mt-4 mb-0" style="font-size: 0.9rem;">
                                     Sudah punya akun? 
                                     <a href="{{ route('login') }}" class="link-login">Masuk di sini</a>
                                 </p>
+                                @endif
                                 
                             </form>
                         </div>
