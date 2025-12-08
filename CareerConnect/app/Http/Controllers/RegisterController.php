@@ -87,6 +87,24 @@ class RegisterController extends Controller
                 'contact' => $request->input('contact', ''),
                 'role' => $role,
             ]);
+          
+        // Provide DB-safe defaults for columns that are NOT NULL in migration
+        $user = User::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => Hash::make($data['password']),
+            // All optional fields default to null (matching migration nullable())
+            'nim' => $request->input('nim', null),
+            'study_program' => $request->input('study_program', null),
+            'class' => $request->input('class', null),
+            'image' => $request->input('image', null),
+            'interest' => $request->input('interest', null),
+            'field' => $request->input('field', null),
+            'current_field' => $request->input('current_field', null),
+            'graduation_year' => $request->input('graduation_year', null),
+            'contact' => $request->input('contact', null),
+            'role' => $role,
+        ]); 
 
             return redirect()->route('login')->with('success', 'Registrasi berhasil. Silakan masuk.');
         }

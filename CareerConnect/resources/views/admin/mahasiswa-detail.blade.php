@@ -58,16 +58,18 @@
                         <div class="card bg-light">
                             <div class="card-body text-center">
                                 <div class="mb-3">
-                                    <img src="https://ui-avatars.com/api/?name={{ urlencode($mahasiswa->name ?? 'User') }}&background=667eea&color=fff&size=120" 
-                                         class="rounded-circle" width="120" height="120" alt="Avatar">
+                                    @if($mahasiswa->image && file_exists(public_path('storage/profile_photos/' . $mahasiswa->image)))
+                                        <img src="{{ asset('storage/profile_photos/' . $mahasiswa->image) }}" 
+                                             class="rounded-circle" width="120" height="120" alt="Foto Profil" style="object-fit: cover;">
+                                    @else
+                                        <img src="https://ui-avatars.com/api/?name={{ urlencode($mahasiswa->name ?? 'User') }}&background=667eea&color=fff&size=120" 
+                                             class="rounded-circle" width="120" height="120" alt="Avatar">
+                                    @endif
                                 </div>
                                 <h6 class="card-title">Status Akun</h6>
                                 <span class="badge bg-success fs-6">Aktif</span>
                                 <hr>
                                 <div class="d-grid gap-2">
-                                    <a href="#" class="btn btn-warning btn-sm">
-                                        <i class="bi bi-lock me-2"></i>Suspend Akun
-                                    </a>
                                     <a href="#" class="btn btn-danger btn-sm">
                                         <i class="bi bi-trash me-2"></i>Hapus Akun
                                     </a>
