@@ -43,11 +43,6 @@ class HomeController extends Controller
                 ->toArray();
         }
 
-        return view('home', [
-            'latestRecruitments' => $latestRecruitments,
-            'favoriteIds' => $favoriteIds
-        ]);
-
         // Tampilkan view berbeda berdasarkan role
         if ($user->role === 'alumni') {
             // Data tambahan untuk alumni

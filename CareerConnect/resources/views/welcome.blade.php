@@ -51,47 +51,47 @@
             </div>
         </section>
 
+        {{-- Fitur Unggulan CareerConnect --}}
         <section class="py-5">
-            <div class="container py-5">
+            <div class="container">
                 <div class="text-center mb-5">
-                    <h2 class="fw-bold">Fitur Unggulan untuk Mahasiswa</h2>
-                    <p class="text-muted">Semua yang Anda butuhkan untuk memulai dan membangun karir impian</p>
+                    <h2 class="fw-bold">Fitur Unggulan CareerConnect</h2>
+                    <p class="text-muted">Manfaatkan semua fitur yang tersedia untuk kesuksesan karirmu</p>
                 </div>
-                
                 <div class="row g-4">
                     <div class="col-md-4">
-                        <div class="card h-100 shadow-sm border-light-subtle">
-                            <div class="card-body p-4">
-                                <i class="bi bi-search fs-2 text-primary mb-3"></i>
-                                <h5 class="card-title fw-bold">Cari & Filter Lowongan</h5>
-                                <p class="card-text text-muted">Temukan peluang magang, part-time, dan full-time dengan filter berdasarkan lokasi, jurusan, dan keahlian.</p>
-                                <span class="badge bg-secondary-subtle text-secondary-emphasis rounded-pill">Full-time</span>
-                                <span class="badge bg-secondary-subtle text-secondary-emphasis rounded-pill">Part-time</span>
-                                <span class="badge bg-secondary-subtle text-secondary-emphasis rounded-pill">Internship</span>
+                        <div class="card h-100 shadow-sm feature-card border-0">
+                            <div class="card-body text-center p-4">
+                                <div class="icon-circle-large bg-primary bg-opacity-10 text-primary mx-auto mb-3">
+                                    <i class="bi bi-briefcase-fill fs-3"></i>
+                                </div>
+                                <h6 class="fw-bold mb-2">Lowongan Kerja & Magang</h6>
+                                <p class="small text-muted mb-3">Temukan ribuan lowongan pekerjaan dan magang dari berbagai perusahaan terkemuka.</p>
+                                <a href="{{ route('login') }}" class="btn btn-outline-primary btn-sm rounded-pill">Jelajahi Lowongan</a>
                             </div>
                         </div>
                     </div>
-
                     <div class="col-md-4">
-                        <div class="card h-100 shadow-sm border-light-subtle">
-                            <div class="card-body p-4">
-                                <i class="bi bi-person-badge fs-2 text-primary mb-3"></i>
-                                <h5 class="card-title fw-bold">Profil Mahasiswa</h5>
-                                <p class="card-text text-muted">Buat profil lengkap dengan skill, pengalaman, dan portofolio menarik untuk menarik perhatian rekruter.</p>
-                                <span class="badge bg-secondary-subtle text-secondary-emphasis rounded-pill">skill</span>
-                                <span class="badge bg-secondary-subtle text-secondary-emphasis rounded-pill">portofolio</span>
+                        <div class="card h-100 shadow-sm feature-card border-0">
+                            <div class="card-body text-center p-4">
+                                <div class="icon-circle-large bg-success bg-opacity-10 text-success mx-auto mb-3">
+                                    <i class="bi bi-bookmark-fill fs-3"></i>
+                                </div>
+                                <h6 class="fw-bold mb-2">Simpan Favorit</h6>
+                                <p class="small text-muted mb-3">Tandai lowongan favorit untuk dilamar nanti dan kelola daftar lamaran kamu.</p>
+                                <a href="{{ route('login') }}" class="btn btn-outline-success btn-sm rounded-pill">Lihat Favorit</a>
                             </div>
                         </div>
                     </div>
-
                     <div class="col-md-4">
-                        <div class="card h-100 shadow-sm border-light-subtle">
-                            <div class="card-body p-4">
-                                <i class="bi bi-bookmark-star fs-2 text-primary mb-3"></i>
-                                <h5 class="card-title fw-bold">Simpan Lowongan</h5>
-                                <p class="card-text text-muted">Bookmark lowongan menarik dan kelola daftar lamaran Anda dalam satu tempat yang mudah diakses.</p>
-                                <span class="badge bg-secondary-subtle text-secondary-emphasis rounded-pill">bookmark</span>
-                                <span class="badge bg-secondary-subtle text-secondary-emphasis rounded-pill">organize</span>
+                        <div class="card h-100 shadow-sm feature-card border-0">
+                            <div class="card-body text-center p-4">
+                                <div class="icon-circle-large bg-warning bg-opacity-10 text-warning mx-auto mb-3">
+                                    <i class="bi bi-person-circle fs-3"></i>
+                                </div>
+                                <h6 class="fw-bold mb-2">Profil Profesional</h6>
+                                <p class="small text-muted mb-3">Buat dan kelola profil profesionalmu untuk meningkatkan peluang dilirik recruiter.</p>
+                                <a href="{{ route('login') }}" class="btn btn-outline-warning btn-sm rounded-pill">Edit Profil</a>
                             </div>
                         </div>
                     </div>
@@ -146,6 +146,30 @@
             </div>
         </section>
 
+        {{-- CTA band --}}
+        <section class="cta-band">
+            <div class="container">
+                <div class="cta-card">
+                    <div class="row align-items-center g-4">
+                        <div class="col-lg-8">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="cta-icon me-3">
+                                    <i class="bi bi-rocket-takeoff"></i>
+                                </div>
+                                <h4 class="fw-bold mb-0 text-white">Siap Mulai Karir Impianmu?</h4>
+                            </div>
+                            <p class="mb-0 text-white opacity-90">Bergabung sekarang dan temukan peluang magang, kerja part-time, hingga full-time bersama alumni Del.</p>
+                        </div>
+                        <div class="col-lg-4 text-lg-end">
+                            <a href="{{ route('register') }}" class="btn btn-light btn-lg rounded-pill shadow-sm px-5 fw-semibold">
+                                <i class="bi bi-person-plus me-2"></i>Daftar Sekarang
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
     </main>
     
     <footer class="py-5 bg-white border-top"> 
@@ -174,5 +198,128 @@
         </div> 
     </div> 
 </footer>
+
+{{-- Inline styles khusus landing/pre-login --}}
+<style>
+    body {
+        background: linear-gradient(135deg, #f8f9fa 0%, #eef2ff 100%);
+    }
+
+    .navbar-section {
+        position: sticky;
+        top: 0;
+        z-index: 1050;
+        backdrop-filter: blur(8px);
+    }
+
+    .hero-section {
+        position: relative;
+        overflow: hidden;
+        border-radius: 1.5rem;
+    }
+
+    .hero-section::after {
+        content: '';
+        position: absolute;
+        top: -30%;
+        right: -10%;
+        width: 420px;
+        height: 420px;
+        background: radial-gradient(circle, rgba(255,255,255,0.12) 0%, transparent 65%);
+        animation: float 8s ease-in-out infinite;
+    }
+
+    @keyframes float {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-15px); }
+    }
+
+    .stat-strip {
+        margin-top: -40px;
+        margin-bottom: 40px;
+    }
+
+    .stat-item {
+        background: #fff;
+        border-radius: 14px;
+        padding: 18px;
+        box-shadow: 0 12px 30px rgba(0,0,0,0.06);
+        transition: all 0.3s ease;
+    }
+
+    .stat-item:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 18px 40px rgba(13,110,253,0.15);
+    }
+
+    .stat-label { color: #6c757d; font-weight: 600; font-size: 0.9rem; }
+    .stat-value { color: #0d6efd; font-weight: 800; }
+
+    .card {
+        border-radius: 16px;
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 18px 40px rgba(0,0,0,0.08);
+    }
+
+    .feature-card {
+        border-radius: 1rem;
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .feature-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 12px 30px rgba(0,0,0,0.15) !important;
+    }
+
+    .icon-circle-large {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .partners-section {
+        background: #fff;
+        border-radius: 14px;
+    }
+
+    .partner-logo {
+        height: 40px;
+        object-fit: contain;
+        filter: grayscale(1);
+        opacity: 0.7;
+        transition: all 0.3s ease;
+    }
+
+    .partner-logo:hover {
+        filter: grayscale(0);
+        opacity: 1;
+    }
+
+    .cta-band {
+        background: linear-gradient(135deg, #0d6efd 0%, #6610f2 100%);
+        color: white;
+        padding: 32px 0;
+        border-radius: 16px;
+        margin: 0 12px 48px;
+        box-shadow: 0 18px 45px rgba(0,0,0,0.12);
+    }
+
+    footer {
+        border-radius: 18px 18px 0 0;
+        box-shadow: 0 -10px 30px rgba(0,0,0,0.05);
+    }
+
+    .footer-logo {
+        max-width: 120px;
+        filter: drop-shadow(0 6px 12px rgba(0,0,0,0.1));
+    }
+</style>
 
 @endsection

@@ -265,7 +265,43 @@
         </div>
     </div>
 
-
+    {{-- Section Quick Stats untuk Mahasiswa --}}
+    <div class="container my-4">
+        <div class="card border-0 shadow-sm" style="border-radius: 1rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+            <div class="card-body p-4">
+                <div class="row text-white text-center">
+                    <div class="col-md-3 col-6 mb-3 mb-md-0">
+                        <div class="quick-stat-item">
+                            <i class="bi bi-bookmark-fill fs-3 mb-2"></i>
+                            <h4 class="fw-bold mb-0">{{ DB::table('favorite')->where('user_id', auth()->id())->count() }}</h4>
+                            <small class="opacity-75">Lowongan Disimpan</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-6 mb-3 mb-md-0">
+                        <div class="quick-stat-item">
+                            <i class="bi bi-eye-fill fs-3 mb-2"></i>
+                            <h4 class="fw-bold mb-0">{{ DB::table('recruitment')->count() }}</h4>
+                            <small class="opacity-75">Lowongan Tersedia</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-6">
+                        <div class="quick-stat-item">
+                            <i class="bi bi-fire fs-3 mb-2"></i>
+                            <h4 class="fw-bold mb-0">{{ DB::table('recruitment')->whereDate('date', '>=', now()->subDays(7))->count() }}</h4>
+                            <small class="opacity-75">Lowongan Baru (7 Hari)</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-6">
+                        <div class="quick-stat-item">
+                            <i class="bi bi-trophy-fill fs-3 mb-2"></i>
+                            <h4 class="fw-bold mb-0">Top 10%</h4>
+                            <small class="opacity-75">Aktif Mencari</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </main>
 
@@ -292,14 +328,41 @@
 </script>
 
 <style>
-    .job-card:hover {
-        transform: translateY(-2px) !important;
-        box-shadow: 0 8px 25px rgba(0,0,0,0.1) !important;
+    /* Enhanced styling for dashboard */
+    body {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
     }
+    
+    .job-card {
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .job-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 4px;
+        height: 100%;
+        background: linear-gradient(180deg, #0d6efd, #6610f2);
+        transform: scaleY(0);
+        transition: transform 0.3s ease;
+    }
+    
+    .job-card:hover::before {
+        transform: scaleY(1);
+    }
+    
+    .job-card:hover {
+        transform: translateX(8px) translateY(-4px) !important;
+        box-shadow: 0 12px 35px rgba(13, 110, 253, 0.2) !important;
+    }
+    
     .hover-shadow:hover {
         transition: all 0.3s ease;
     }
-
 
     /* Smooth animations */
     * {
@@ -313,11 +376,158 @@
         overflow: hidden;
     }
     
+    .hero-section::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+        pointer-events: none;
+    }
+    
     .text-highlight {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
+        position: relative;
+        display: inline-block;
+    }
+    
+    .text-highlight::after {
+        content: '';
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        width: 100%;
+        height: 3px;
+        background: linear-gradient(90deg, #667eea, #764ba2);
+        border-radius: 2px;
+        animation: slideWidth 2s ease-in-out infinite;
+    }
+    
+    @keyframes slideWidth {
+        0%, 100% { width: 100%; }
+        50% { width: 60%; }
+    }
+    
+    /* Profile card enhancement */
+    .profile-card {
+        background: white;
+        border: 2px solid transparent;
+        background-clip: padding-box;
+        position: relative;
+        transition: all 0.3s ease;
+    }
+    
+    .profile-card::before {
+        content: '';
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        right: -2px;
+        bottom: -2px;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        border-radius: inherit;
+        z-index: -1;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+    
+    .profile-card:hover::before {
+        opacity: 1;
+    }
+    
+    .profile-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 40px rgba(102, 126, 234, 0.2) !important;
+    }
+    
+    /* Badge animations */
+    .badge {
+        animation: fadeInUp 0.5s ease-out;
+    }
+    
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    /* Icon enhancement */
+    .bi-building {
+        animation: bounce 2s ease-in-out infinite;
+    }
+    
+    @keyframes bounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-5px); }
+    }
+    
+    /* Card hover glow */
+    .card {
+        position: relative;
+        transition: all 0.3s ease;
+    }
+    
+    .card:hover {
+        box-shadow: 0 10px 30px rgba(0,0,0,0.12) !important;
+    }
+    
+    /* Button enhancement */
+    .btn {
+        position: relative;
+        overflow: hidden;
+        z-index: 1;
+    }
+    
+    .btn::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.3);
+        transform: translate(-50%, -50%);
+        transition: width 0.6s, height 0.6s;
+        z-index: -1;
+    }
+    
+    .btn:hover::before {
+        width: 300px;
+        height: 300px;
+    }
+    
+    /* Quick stat items */
+    .quick-stat-item {
+        padding: 15px;
+        border-radius: 12px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+    
+    .quick-stat-item:hover {
+        background: rgba(255, 255, 255, 0.15);
+        transform: translateY(-5px) scale(1.05);
+    }
+    
+    .quick-stat-item i {
+        display: block;
+        animation: float 3s ease-in-out infinite;
+    }
+    
+    @keyframes float {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-8px); }
     }
 </style>
 
