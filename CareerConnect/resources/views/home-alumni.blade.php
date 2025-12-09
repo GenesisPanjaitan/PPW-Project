@@ -302,6 +302,28 @@
             </div>
         </div>
     </div>
+    
+    {{-- Quick Actions Banner untuk Alumni --}}
+    <div class="container my-4">
+        <div class="card border-0 shadow-sm" style="border-radius: 1.5rem; background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+            <div class="card-body p-4">
+                <div class="row align-items-center">
+                    <div class="col-md-8 text-white">
+                        <h5 class="fw-bold mb-2">
+                            <i class="bi bi-rocket-takeoff-fill me-2"></i>
+                            Bantu Mahasiswa Menemukan Peluang Karir
+                        </h5>
+                        <p class="mb-0 opacity-75">Bagikan lowongan pekerjaan dan magang untuk generasi muda yang berbakat</p>
+                    </div>
+                    <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                        <a href="{{ route('recruitment') }}" class="btn btn-light btn-lg rounded-pill px-4 fw-bold shadow">
+                            <i class="bi bi-plus-circle me-2"></i>Posting Lowongan
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </main>
 
 <script>
@@ -527,9 +549,66 @@
         border: 1px solid #e5e7eb;
     }
 
+    /* Enhanced animations and effects */
+    body {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    }
+
+    /* Stat Cards - Enhanced */
+    .stat-card {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .stat-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 5px;
+        background: linear-gradient(90deg, var(--green-primary), var(--green-dark));
+        transform: scaleX(0);
+        transition: transform 0.4s ease;
+    }
+
+    .stat-card:hover::before {
+        transform: scaleX(1);
+    }
+    
+    .stat-card:hover {
+        transform: translateY(-8px) scale(1.02);
+        box-shadow: 0 15px 40px rgba(16, 185, 129, 0.25) !important;
+    }
+
+    /* Job Card Alumni - Enhanced */
+    .job-card-alumni {
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        border: 1px solid #e5e7eb;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .job-card-alumni::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 5px;
+        height: 100%;
+        background: linear-gradient(180deg, #10b981, #059669);
+        transform: scaleY(0);
+        transition: transform 0.3s ease;
+    }
+
+    .job-card-alumni:hover::before {
+        transform: scaleY(1);
+    }
+
     .job-card-alumni:hover {
-        box-shadow: 0 12px 30px rgba(16, 185, 129, 0.15) !important;
+        box-shadow: 0 15px 40px rgba(16, 185, 129, 0.2) !important;
         border-color: var(--green-primary);
+        transform: translateX(8px) translateY(-4px);
     }
 
     .job-icon-wrapper {
@@ -542,13 +621,165 @@
         border-radius: 0.75rem;
         font-size: 1.5rem;
         flex-shrink: 0;
-        transition: all 0.3s ease;
+        transition: all 0.4s ease;
+        position: relative;
     }
 
+    .job-icon-wrapper::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        background: linear-gradient(135deg, #10b981, #059669);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .job-card-alumni:hover .job-icon-wrapper::after {
+        opacity: 1;
+    }
+    
     .job-card-alumni:hover .job-icon-wrapper {
-        transform: scale(1.1) rotate(5deg);
-        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-        color: white;
+        transform: scale(1.15) rotate(5deg);
+    }
+
+    .job-card-alumni:hover .job-icon-wrapper i {
+        color: white !important;
+        position: relative;
+        z-index: 1;
+    }
+
+    /* Animated gradient background for hero */
+    .alumni-hero-wrapper {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .hero-bg-gradient {
+        animation: gradientShift 8s ease-in-out infinite;
+    }
+
+    @keyframes gradientShift {
+        0%, 100% { opacity: 1; transform: scale(1); }
+        50% { opacity: 0.8; transform: scale(1.1); }
+    }
+
+    /* Info Box Enhancement */
+    .info-box {
+        background: linear-gradient(135deg, #f0fdf4 0%, #f3f4f6 100%);
+        padding: 0.75rem 1rem;
+        border-radius: 0.5rem;
+        border-left: 3px solid var(--green-primary);
+        color: #1f2937;
+        font-weight: 500;
+        transition: all 0.4s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .info-box::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(16, 185, 129, 0.1), transparent);
+        transition: left 0.5s ease;
+    }
+
+    .info-box:hover::before {
+        left: 100%;
+    }
+
+    .info-box:hover {
+        background: linear-gradient(135deg, #dcfce7 0%, #f0fdf4 100%);
+        transform: translateX(6px);
+        box-shadow: 0 4px 15px rgba(16, 185, 129, 0.15);
+    }
+
+    /* Badge with pulse effect */
+    .badge {
+        animation: fadeInUp 0.5s ease-out;
+        position: relative;
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Pulse Badge */
+    .pulse-badge {
+        animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+        0%, 100% { opacity: 1; transform: scale(1); }
+        50% { opacity: 0.85; transform: scale(1.05); }
+    }
+
+    /* Profile Card Enhanced */
+    .profile-card {
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+        background-clip: padding-box;
+        position: relative;
+    }
+
+    .profile-card::before {
+        content: '';
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        right: -2px;
+        bottom: -2px;
+        background: linear-gradient(135deg, #10b981, #059669);
+        border-radius: inherit;
+        z-index: -1;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .profile-card:hover::before {
+        opacity: 0.3;
+    }
+
+    .profile-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 15px 40px rgba(16, 185, 129, 0.2) !important;
+    }
+
+    /* Button ripple effect */
+    .btn {
+        position: relative;
+        overflow: hidden;
+        z-index: 1;
+    }
+
+    .btn::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.4);
+        transform: translate(-50%, -50%);
+        transition: width 0.6s, height 0.6s;
+        z-index: -1;
+    }
+
+    .btn:hover::before {
+        width: 300px;
+        height: 300px;
     }
 
     /* Hover Lift Effect */
