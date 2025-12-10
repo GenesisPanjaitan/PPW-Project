@@ -35,8 +35,13 @@
                 <ul class="navbar-nav">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle d-flex align-items-center fw-semibold" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            @if(auth()->user() && auth()->user()->image && file_exists(public_path('storage/profile_photos/' . auth()->user()->image)))
-                                <img src="{{ asset('storage/profile_photos/' . auth()->user()->image) }}" class="rounded-circle me-2" width="32" height="32" style="object-fit: cover;">
+                            @if(auth()->user() && auth()->user()->image)
+                                @php
+                                    $avatarUrl = filter_var(auth()->user()->image, FILTER_VALIDATE_URL) 
+                                        ? auth()->user()->image 
+                                        : asset('storage/profile_photos/' . auth()->user()->image);
+                                @endphp
+                                <img src="{{ $avatarUrl }}" class="rounded-circle me-2" width="32" height="32" style="object-fit: cover;">
                             @else
                                 <i class="bi bi-person-circle me-1"></i>
                             @endif
@@ -136,8 +141,14 @@
                     <div class="avatar-placeholder mx-auto d-flex align-items-center justify-content-center position-relative overflow-hidden">
                         
                         @if(auth()->user()->image)
-                            <!-- Gambar Existing dari Database -->
-                            <img id="avatarPreview" src="{{ asset('storage/profile_photos/' . auth()->user()->image) }}" alt="Profile Photo" class="w-100 h-100" style="object-fit: cover;">
+                            @php
+                                // Cek apakah image adalah URL eksternal (dari Google) atau file lokal
+                                $imageUrl = filter_var(auth()->user()->image, FILTER_VALIDATE_URL) 
+                                    ? auth()->user()->image 
+                                    : asset('storage/profile_photos/' . auth()->user()->image);
+                            @endphp
+                            <!-- Gambar Existing dari Database atau Google -->
+                            <img id="avatarPreview" src="{{ $imageUrl }}" alt="Profile Photo" class="w-100 h-100" style="object-fit: cover;">
                             <!-- Icon User (Sembunyi jika ada gambar) -->
                             <i id="avatarInitial" class="bi bi-person-fill d-none" style="font-size: 3rem; color: #6c757d;"></i>
                         @else

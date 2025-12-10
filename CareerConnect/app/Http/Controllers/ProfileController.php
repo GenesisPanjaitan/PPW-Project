@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use App\Models\User;
 
 class ProfileController extends Controller
@@ -197,5 +198,72 @@ class ProfileController extends Controller
         Log::info('=== ALUMNI UPDATE COMPLETED ===');
 
         return redirect()->route('profile.alumni')->with('success', 'Data alumni berhasil diperbarui!');
+    }
+
+
+    /**
+     * Delete user account
+     */
+    public function deleteAccount()
+    {
+        $user = Auth::user();
+
+        if (!$user) {
+            return redirect()->route('login');
+        }
+
+        $userId = $user->id;
+        $userEmail = $user->email;
+
+        Log::info("=== DELETE ACCOUNT STARTED for user ID: {$userId}, email: {$userEmail} ===");
+
+        DB::beginTransaction();
+        try {
+            // Delete favorites
+            $favCount = DB::table('favorite')->where('user_id', $userId)->count();
+            DB::table('favorite')->where('user_id', $userId)->delete();
+            Log::info("Deleted {$favCount} favorites");
+
+            // Delete user's comments
+            $commentCount = DB::table('comment')->where('user_id', $userId)->count();
+            DB::table('comment')->where('user_id', $userId)->delete();
+            Log::info("Deleted {$commentCount} user comments");
+
+            // Delete recruitments and their related data
+            $recruitmentIds = DB::table('recruitment')->where('user_id', $userId)->pluck('id');
+            Log::info("Found " . count($recruitmentIds) . " recruitments to delete");
+            
+            foreach ($recruitmentIds as $rid) {
+                $recComments = DB::table('comment')->where('recruitment_id', $rid)->count();
+                DB::table('comment')->where('recruitment_id', $rid)->delete();
+                Log::info("Deleted {$recComments} comments for recruitment {$rid}");
+                
+                $recFavs = DB::table('favorite')->where('recruitment_id', $rid)->count();
+                DB::table('favorite')->where('recruitment_id', $rid)->delete();
+                Log::info("Deleted {$recFavs} favorites for recruitment {$rid}");
+            }
+            
+            DB::table('recruitment')->where('user_id', $userId)->delete();
+            Log::info("Deleted all recruitments");
+
+            // Delete user from database
+            DB::table('user')->where('id', $userId)->delete();
+            Log::info("User deleted from database");
+
+            DB::commit();
+            Log::info("=== DELETE ACCOUNT COMPLETED ===");
+
+            // Logout
+            Auth::logout();
+            request()->session()->invalidate();
+            request()->session()->regenerateToken();
+
+            return redirect()->route('welcome')->with('success', 'Akun Anda berhasil dihapus.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Failed to delete account: ' . $e->getMessage());
+            Log::error('Stack trace: ' . $e->getTraceAsString());
+            return redirect()->route('profile.settings')->with('error', 'Gagal menghapus akun: ' . $e->getMessage());
+        }
     }
 }

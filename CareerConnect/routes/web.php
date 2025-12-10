@@ -52,6 +52,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile/settings', [ProfileController::class, 'settings'])->name('profile.settings');
     Route::post('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password.update');
     Route::post('/profile/set-password', [ProfileController::class, 'setPassword'])->name('profile.set-password');
+    Route::delete('/profile/delete-account', [ProfileController::class, 'deleteAccount'])->name('profile.delete-account');
 
     // RECRUITMENT
     Route::get('/recruitment', [RecruitmentController::class, 'index'])->name('recruitment');
@@ -85,38 +86,6 @@ Route::middleware('auth')->group(function () {
     // comment
     Route::post('/recruitment/{id}/comment', [RecruitmentController::class, 'storeComment'])
         ->name('recruitment.comment');
-
-    // DEBUG: favorites
-    Route::get('/debug/my-favorites', function () {
-        $userId = auth()->id();
-        $my = DB::table('favorite')->where('user_id', $userId)->pluck('recruitment_id');
-        $all = DB::table('favorite')->get();
-        return response()->json(['user_id' => $userId, 'my_favorites' => $my, 'all_favorites' => $all]);
-    });
-
-    // DEBUG: role
-    Route::get('/debug/role', function () {
-        $user = auth()->user();
-        return response()->json([
-            'user_id' => $user->id,
-            'name' => $user->name,
-            'email' => $user->email,
-            'current_role' => $user->role
-        ]);
-    });
-
-    // DEBUG: switch role
-    Route::get('/debug/switch-role/{role}', function ($role) {
-        if (!in_array($role, ['mahasiswa', 'alumni', 'admin'])) {
-            return response()->json(['error' => 'Invalid role'], 400);
-        }
-        $user = auth()->user();
-        $user->update(['role' => $role]);
-        return response()->json([
-            'message' => 'Role changed successfully',
-            'new_role' => $user->role
-        ]);
-    });
 
     // LOGOUT
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');

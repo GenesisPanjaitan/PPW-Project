@@ -71,42 +71,28 @@ class RegisterController extends Controller
 
             return redirect()->route('home')->with('success', 'Profil berhasil dilengkapi. Selamat datang!');
         } else {
-            // Create new user
+            // Create new user with all fields explicitly set
             $user = User::create([
                 'name' => $data['name'],
                 'email' => $data['email'],
                 'password' => Hash::make($data['password']),
-                'nim' => $request->input('nim', ''),
-                'study_program' => $request->input('study_program', ''),
-                'class' => $request->input('class', ''),
-                'image' => $request->input('image', ''),
-                'interest' => $request->input('interest', ''),
-                'field' => $request->input('field', ''),
-                'current_field' => $request->input('current_field', ''),
-                'graduation_year' => $request->input('graduation_year', null),
-                'contact' => $request->input('contact', ''),
+                'nim' => $request->input('nim'),
+                'study_program' => $request->input('study_program'),
+                'class' => $request->input('class'),
+                'image' => null,
+                'interest' => $request->input('interest'),
+                'field' => $request->input('field'),
+                'current_field' => $request->input('current_field'),
+                'graduation_year' => $request->input('graduation_year'),
+                'contact' => $request->input('contact'),
+                'experience' => null,
                 'role' => $role,
             ]);
-          
-        // Provide DB-safe defaults for columns that are NOT NULL in migration
-        $user = User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-            // All optional fields default to null (matching migration nullable())
-            'nim' => $request->input('nim', null),
-            'study_program' => $request->input('study_program', null),
-            'class' => $request->input('class', null),
-            'image' => $request->input('image', null),
-            'interest' => $request->input('interest', null),
-            'field' => $request->input('field', null),
-            'current_field' => $request->input('current_field', null),
-            'graduation_year' => $request->input('graduation_year', null),
-            'contact' => $request->input('contact', null),
-            'role' => $role,
-        ]); 
 
-            return redirect()->route('login')->with('success', 'Registrasi berhasil. Silakan masuk.');
+            // Auto-login after registration
+            Auth::login($user);
+
+            return redirect()->route('home')->with('success', 'Registrasi berhasil. Selamat datang!');
         }
     }
 }

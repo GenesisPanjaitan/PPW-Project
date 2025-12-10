@@ -31,6 +31,7 @@ class User extends Authenticatable
         'current_field',
         'graduation_year',
         'contact',
+        'experience',
         'role',
         'login_method',
     ];

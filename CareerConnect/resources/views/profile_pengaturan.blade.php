@@ -91,17 +91,16 @@
                 </div>
             </div>
             
-            <!-- Card Hapus Akun (DIPERBAIKI DENGAN KONFIRMASI) -->
+            <!-- Card Hapus Akun -->
             <div class="card shadow-sm border-0 mb-4" style="border-radius: 1rem;">
                 <div class="card-body p-4 p-md-5">
                     <h5 class="fw-bold mb-1 text-danger">Data & Privasi</h5>
                     <p class="text-muted small mb-4">Kontrol data pribadi dan pengaturan privasi</p>
                     
                     <!-- Form Hapus Akun -->
-                    <!-- Note: Pastikan nanti membuat route khusus delete account di web.php -->
-                    <form action="#" method="POST" onsubmit="return confirm('PERINGATAN KERAS:\n\nApakah Anda yakin ingin menghapus akun ini secara permanen?\n\nSemua data Anda akan hilang dan tidak dapat dikembalikan.');">
+                    <form action="{{ route('profile.delete-account') }}" method="POST" onsubmit="return confirm('PERINGATAN KERAS:\n\nApakah Anda yakin ingin menghapus akun ini secara permanen?\n\nSemua data Anda akan hilang dan tidak dapat dikembalikan.');">
                         @csrf
-                        <!-- @method('DELETE') --> <!-- Aktifkan ini jika nanti sudah pakai route destroy -->
+                        @method('DELETE')
                         
                         <button type="submit" class="btn btn-danger fw-semibold">
                             <i class="bi bi-trash me-1"></i> Hapus Akun
