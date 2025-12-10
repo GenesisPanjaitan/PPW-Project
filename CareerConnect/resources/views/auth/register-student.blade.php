@@ -70,12 +70,22 @@
                                     </div>
                                     <div class="col-md-12">
                                         <label for="password" class="form-label-custom">Password</label>
-                                        <input type="password" class="form-control form-control-custom" id="password" name="password" placeholder="Buat password yang kuat" required>
+                                        <div class="input-group">
+                                            <input type="password" class="form-control form-control-custom border-end-0" id="password" name="password" placeholder="Buat password yang kuat" required style="border-right: none; border-top-right-radius: 0; border-bottom-right-radius: 0;">
+                                            <span class="input-group-text bg-light border-0" style="cursor: pointer; background-color: #F3F4F6 !important; border-top-left-radius: 0; border-bottom-left-radius: 0;" onclick="togglePassword('password', 'icon-password')">
+                                                <i class="bi bi-eye-slash" id="icon-password"></i>
+                                            </span>
+                                        </div>
                                         @error('password') <div class="text-danger small mt-1">{{ $message }}</div> @enderror
                                     </div>
                                     <div class="col-md-12">
                                         <label for="password_confirmation" class="form-label-custom">Konfirmasi Password</label>
-                                        <input type="password" class="form-control form-control-custom" id="password_confirmation" name="password_confirmation" placeholder="Konfirmasi password" required>
+                                        <div class="input-group">
+                                            <input type="password" class="form-control form-control-custom border-end-0" id="password_confirmation" name="password_confirmation" placeholder="Konfirmasi password" required style="border-right: none; border-top-right-radius: 0; border-bottom-right-radius: 0;">
+                                            <span class="input-group-text bg-light border-0" style="cursor: pointer; background-color: #F3F4F6 !important; border-top-left-radius: 0; border-bottom-left-radius: 0;" onclick="togglePassword('password_confirmation', 'icon-confirm-password')">
+                                                <i class="bi bi-eye-slash" id="icon-confirm-password"></i>
+                                            </span>
+                                        </div>
                                     </div>
                                     @else
                                     <div class="col-md-12">
@@ -167,5 +177,32 @@
             </div>
         </div>
     </main>
+
+    <script>
+        function togglePassword(inputId, iconId) {
+            const passwordInput = document.getElementById(inputId);
+            const icon = document.getElementById(iconId);
+
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.remove('bi-eye-slash');
+                icon.classList.add('bi-eye');
+            } else {
+                passwordInput.type = 'password';
+                icon.classList.remove('bi-eye');
+                icon.classList.add('bi-eye-slash');
+            }
+        }
+    </script>
+
+<style>
+    /* Hide native password reveal icons (Edge/Chromium) to avoid double eye */
+    input[type=password]::-ms-reveal,
+    input[type=password]::-ms-clear,
+    input[type=password]::-webkit-credentials-auto-fill-button,
+    input[type=password]::-webkit-textfield-decoration-container {
+        display: none !important;
+    }
+</style>
 
 @endsection

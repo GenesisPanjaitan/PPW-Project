@@ -213,4 +213,14 @@
         }
     </script>
 
+<style>
+    /* Hide native password reveal icons (Edge/Chromium) to avoid double eye */
+    input[type=password]::-ms-reveal,
+    input[type=password]::-ms-clear,
+    input[type=password]::-webkit-credentials-auto-fill-button,
+    input[type=password]::-webkit-textfield-decoration-container {
+        display: none !important;
+    }
+</style>
+
 @endsection
