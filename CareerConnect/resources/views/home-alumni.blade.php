@@ -25,8 +25,13 @@
             <ul class="navbar-nav">
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle d-flex align-items-center fw-semibold" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
-                        @if(auth()->user() && auth()->user()->image && file_exists(public_path('storage/profile_photos/' . auth()->user()->image)))
-                            <img src="{{ asset('storage/profile_photos/' . auth()->user()->image) }}" class="rounded-circle me-2" width="32" height="32" style="object-fit: cover;">
+                        @if(auth()->user() && auth()->user()->image)
+                            @php
+                                $avatarUrl = filter_var(auth()->user()->image, FILTER_VALIDATE_URL)
+                                    ? auth()->user()->image
+                                    : asset('storage/profile_photos/' . auth()->user()->image);
+                            @endphp
+                            <img src="{{ $avatarUrl }}" class="rounded-circle me-2" width="32" height="32" style="object-fit: cover;">
                         @else
                             <i class="bi bi-person-circle me-1"></i>
                         @endif

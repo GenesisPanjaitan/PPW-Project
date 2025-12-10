@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 
 class AuthController extends Controller
 {
@@ -40,6 +41,12 @@ class AuthController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
+
+        $redirectTo = $request->input('redirect_to');
+        if ($redirectTo && Route::has($redirectTo)) {
+            return redirect()->route($redirectTo);
+        }
+
         return redirect()->route('login');
     }
 }
