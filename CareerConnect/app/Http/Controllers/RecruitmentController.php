@@ -5,8 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Str;
+use App\Mail\NewJobPostedMail;
+use App\Models\User;
 
 class RecruitmentController extends Controller
 {
@@ -178,7 +182,7 @@ class RecruitmentController extends Controller
         }
 
         // insert recruitment
-        DB::table('recruitment')->insert([
+        $recruitmentId = DB::table('recruitment')->insertGetId([
             'position' => $request->position,
             'company_name' => $request->company,
             'description' => $request->deskripsi ?? '',
@@ -193,7 +197,30 @@ class RecruitmentController extends Controller
             'updated_at' => now(),
         ]);
 
-        return redirect()->route('recruitment')->with('success', 'Posting lowongan berhasil dibuat.');
+        // Fetch the newly created recruitment with related data for email
+        $recruitment = DB::table('recruitment as r')
+            ->leftJoin('category as c', 'r.category_id', '=', 'c.id')
+            ->leftJoin('jobtype as j', 'r.jobtype_id', '=', 'j.id')
+            ->select('r.*', 'c.name as category', 'j.name as jobtype')
+            ->where('r.id', $recruitmentId)
+            ->first();
+
+        // Send email notification to mahasiswa users
+        try {
+            // Get all mahasiswa users who might be interested
+            // You can customize this query to filter by interest/category if needed
+            $students = User::where('role', 'mahasiswa')->get();
+            
+            if ($students->isNotEmpty()) {
+                Mail::to($students)->send(new NewJobPostedMail($recruitment));
+                Log::info('Email notifications sent for new job posting: ' . $recruitmentId);
+            }
+        } catch (\Exception $e) {
+            // Log error but don't block the recruitment posting
+            Log::error('Failed to send email notifications: ' . $e->getMessage());
+        }
+
+        return redirect()->route('recruitment')->with('success', 'Posting lowongan berhasil dibuat dan notifikasi telah dikirim ke mahasiswa.');
     }
 
     /**
