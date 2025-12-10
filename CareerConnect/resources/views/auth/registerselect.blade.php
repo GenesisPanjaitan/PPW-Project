@@ -44,11 +44,26 @@
                                     {{ Auth::check() ? 'Pilih tipe akun untuk melanjutkan' : 'Lengkapi profil Anda untuk mendapatkan peluang karir terbaik' }}
                                 </p>
                                 @if(Auth::check())
-                                <div class="alert alert-info mt-3">
-                                    <i class="bi bi-info-circle"></i> Anda login dengan Google sebagai <strong>{{ Auth::user()->email }}</strong>
-                                </div>
+                                {{-- Always show Google button, even if already logged in --}}
+                                <a href="{{ route('google.redirect') }}" 
+                                   class="btn btn-light w-100 border d-flex align-items-center justify-content-center gap-2 mb-4">
+                                    <img src="https://developers.google.com/identity/images/g-logo.png" 
+                                         alt="Google Logo" width="20" height="20">
+                                    <span>Daftar / Masuk dengan akun Google</span>
+                                </a>
                                 @endif
                             </div>
+
+                            @guest
+                            {{-- Tombol daftar/masuk via Google --}}
+                            <a href="{{ route('google.redirect') }}" 
+                               class="btn btn-light w-100 border d-flex align-items-center justify-content-center gap-2 mb-4">
+                                <img src="https://developers.google.com/identity/images/g-logo.png" 
+                                     alt="Google Logo" width="20" height="20">
+                                <span>Daftar / Masuk dengan akun Google</span>
+                            </a>
+                            <div class="text-center text-muted small mb-3">atau lanjutkan dengan email</div>
+                            @endguest
 
                             <div class="mb-3">
                                 <h5 class="fw-bold mb-3">Tipe Akun</h5>
