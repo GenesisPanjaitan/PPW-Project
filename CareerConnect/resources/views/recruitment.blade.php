@@ -367,23 +367,21 @@
                             <div class="col-md-6">
                                 <label class="form-label small fw-bold text-secondary">Kategori</label>
                                 <select name="kategori" class="form-select form-select-sm bg-light border-0" required>
-                                    <option value="" selected disabled>Pilih...</option>
-                                    @if(isset($categories))
-                                        @foreach($categories as $cat)
-                                            <option value="{{ $cat->id }}">{{ $cat->name }}</option>
-                                        @endforeach
-                                    @endif
+                                    @php
+                                        $wantedCats = ['Teknologi','Desain','Bisnis'];
+                                    @endphp
+                                    @foreach($wantedCats as $cn)
+                                        <option value="{{ $cn }}">{{ $cn }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label small fw-bold text-secondary">Tipe</label>
                                 <select name="tipe" class="form-select form-select-sm bg-light border-0" required>
-                                    <option value="" selected disabled>Pilih Tipe</option>
-                                    @if(isset($jobtypes))
-                                        @foreach($jobtypes as $jt)
-                                            <option value="{{ $jt->id }}">{{ $jt->name }}</option>
-                                        @endforeach
-                                    @endif
+                                    @php $wantedTypes = ['Full Time','Part Time','Magang']; @endphp
+                                    @foreach($wantedTypes as $tn)
+                                        <option value="{{ $tn }}">{{ $tn }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
@@ -491,19 +489,17 @@
                             <div class="col-md-6">
                                 <label class="form-label small fw-bold text-secondary">Kategori</label>
                                 <select id="edit_kategori" name="kategori" class="form-select form-select-sm bg-light border-0">
-                                    <option value="">Pilih...</option>
                                     <option value="Teknologi">Teknologi</option>
-                                    <option value="Bisnis">Bisnis</option>
                                     <option value="Desain">Desain</option>
+                                    <option value="Bisnis">Bisnis</option>
                                 </select>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label small fw-bold text-secondary">Tipe</label>
                                 <select id="edit_tipe" name="tipe" class="form-select form-select-sm bg-light border-0">
-                                    <option value="">Pilih...</option>
-                                    <option value="Full-time">Full-time</option>
-                                    <option value="Part-time">Part-time</option>
-                                    <option value="Internship">Internship</option>
+                                    <option value="Full Time">Full Time</option>
+                                    <option value="Part Time">Part Time</option>
+                                    <option value="Magang">Magang</option>
                                 </select>
                             </div>
                         </div>
