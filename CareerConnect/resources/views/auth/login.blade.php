@@ -66,9 +66,15 @@
                         <label for="password" class="form-label fw-semibold">
                             <i class="bi bi-lock me-1"></i> Password
                         </label>
-                        <input type="password" id="password" name="password"
-                               class="form-control bg-light border-0 p-3 @error('password') is-invalid @enderror"
-                               placeholder="Password anda disini..." required>
+                        <div class="input-group">
+                            <input type="password" id="password" name="password"
+                                   class="form-control bg-light border-0 p-3 border-end-0 @error('password') is-invalid @enderror"
+                                   placeholder="Password anda disini..." required
+                                   style="border-right: none; border-top-right-radius: 0; border-bottom-right-radius: 0;">
+                            <span class="input-group-text bg-light border-0" style="cursor: pointer; background-color: #F3F4F6 !important; border-top-left-radius: 0; border-bottom-left-radius: 0;" onclick="togglePassword('password', 'icon-login-password')">
+                                <i class="bi bi-eye-slash" id="icon-login-password"></i>
+                            </span>
+                        </div>
                         @error('password')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -104,3 +110,30 @@
     </div>  
 </div>
 @endsection
+
+<script>
+    function togglePassword(inputId, iconId) {
+        const input = document.getElementById(inputId);
+        const icon = document.getElementById(iconId);
+
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.classList.remove('bi-eye-slash');
+            icon.classList.add('bi-eye');
+        } else {
+            input.type = 'password';
+            icon.classList.remove('bi-eye');
+            icon.classList.add('bi-eye-slash');
+        }
+    }
+</script>
+
+<style>
+    /* Hide native password reveal icons (Edge/Chromium) to avoid double eye */
+    input[type=password]::-ms-reveal,
+    input[type=password]::-ms-clear,
+    input[type=password]::-webkit-credentials-auto-fill-button,
+    input[type=password]::-webkit-textfield-decoration-container {
+        display: none !important;
+    }
+</style>

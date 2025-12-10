@@ -270,43 +270,7 @@
         </div>
     </div>
 
-    {{-- Section Quick Stats untuk Mahasiswa --}}
-    <div class="container my-4">
-        <div class="card border-0 shadow-sm" style="border-radius: 1rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-            <div class="card-body p-4">
-                <div class="row text-white text-center">
-                    <div class="col-md-3 col-6 mb-3 mb-md-0">
-                        <div class="quick-stat-item">
-                            <i class="bi bi-bookmark-fill fs-3 mb-2"></i>
-                            <h4 class="fw-bold mb-0">{{ DB::table('favorite')->where('user_id', auth()->id())->count() }}</h4>
-                            <small class="opacity-75">Lowongan Disimpan</small>
-                        </div>
-                    </div>
-                    <div class="col-md-3 col-6 mb-3 mb-md-0">
-                        <div class="quick-stat-item">
-                            <i class="bi bi-eye-fill fs-3 mb-2"></i>
-                            <h4 class="fw-bold mb-0">{{ DB::table('recruitment')->count() }}</h4>
-                            <small class="opacity-75">Lowongan Tersedia</small>
-                        </div>
-                    </div>
-                    <div class="col-md-3 col-6">
-                        <div class="quick-stat-item">
-                            <i class="bi bi-fire fs-3 mb-2"></i>
-                            <h4 class="fw-bold mb-0">{{ DB::table('recruitment')->whereDate('date', '>=', now()->subDays(7))->count() }}</h4>
-                            <small class="opacity-75">Lowongan Baru (7 Hari)</small>
-                        </div>
-                    </div>
-                    <div class="col-md-3 col-6">
-                        <div class="quick-stat-item">
-                            <i class="bi bi-trophy-fill fs-3 mb-2"></i>
-                            <h4 class="fw-bold mb-0">Top 10%</h4>
-                            <small class="opacity-75">Aktif Mencari</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+
 
 </main>
 
