@@ -2,78 +2,49 @@
 
 @section('content')
 
-    <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
+ 
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom sticky-top">
         <div class="container">
-            
-            <!-- Logo -->
             <a class="navbar-brand fw-bold fs-4" href="{{ route('home') }}">
-                <img src="{{ asset('images/logokita.png') }}" 
-                     alt="CareerConnect Logo" 
-                     style="height: 30px;" 
-                     class="ms-2"> CareerConnect
+                <img src="{{ asset('images/logokita.png') }}" alt="CareerConnect Logo" style="height: 30px;" class="ms-2"> CareerConnect
             </a>
-            
-            <!-- Tombol Mobile Toggle -->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navDashboard" aria-controls="navDashboard" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            
-            <!-- Menu -->
             <div class="collapse navbar-collapse" id="navDashboard">
-                
-                <!-- Menu Tengah -->
                 <ul class="navbar-nav mx-auto">
-                    <li class="nav-item mx-3">
-                        <a class="nav-link {{ Request::is('home') ? 'active fw-semibold' : '' }}" href="{{ route('home') }}">Home</a>
-                    </li>
-                    <li class="nav-item mx-3">
-                        <a class="nav-link {{ Request::is('recruitment*') ? 'active fw-semibold' : '' }}" href="/recruitment">Recruitment</a>
-                    </li>
-                    <li class="nav-item mx-3">
-                        <a class="nav-link {{ Request::is('profile*') ? 'active fw-semibold' : '' }}" href="/profile">My Profile</a>
-                    </li>
+                    <li class="nav-item mx-3"><a class="nav-link {{ Request::is('home') ? 'active fw-semibold' : '' }}" href="{{ route('home') }}">Home</a></li>
+                    <li class="nav-item mx-3"><a class="nav-link {{ Request::is('recruitment*') ? 'active fw-semibold' : '' }}" href="/recruitment">Recruitment</a></li>
+                    <li class="nav-item mx-3"><a class="nav-link {{ Request::is('profile*') ? 'active fw-semibold' : '' }}" href="/profile">My Profile</a></li>
                 </ul>
-                
-                <!-- Menu Kanan (Dropdown Profil) -->
                 <ul class="navbar-nav">
                     <li class="nav-item dropdown">
-                        <!-- Tombol Pemicu Dropdown -->
                         <a class="nav-link dropdown-toggle d-flex align-items-center fw-semibold" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            @if(auth()->user() && auth()->user()->image && file_exists(public_path('storage/profile_photos/' . auth()->user()->image)))
-                                <img src="{{ asset('storage/profile_photos/' . auth()->user()->image) }}" class="rounded-circle me-2" width="32" height="32" style="object-fit: cover;">
+                            @if(auth()->user() && auth()->user()->image)
+                                @php
+                                    $avatarUrl = filter_var(auth()->user()->image, FILTER_VALIDATE_URL)
+                                        ? auth()->user()->image
+                                        : asset('storage/profile_photos/' . auth()->user()->image);
+                                @endphp
+                                <img src="{{ $avatarUrl }}" class="rounded-circle me-2" width="32" height="32" style="object-fit: cover;">
                             @else
                                 <i class="bi bi-person-circle me-1"></i>
                             @endif
-                            @auth
-                                {{ auth()->user()->name }}
-                            @else
-                                {{ optional(auth()->user())->name ?? 'Kevin Gultom' }}
-                            @endauth
+                            @auth {{ auth()->user()->name }} @else {{ optional(auth()->user())->name ?? 'Kevin Gultom' }} @endauth
                         </a>
-                        
-                        <!-- Isi Dropdown -->
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                            <li>
-                                <a class="dropdown-item" href="{{ route('favorit') }}">
-                                    <i class="bi bi-bookmark-fill me-2"></i> Favorit Anda
-                                </a>
-                            </li>
+                            <li><a class="dropdown-item" href="{{ route('favorit') }}"><i class="bi bi-bookmark-fill me-2"></i> Favorit Anda</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li>
-                                <!-- Link Logout -->
-                                <a class="dropdown-item" href="{{ route('logout') }}"
-                                   onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                     <i class="bi bi-box-arrow-right me-2"></i> Keluar Akun
                                 </a>
-                                <!-- Form Logout (Tersembunyi) -->
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                    @csrf
-                                </form>
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">@csrf</form>
                             </li>
                         </ul>
                     </li>
                 </ul>
-
             </div>
         </div>
     </nav>
