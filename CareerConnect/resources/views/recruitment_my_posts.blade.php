@@ -19,15 +19,21 @@
                 </ul>
                 <ul class="navbar-nav">
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle d-flex align-items-center fw-semibold" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            @if(auth()->user() && auth()->user()->image && file_exists(public_path('storage/profile_photos/' . auth()->user()->image)))
-                                <img src="{{ asset('storage/profile_photos/' . auth()->user()->image) }}" class="rounded-circle me-2" width="32" height="32" style="object-fit: cover;">
-                            @else
-                                <i class="bi bi-person-circle me-1"></i>
-                            @endif
-                            @auth {{ auth()->user()->name }} @else {{ optional(auth()->user())->name ?? 'Kevin Gultom' }} @endauth
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                     
+<a class="nav-link dropdown-toggle d-flex align-items-center fw-semibold" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    @if(auth()->user() && auth()->user()->image)
+        @php
+            $avatarUrl = filter_var(auth()->user()->image, FILTER_VALIDATE_URL)
+                ? auth()->user()->image
+                : asset('storage/profile_photos/' . auth()->user()->image);
+        @endphp
+        <img src="{{ $avatarUrl }}" class="rounded-circle me-2" width="32" height="32" style="object-fit: cover;">
+    @else
+        <i class="bi bi-person-circle me-1"></i>
+    @endif
+    @auth {{ auth()->user()->name }} @else {{ optional(auth()->user())->name ?? 'Kevin Gultom' }} @endauth
+</a>
+<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                             <li><a class="dropdown-item" href="{{ route('favorit') }}"><i class="bi bi-bookmark-fill me-2"></i> Favorit Anda</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li>
@@ -55,8 +61,7 @@
                             <li class="breadcrumb-item active" aria-current="page">Postingan Anda</li>
                         </ol>
                     </nav>
-                    <h2 class="fw-bold mb-1 text-primary">Postingan Anda</h2>
-                    <p class="text-muted mb-0 small">Kelola semua lowongan yang telah Anda posting.</p>
+                        <h2 class="fw-bold mb-1" style="color: #6b5ce7;">Postingan Anda</h2>                    <p class="text-muted mb-0 small">Kelola semua lowongan yang telah Anda posting.</p>
                 </div>
                 
                 <div class="mt-3 mt-md-0">

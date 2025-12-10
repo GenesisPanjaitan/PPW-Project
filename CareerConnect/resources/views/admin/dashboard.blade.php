@@ -163,79 +163,62 @@
                                 <span class="badge bg-light text-dark">{{ $lowonganCount ?? 0 }} Total</span>
                             </div>
                             <div class="card-body">
+                    
+                          
+                            <div class="card-body">
                                 @php
                                     // Hitung data aktual dari database
                                     $actualFulltime = DB::table('recruitment')
                                         ->join('jobtype', 'recruitment.jobtype_id', '=', 'jobtype.id')
-                                        ->where('jobtype.name', 'Full-time')
+                                        ->where('jobtype.name', 'Full Time')
                                         ->count();
                                     
                                     $actualParttime = DB::table('recruitment')
                                         ->join('jobtype', 'recruitment.jobtype_id', '=', 'jobtype.id')
-                                        ->where('jobtype.name', 'Part-time')
+                                        ->where('jobtype.name', 'Part Time')
                                         ->count();
                                     
                                     $actualInternship = DB::table('recruitment')
                                         ->join('jobtype', 'recruitment.jobtype_id', '=', 'jobtype.id')
-                                        ->where('jobtype.name', 'Internship')
+                                        ->whereIn('jobtype.name', ['Internship', 'Magang'])
                                         ->count();
                                     
-                                    $actualMaxValue = max($actualFulltime, $actualParttime, $actualInternship, 1);
+                                    $total = $actualFulltime + $actualParttime + $actualInternship;
+                                    
+                                    // Hitung persentase
+                                    $percentFulltime = $total > 0 ? round(($actualFulltime / $total) * 100, 1) : 0;
+                                    $percentParttime = $total > 0 ? round(($actualParttime / $total) * 100, 1) : 0;
+                                    $percentInternship = $total > 0 ? round(($actualInternship / $total) * 100, 1) : 0;
                                 @endphp
                                 
-                                <div class="chart-container d-flex align-items-end justify-content-around" style="height: 140px; padding: 15px 0;">
-                                    <!-- Full-time Bar -->
-                                    <div class="bar-item text-center" style="width: 30%;">
-                                        <div class="bar-value mb-1">
-                                            <span class="badge bg-primary rounded-pill px-2 py-1 fw-bold" style="font-size: 0.75rem;">{{ $actualFulltime }}</span>
+                            
+<div class="text-center mb-4" style="max-width: 200px; margin: 0 auto;">
+    <canvas id="jobTypeChart" width="180" height="180"></canvas>
+</div>
+                                
+                                
+                                <!-- Legend -->
+                                <div class="d-flex justify-content-around mt-4">
+                                    <div class="text-center">
+                                        <div class="d-flex align-items-center justify-content-center mb-1">
+                                            <div style="width: 12px; height: 12px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 50%; margin-right: 8px;"></div>
+                                            <small class="fw-bold">Full-time</small>
                                         </div>
-                                        <div class="bar" style="
-                                            height: {{ $actualMaxValue > 0 ? ($actualFulltime / $actualMaxValue) * 90 : 15 }}px;
-                                            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                                            border-radius: 6px 6px 0 0;
-                                            position: relative;
-                                            transition: all 0.3s ease;
-                                            box-shadow: 0 3px 10px rgba(102, 126, 234, 0.3);
-                                        "></div>
-                                        <div class="bar-label mt-1">
-                                            <small class="fw-bold text-primary" style="font-size: 0.75rem;">Full-time</small>
-                                        </div>
+                                        <div class="text-muted small">{{ $actualFulltime }} ({{ $percentFulltime }}%)</div>
                                     </div>
-                                    
-                                    <!-- Part-time Bar -->
-                                    <div class="bar-item text-center" style="width: 30%;">
-                                        <div class="bar-value mb-1">
-                                            <span class="badge bg-success rounded-pill px-2 py-1 fw-bold" style="font-size: 0.75rem;">{{ $actualParttime }}</span>
+                                    <div class="text-center">
+                                        <div class="d-flex align-items-center justify-content-center mb-1">
+                                            <div style="width: 12px; height: 12px; background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); border-radius: 50%; margin-right: 8px;"></div>
+                                            <small class="fw-bold">Part-time</small>
                                         </div>
-                                        <div class="bar" style="
-                                            height: {{ $actualMaxValue > 0 ? ($actualParttime / $actualMaxValue) * 90 : 15 }}px;
-                                            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
-                                            border-radius: 6px 6px 0 0;
-                                            position: relative;
-                                            transition: all 0.3s ease;
-                                            box-shadow: 0 3px 10px rgba(17, 153, 142, 0.3);
-                                        "></div>
-                                        <div class="bar-label mt-1">
-                                            <small class="fw-bold text-success" style="font-size: 0.75rem;">Part-time</small>
-                                        </div>
+                                        <div class="text-muted small">{{ $actualParttime }} ({{ $percentParttime }}%)</div>
                                     </div>
-                                    
-                                    <!-- Internship Bar -->
-                                    <div class="bar-item text-center" style="width: 30%;">
-                                        <div class="bar-value mb-1">
-                                            <span class="badge bg-warning rounded-pill px-2 py-1 fw-bold text-dark" style="font-size: 0.75rem;">{{ $actualInternship }}</span>
+                                    <div class="text-center">
+                                        <div class="d-flex align-items-center justify-content-center mb-1">
+                                            <div style="width: 12px; height: 12px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); border-radius: 50%; margin-right: 8px;"></div>
+                                            <small class="fw-bold">Internship</small>
                                         </div>
-                                        <div class="bar" style="
-                                            height: {{ $actualMaxValue > 0 ? ($actualInternship / $actualMaxValue) * 90 : 15 }}px;
-                                            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-                                            border-radius: 6px 6px 0 0;
-                                            position: relative;
-                                            transition: all 0.3s ease;
-                                            box-shadow: 0 3px 10px rgba(240, 147, 251, 0.3);
-                                        "></div>
-                                        <div class="bar-label mt-1">
-                                            <small class="fw-bold text-warning" style="font-size: 0.75rem;">Internship</small>
-                                        </div>
+                                        <div class="text-muted small">{{ $actualInternship }} ({{ $percentInternship }}%)</div>
                                     </div>
                                 </div>
                                 
@@ -244,10 +227,48 @@
                                         <i class="bi bi-eye me-1"></i> Lihat Detail
                                     </a>
                                 </div>
+                                
+                                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                                <script>
+                                    const ctx = document.getElementById('jobTypeChart');
+                                    new Chart(ctx, {
+                                        type: 'doughnut',
+                                        data: {
+                                            labels: ['Full-time', 'Part-time', 'Internship'],
+                                            datasets: [{
+                                                data: [{{ $actualFulltime }}, {{ $actualParttime }}, {{ $actualInternship }}],
+                                                backgroundColor: [
+                                                    '#667eea',
+                                                    '#11998e',
+                                                    '#f093fb'
+                                                ],
+                                                borderWidth: 0
+                                            }]
+                                        },
+                                        options: {
+                                            responsive: true,
+                                            maintainAspectRatio: true,
+                                            plugins: {
+                                                legend: {
+                                                    display: false
+                                                },
+                                                tooltip: {
+                                                    callbacks: {
+                                                        label: function(context) {
+                                                            let label = context.label || '';
+                                                            if (label) {
+                                                                label += ': ';
+                                                            }
+                                                            label += context.parsed + ' lowongan';
+                                                            return label;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    });
+                                </script>
                             </div>
-                        </div>
-                    </div>
-                </div>
 
                 <!-- System Info -->
                 <div class="row">
