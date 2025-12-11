@@ -8,29 +8,27 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Socialite\Facades\Socialite;
 
-class GoogleAuthController extends Controller
+class GitHubAuthController extends Controller
 {
     public function redirect(): RedirectResponse
     {
-        return Socialite::driver('google')
-            ->with(['prompt' => 'select_account'])
-            ->redirect();
+        return Socialite::driver('github')->redirect();
     }
 
     public function callback(): RedirectResponse
     {
         try {
-            $googleUser = Socialite::driver('google')->stateless()->user();
+            $githubUser = Socialite::driver('github')->stateless()->user();
         } catch (\Exception $e) {
-            return redirect()->route('login')->with('error', 'Gagal login dengan Google. Silakan coba lagi.');
+            return redirect()->route('login')->with('error', 'Gagal login dengan GitHub. Silakan coba lagi.');
         }
 
-        $email = $googleUser->getEmail();
+        $email = $githubUser->getEmail();
         
         // Cari user dengan email dan login_method yang sesuai
-        $user = User::where('email', $email)->where('login_method', 'google')->first();
+        $user = User::where('email', $email)->where('login_method', 'github')->first();
 
-        // Jika tidak ada user dengan Google, cek apakah ada user dengan email yang sama tapi provider berbeda
+        // Jika tidak ada user dengan GitHub, cek apakah ada user dengan email yang sama tapi provider berbeda
         if (!$user) {
             $existingUser = User::where('email', $email)->first();
             
@@ -40,10 +38,10 @@ class GoogleAuthController extends Controller
                     ->with([
                         'email' => $email,
                         'existing_method' => $existingUser->login_method,
-                        'new_method' => 'google',
+                        'new_method' => 'github',
                         'provider_data' => [
-                            'name' => $googleUser->getName() ?? $googleUser->getNickname() ?? 'Pengguna',
-                            'avatar' => $googleUser->getAvatar() ?? '',
+                            'name' => $githubUser->getName() ?? $githubUser->getNickname() ?? 'Pengguna',
+                            'avatar' => $githubUser->getAvatar() ?? '',
                         ]
                     ]);
             }
@@ -53,20 +51,20 @@ class GoogleAuthController extends Controller
 
         if (! $user) {
             $user = User::create([
-                'name' => $googleUser->getName() ?? $googleUser->getNickname() ?? 'Pengguna',
-                'email' => $googleUser->getEmail(),
-                'password' => Hash::make(uniqid('google_', true)),
+                'name' => $githubUser->getName() ?? $githubUser->getNickname() ?? 'Pengguna',
+                'email' => $githubUser->getEmail(),
+                'password' => Hash::make(uniqid('github_', true)),
                 'nim' => '',
                 'study_program' => '',
                 'class' => '',
-                'image' => $googleUser->getAvatar() ?? '',
+                'image' => $githubUser->getAvatar() ?? '',
                 'interest' => '',
                 'field' => '',
                 'current_field' => '',
                 'graduation_year' => null,
                 'contact' => '',
                 'role' => 'mahasiswa',
-                'login_method' => 'google',
+                'login_method' => 'github',
             ]);
             $isNewUser = true;
         }
@@ -76,11 +74,11 @@ class GoogleAuthController extends Controller
         // Check if profile is incomplete (only for new users)
         if ($isNewUser) {
             return redirect()->route('register')->with([
-                'info' => 'Anda login dengan Google (' . $googleUser->getEmail() . '). Pilih tipe akun (Mahasiswa/Alumni) dan lengkapi data.',
+                'info' => 'Anda login dengan GitHub (' . $githubUser->getEmail() . '). Pilih tipe akun (Mahasiswa/Alumni) dan lengkapi data.',
                 'hide_oauth' => true,
             ]);
         }
 
-        return redirect()->intended(route('home'))->with('login_success', 'Berhasil masuk dengan Google');
+        return redirect()->intended(route('home'))->with('login_success', 'Berhasil masuk dengan GitHub');
     }
 }

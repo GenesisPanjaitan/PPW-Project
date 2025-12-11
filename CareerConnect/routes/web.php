@@ -11,6 +11,8 @@ use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\GoogleAuthController;
+use App\Http\Controllers\GitHubAuthController;
+use App\Http\Controllers\AccountLinkingController;
 
 /**
  * Public (unauthenticated) routes
@@ -23,6 +25,21 @@ Route::post('/login', [AuthController::class, 'login'])->name('login.submit');
 // Google OAuth
 Route::get('/auth/google', [GoogleAuthController::class, 'redirect'])->name('google.redirect');
 Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback'])->name('google.callback');
+
+// GitHub OAuth
+Route::get('/auth/github', [GitHubAuthController::class, 'redirect'])->name('github.redirect');
+Route::get('/auth/github/callback', [GitHubAuthController::class, 'callback'])->name('github.callback');
+
+// Account Linking
+Route::get('/account-linking', function() {
+    return view('auth.account-linking', [
+        'email' => session('email'),
+        'existingMethod' => session('existing_method'),
+        'newMethod' => session('new_method'),
+        'newProviderData' => session('provider_data'),
+    ]);
+})->name('account-linking.show');
+Route::post('/account-linking/select', [AccountLinkingController::class, 'select'])->name('account-linking.select');
 
 // Register
 Route::get('/register', [RegisterController::class, 'select'])->name('register');

@@ -89,7 +89,8 @@
                                     @else
                                     <div class="col-md-12">
                                         <div class="alert alert-info">
-                                            <i class="bi bi-info-circle"></i> Anda login dengan Google ({{ Auth::user()->email }}). Lengkapi data di bawah untuk melanjutkan.
+                                            <i class="bi bi-info-circle"></i>
+                                            Anda login dengan {{ ucfirst(Auth::user()->login_method ?? 'akun') }} ({{ Auth::user()->email }}). Lengkapi data di bawah untuk melanjutkan.
                                         </div>
                                     </div>
                                     @endif
