@@ -101,31 +101,32 @@
                                 <div class="row g-3">
                                     <div class="col-md-6">
                                         <label for="angkatan" class="form-label-custom">Angkatan</label>
-                                        
-                                        <!-- PERUBAHAN DI SINI: Added min="2001" -->
-                                        <input type="number" 
+                                        <input type="text" 
                                                class="form-control form-control-custom" 
                                                id="angkatan" 
                                                name="class" 
-                                               placeholder="Contoh: 2023" 
+                                               placeholder="Contoh: 2020" 
                                                value="{{ old('class') }}" 
-                                               min="2001" 
-                                               max="{{ date('Y') + 5 }}"
+                                               maxlength="4"
+                                               pattern="[0-9]*"
+                                               inputmode="numeric"
                                                required>
-                                               
+                                        <small class="text-muted">Tahun angkatan: 2001-2021</small>
                                         @error('class') <div class="text-danger small mt-1">{{ $message }}</div> @enderror
                                     </div>
                                     <div class="col-md-6">
                                         <label for="graduation_year" class="form-label-custom">Tahun Lulus</label>
-                                        <input type="number" 
+                                        <input type="text" 
                                                class="form-control form-control-custom" 
                                                id="graduation_year" 
                                                name="graduation_year" 
                                                placeholder="Contoh: 2024" 
                                                value="{{ old('graduation_year') }}" 
-                                               min="2005" 
-                                               max="{{ date('Y') }}"
+                                               maxlength="4"
+                                               pattern="[0-9]*"
+                                               inputmode="numeric"
                                                required>
+                                        <small class="text-muted">Tahun kelulusan: 2003-2025</small>
                                         @error('graduation_year') <div class="text-danger small mt-1">{{ $message }}</div> @enderror
                                     </div>
                                     <div class="col-md-12">
@@ -211,6 +212,82 @@
                 icon.classList.add('bi-eye-slash');
             }
         }
+
+        // Validasi Angkatan dan Tahun Lulus
+        document.addEventListener('DOMContentLoaded', function() {
+            const angkatanInput = document.getElementById('angkatan');
+            const graduationInput = document.getElementById('graduation_year');
+            const form = angkatanInput.closest('form');
+
+            // Hanya terima angka
+            function onlyNumbers(e) {
+                e.target.value = e.target.value.replace(/[^0-9]/g, '');
+            }
+
+            angkatanInput.addEventListener('input', onlyNumbers);
+            graduationInput.addEventListener('input', onlyNumbers);
+
+            // Fungsi untuk menampilkan error
+            function showError(message, inputElement) {
+                // Hapus error sebelumnya
+                const existingError = document.querySelector('.custom-error-alert');
+                if (existingError) existingError.remove();
+
+                // Buat error div
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'alert alert-danger alert-dismissible fade show custom-error-alert';
+                errorDiv.style.position = 'fixed';
+                errorDiv.style.top = '20px';
+                errorDiv.style.left = '50%';
+                errorDiv.style.transform = 'translateX(-50%)';
+                errorDiv.style.zIndex = '9999';
+                errorDiv.style.minWidth = '300px';
+                errorDiv.innerHTML = `
+                    <strong>Error!</strong> ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                `;
+                document.body.appendChild(errorDiv);
+
+                // Auto close after 5 seconds
+                setTimeout(() => errorDiv.remove(), 5000);
+                
+                inputElement.focus();
+            }
+
+            // Validasi saat submit
+            form.addEventListener('submit', function(e) {
+                const angkatan = parseInt(angkatanInput.value);
+                const graduation = parseInt(graduationInput.value);
+
+                // Validasi angkatan
+                if (angkatan < 2001 || angkatan > 2021) {
+                    e.preventDefault();
+                    showError('Angkatan harus antara 2001 sampai 2021', angkatanInput);
+                    return false;
+                }
+
+                // Validasi tahun lulus
+                if (graduation < 2003 || graduation > 2025) {
+                    e.preventDefault();
+                    showError('Tahun lulus harus antara 2003 sampai 2025', graduationInput);
+                    return false;
+                }
+
+                // Validasi logika: tahun lulus minimal 2 tahun setelah angkatan
+                if (graduation < angkatan + 2) {
+                    e.preventDefault();
+                    showError('Tahun lulus harus minimal 2 tahun setelah tahun angkatan', graduationInput);
+                    return false;
+                }
+
+                // Validasi: tahun lulus tidak boleh terlalu lama (maksimal 7 tahun)
+                if (graduation > angkatan + 7) {
+                    e.preventDefault();
+                    showError('Tahun lulus terlalu lama dari tahun angkatan. Maksimal 7 tahun setelah angkatan.', graduationInput);
+                    return false;
+                }
+            });
+        });
     </script>
 
 <style>

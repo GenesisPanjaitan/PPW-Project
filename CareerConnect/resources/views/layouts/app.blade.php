@@ -550,6 +550,71 @@
 </head>
 <body>
 
+    {{-- Success Toast Notifications --}}
+    @if(session('login_success'))
+    <div id="loginToast" class="position-fixed" style="top: 30px; right: 30px; z-index: 9999;">
+        <div class="card border-0 shadow-lg" style="border-radius: 15px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-width: 400px; animation: slideInDown 0.4s ease-out;">
+            <div class="card-body p-5">
+                <div class="d-flex align-items-start">
+                    <div style="width: 60px; height: 60px; border-radius: 50%; background: rgba(255, 255, 255, 0.25); display: flex; align-items: center; justify-content: center; margin-right: 20px; flex-shrink: 0;">
+                        <i class="bi bi-check-circle-fill text-white" style="font-size: 32px;"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                        <h5 class="text-white fw-bold mb-2" style="font-size: 1.2rem;">Selamat Datang! 🎉</h5>
+                        <p class="text-white mb-0 opacity-90" style="font-size: 1rem;">
+                            Anda berhasil login. Silakan lanjutkan eksplorasi
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
+
+    @if(session('register_success'))
+    <div id="registerToast" class="position-fixed" style="top: 30px; right: 30px; z-index: 9999;">
+        <div class="card border-0 shadow-lg" style="border-radius: 15px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); min-width: 360px; animation: slideInDown 0.4s ease-out;">
+            <div class="card-body p-4">
+                <div class="d-flex align-items-start">
+                    <div style="width: 50px; height: 50px; border-radius: 50%; background: rgba(255, 255, 255, 0.2); display: flex; align-items: center; justify-content: center; margin-right: 15px; flex-shrink: 0;">
+                        <i class="bi bi-check-circle-fill text-white" style="font-size: 28px;"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                        <h6 class="text-white fw-bold mb-1" style="font-size: 1.05rem;">Registrasi Berhasil! 🎊</h6>
+                        <p class="text-white mb-0 opacity-90" style="font-size: 0.95rem;">
+                            Selamat bergabung <strong>{{ session('user_name') }}</strong> sebagai {{ session('user_role') }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
+
+    @if(session('post_success'))
+    <div id="postJobToast" class="position-fixed" style="top: 30px; right: 30px; z-index: 9999;">
+        <div class="card border-0 shadow-lg" style="border-radius: 15px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-width: 350px; animation: slideInDown 0.4s ease-out;">
+            <div class="card-body p-4">
+                <div class="d-flex align-items-start">
+                    <div style="width: 50px; height: 50px; border-radius: 50%; background: rgba(255, 255, 255, 0.2); display: flex; align-items: center; justify-content: center; margin-right: 15px; flex-shrink: 0;">
+                        <i class="bi bi-check-circle-fill text-white" style="font-size: 28px;"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                        <h6 class="text-white fw-bold mb-1" style="font-size: 1rem;">Lowongan Berhasil Diposting! 🚀</h6>
+                        <p class="text-white mb-1 opacity-90" style="font-size: 0.9rem;">
+                            <strong>{{ session('job_position') ?? 'Posisi' }}</strong> di {{ session('job_company') ?? 'Perusahaan' }}
+                        </p>
+                        <p class="text-white mb-0 opacity-80" style="font-size: 0.85rem;">
+                            <i class="bi bi-check me-1"></i>Notifikasi dikirim ke mahasiswa
+                        </p>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white ms-2" style="opacity: 0.7;" onclick="document.getElementById('postJobToast').style.animation='slideOutUp 0.3s ease-in'; setTimeout(() => document.getElementById('postJobToast').remove(), 300);"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
+
     @yield('content')
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" xintegrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
@@ -675,6 +740,125 @@
             // run once on load to ensure bookmark UI is correct
             ensureBookmarkedUI();
         });
+
+        // Auto-show and auto-hide success toasts
+        document.addEventListener('DOMContentLoaded', function() {
+            @if(session('login_success'))
+                // Auto-hide login toast after 5 seconds
+                setTimeout(() => {
+                    const loginToast = document.getElementById('loginToast');
+                    if (loginToast) {
+                        loginToast.style.animation = 'slideOutUp 0.3s ease-in';
+                        setTimeout(() => loginToast.remove(), 300);
+                    }
+                }, 5000);
+            @endif
+
+            @if(session('register_success'))
+                // Auto-hide register toast after 5 seconds
+                setTimeout(() => {
+                    const registerToast = document.getElementById('registerToast');
+                    if (registerToast) {
+                        registerToast.style.animation = 'slideOutUp 0.3s ease-in';
+                        setTimeout(() => registerToast.remove(), 300);
+                    }
+                }, 5000);
+            @endif
+
+            @if(session('post_success'))
+                // Auto-hide posting success toast after 5 seconds
+                setTimeout(() => {
+                    const postJobToast = document.getElementById('postJobToast');
+                    if (postJobToast) {
+                        postJobToast.style.animation = 'slideOutUp 0.3s ease-in';
+                        setTimeout(() => postJobToast.remove(), 300);
+                    }
+                }, 5000);
+            @endif
+        });
     </script>
+
+    <style>
+        /* Success Modal Animations */
+        @keyframes icon-line-tip {
+            0% { width: 0; left: 1px; top: 19px; }
+            54% { width: 0; left: 1px; top: 19px; }
+            70% { width: 50px; left: -8px; top: 37px; }
+            84% { width: 17px; left: 21px; top: 48px; }
+            100% { width: 25px; left: 14px; top: 46px; }
+        }
+
+        @keyframes icon-line-long {
+            0% { width: 0; right: 46px; top: 54px; }
+            65% { width: 0; right: 46px; top: 54px; }
+            84% { width: 55px; right: 0px; top: 35px; }
+            100% { width: 47px; right: 8px; top: 38px; }
+        }
+
+        @keyframes icon-circle {
+            0% { transform: scale(0); opacity: 0; }
+            50% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-content {
+            animation: modalSlideIn 0.4s ease-out;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideInUp {
+            from {
+                transform: translateY(-100px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOutUp {
+            from {
+                transform: translateY(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateY(-100px);
+                opacity: 0;
+            }
+        }
+
+        @keyframes slideInDown {
+            from {
+                transform: translateY(-100px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOutDown {
+            from {
+                transform: translateY(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateY(100px);
+                opacity: 0;
+            }
+        }
+    </style>
 </body>
 </html>

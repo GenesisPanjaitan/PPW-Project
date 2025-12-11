@@ -69,7 +69,12 @@ class RegisterController extends Controller
                 'role' => $role,
             ]);
 
-            return redirect()->route('home')->with('success', 'Profil berhasil dilengkapi. Selamat datang!');
+            $roleName = $role === 'alumni' ? 'Alumni' : 'Mahasiswa';
+            return redirect()->route('home')->with([
+                'register_success' => true,
+                'user_name' => $user->name,
+                'user_role' => $roleName
+            ]);
         } else {
             // Create new user with all fields explicitly set
             $user = User::create([
@@ -92,7 +97,12 @@ class RegisterController extends Controller
             // Auto-login after registration
             Auth::login($user);
 
-            return redirect()->route('home')->with('success', 'Registrasi berhasil. Selamat datang!');
+            $roleName = $role === 'alumni' ? 'Alumni' : 'Mahasiswa';
+            return redirect()->route('home')->with([
+                'register_success' => true,
+                'user_name' => $user->name,
+                'user_role' => $roleName
+            ]);
         }
     }
 }

@@ -29,8 +29,13 @@ class AuthController extends Controller
                 return redirect()->route('admin.dashboard')->with('login_success', 'Selamat datang, Administrator!');
             }
             
-            // Regular user redirect
-            return redirect()->intended(route('home'))->with('login_success', 'Selamat datang!');
+            // Regular user redirect with role-specific message
+            $roleName = $user->role === 'alumni' ? 'Alumni' : 'Mahasiswa';
+            return redirect()->intended(route('home'))->with([
+                'login_success' => true,
+                'user_name' => $user->name,
+                'user_role' => $roleName
+            ]);
         }
 
         return back()->with('error', 'Email atau password salah.');
