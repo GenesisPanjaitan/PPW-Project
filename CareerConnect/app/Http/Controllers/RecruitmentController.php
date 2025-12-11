@@ -205,15 +205,18 @@ class RecruitmentController extends Controller
             ->where('r.id', $recruitmentId)
             ->first();
 
-        // Send email notification to mahasiswa users
+        // Send email notification to mahasiswa users (only Google login users with verified emails)
         try {
-            // Get all mahasiswa users who might be interested
-            // You can customize this query to filter by interest/category if needed
-            $students = User::where('role', 'mahasiswa')->get();
+            // Get only mahasiswa who logged in via Google (verified email addresses)
+            $students = User::where('role', 'mahasiswa')
+                ->where('login_method', 'google')
+                ->get();
             
             if ($students->isNotEmpty()) {
                 Mail::to($students)->send(new NewJobPostedMail($recruitment));
-                Log::info('Email notifications sent for new job posting: ' . $recruitmentId);
+                Log::info('Email notifications sent to ' . $students->count() . ' Google-verified students for job posting: ' . $recruitmentId);
+            } else {
+                Log::info('No Google-verified students found to send email notifications for job posting: ' . $recruitmentId);
             }
         } catch (\Exception $e) {
             // Log error but don't block the recruitment posting
