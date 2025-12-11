@@ -220,7 +220,11 @@ class RecruitmentController extends Controller
             Log::error('Failed to send email notifications: ' . $e->getMessage());
         }
 
-        return redirect()->route('recruitment')->with('success', 'Posting lowongan berhasil dibuat dan notifikasi telah dikirim ke mahasiswa.');
+        return redirect()->route('recruitment')->with([
+            'post_success' => true,
+            'job_position' => $request->position,
+            'job_company' => $request->company
+        ]);
     }
 
     /**
