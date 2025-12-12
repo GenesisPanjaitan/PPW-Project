@@ -146,30 +146,6 @@
             </div>
         </section>
 
-        {{-- CTA band --}}
-        <section class="cta-band">
-            <div class="container">
-                <div class="cta-card">
-                    <div class="row align-items-center g-4">
-                        <div class="col-lg-8">
-                            <div class="d-flex align-items-center mb-3">
-                                <div class="cta-icon me-3">
-                                    <i class="bi bi-rocket-takeoff"></i>
-                                </div>
-                                <h4 class="fw-bold mb-0 text-white">Siap Mulai Karir Impianmu?</h4>
-                            </div>
-                            <p class="mb-0 text-white opacity-90">Bergabung sekarang dan temukan peluang magang, kerja part-time, hingga full-time bersama alumni Del.</p>
-                        </div>
-                        <div class="col-lg-4 text-lg-end">
-                            <a href="{{ route('register') }}" class="btn btn-light btn-lg rounded-pill shadow-sm px-5 fw-semibold">
-                                <i class="bi bi-person-plus me-2"></i>Daftar Sekarang
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
     </main>
     
     <footer class="py-5 bg-white border-top"> 

@@ -30,7 +30,7 @@ class AuthController extends Controller
             }
             
             // Regular user redirect
-            return redirect()->intended(route('home'))->with('login_success', 'Selamat datang!');
+            return redirect()->intended(route('home'))->with('login_success', 'Anda berhasil login');
         }
 
         return back()->with('error', 'Email atau password salah.');

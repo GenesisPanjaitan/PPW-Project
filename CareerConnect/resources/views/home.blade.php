@@ -112,18 +112,28 @@
 
 
     <div class="container mt-4" id="lowongan-section">
-
-        @if (session('login_success'))
-            <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
-                <i class="bi bi-check-circle-fill me-2"></i> {{ session('login_success') }}
-                <button type="type" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
         
         <div class="text-center mb-5">
             <h2 class="fw-bold mb-3">Halo, {{ optional(auth()->user())->name ?? 'Pencari Kerja' }} 👋</h2>
             <p class="text-muted lead">Siap untuk menemukan peluang karir terbaik hari ini?</p>
         </div>
+        
+        @if (session('login_success'))
+            <div class="position-fixed top-0 end-0 m-3" style="z-index: 1050;">
+                <div class="alert alert-dismissible fade show mb-0" role="alert" id="loginSuccessAlert" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; color: white;">
+                    <i class="bi bi-check-circle-fill me-2"></i> {{ session('login_success') }}
+                </div>
+            </div>
+            <script>
+                setTimeout(function() {
+                    var alert = document.getElementById('loginSuccessAlert');
+                    if (alert) {
+                        var bsAlert = new bootstrap.Alert(alert);
+                        bsAlert.close();
+                    }
+                }, 4000);
+            </script>
+        @endif
 
         <div class="row g-4">
             <div class="col-lg-8"
