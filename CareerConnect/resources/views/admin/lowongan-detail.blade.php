@@ -101,6 +101,18 @@
                                 <td class="fw-bold">Tanggal Posting:</td>
                                 <td>{{ $lowongan->created_at ? \Carbon\Carbon::parse($lowongan->created_at)->format('d M Y H:i') : 'N/A' }}</td>
                             </tr>
+                            <tr>
+                                <td class="fw-bold">Link Postingan:</td>
+                                <td>
+                                    @if(isset($lowongan->link) && !empty(trim($lowongan->link)))
+                                        <a href="{{ $lowongan->link }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                                            <i class="bi bi-link-45deg me-1"></i>Buka Link Postingan
+                                        </a>
+                                    @else
+                                        <span class="text-muted fst-italic">Link tidak dilampirkan</span>
+                                    @endif
+                                </td>
+                            </tr>
                         </table>
                     </div>
                     <div class="col-md-4">

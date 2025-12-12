@@ -117,23 +117,6 @@
             <h2 class="fw-bold mb-3">Halo, {{ optional(auth()->user())->name ?? 'Pencari Kerja' }} 👋</h2>
             <p class="text-muted lead">Siap untuk menemukan peluang karir terbaik hari ini?</p>
         </div>
-        
-        @if (session('login_success'))
-            <div class="position-fixed top-0 end-0 m-3" style="z-index: 1050;">
-                <div class="alert alert-dismissible fade show mb-0" role="alert" id="loginSuccessAlert" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; color: white;">
-                    <i class="bi bi-check-circle-fill me-2"></i> {{ session('login_success') }}
-                </div>
-            </div>
-            <script>
-                setTimeout(function() {
-                    var alert = document.getElementById('loginSuccessAlert');
-                    if (alert) {
-                        var bsAlert = new bootstrap.Alert(alert);
-                        bsAlert.close();
-                    }
-                }, 4000);
-            </script>
-        @endif
 
         <div class="row g-4">
             <div class="col-lg-8"
@@ -234,39 +217,74 @@
                             </span>
                         </div>
 
-                        <div class="mb-3">
-                            <label class="small text-muted d-block">Minat Karir</label>
-                            <span class="fw-semibold text-dark">
-                                @if(auth()->user()->interest)
-                                    @switch(auth()->user()->interest)
-                                        @case('swe') Software Engineering @break
-                                        @case('uiux') UI/UX Design @break
-                                        @case('data') Data Science @break
-                                        @case('product') Product Management @break
-                                        @case('digital_marketing') Digital Marketing @break
-                                        @case('qa_testing') QA & Testing @break
-                                        @case('cybersecurity') Cybersecurity @break
-                                        @case('operations') Operations @break
-                                        @case('lainnya') Lainnya @break
-                                        @default {{ auth()->user()->interest }}
-                                    @endswitch
+                        @if(strtolower(auth()->user()->role) !== 'admin')
+                            <div class="mb-3">
+                                @if(strtolower(auth()->user()->role) === 'alumni')
+                                    <label class="small text-muted d-block">Bidang Saat Ini</label>
+                                    <span class="fw-semibold text-dark">
+                                        @if(auth()->user()->current_field)
+                                            @switch(auth()->user()->current_field)
+                                                @case('swe') Software Engineering @break
+                                                @case('uiux') UI/UX Design @break
+                                                @case('data') Data Science @break
+                                                @case('product') Product Management @break
+                                                @case('digital_marketing') Digital Marketing @break
+                                                @case('qa_testing') QA & Testing @break
+                                                @case('cybersecurity') Cybersecurity @break
+                                                @case('operations') Operations @break
+                                                @case('lainnya') Lainnya @break
+                                                @default {{ auth()->user()->current_field }}
+                                            @endswitch
+                                        @else
+                                            <span class="text-muted">Belum diatur</span>
+                                        @endif
+                                    </span>
                                 @else
-                                    <span class="text-muted">Belum diatur</span>
-                                @endif
-                            </span>
-                        </div>
-
-                        <div class="mb-4">
-                            <label class="small text-muted d-block mb-1">Skills</label>
-                            <div>
-                                @if(auth()->user()->field)
-                                    @foreach(explode(',', auth()->user()->field) as $skill)
-                                        <span class="badge bg-secondary bg-opacity-10 text-dark me-1 mb-1">{{ trim($skill) }}</span>
-                                    @endforeach
-                                @else
-                                    <span class="text-muted">Belum ada skills yang diatur</span>
+                                    <label class="small text-muted d-block">Minat Karir</label>
+                                    <span class="fw-semibold text-dark">
+                                        @if(auth()->user()->interest)
+                                            @switch(auth()->user()->interest)
+                                                @case('swe') Software Engineering @break
+                                                @case('uiux') UI/UX Design @break
+                                                @case('data') Data Science @break
+                                                @case('product') Product Management @break
+                                                @case('digital_marketing') Digital Marketing @break
+                                                @case('qa_testing') QA & Testing @break
+                                                @case('cybersecurity') Cybersecurity @break
+                                                @case('operations') Operations @break
+                                                @case('lainnya') Lainnya @break
+                                                @default {{ auth()->user()->interest }}
+                                            @endswitch
+                                        @else
+                                            <span class="text-muted">Belum diatur</span>
+                                        @endif
+                                    </span>
                                 @endif
                             </div>
+                        @endif
+
+                        <div class="mb-4">
+                            @if(strtolower(auth()->user()->role) === 'mahasiswa')
+                                <label class="small text-muted d-block mb-1">Skills</label>
+                                <div>
+                                    @if(auth()->user()->field)
+                                        @foreach(explode(',', auth()->user()->field) as $skill)
+                                            <span class="badge bg-secondary bg-opacity-10 text-dark me-1 mb-1">{{ trim($skill) }}</span>
+                                        @endforeach
+                                    @else
+                                        <span class="text-muted">Belum ada skills yang diatur</span>
+                                    @endif
+                                </div>
+                            @else
+                                <label class="small text-muted d-block mb-1">Tahun Angkatan</label>
+                                <span class="fw-semibold text-dark">
+                                    @if(auth()->user()->graduation_year)
+                                        {{ auth()->user()->graduation_year }}
+                                    @else
+                                        <span class="text-muted">Belum diatur</span>
+                                    @endif
+                                </span>
+                            @endif
                         </div>
 
                         <hr class="my-3">

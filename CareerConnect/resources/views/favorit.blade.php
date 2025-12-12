@@ -37,30 +37,25 @@
                 <!-- Menu Kanan (Dropdown Profil) -->
                 <ul class="navbar-nav">
                     <li class="nav-item dropdown">
-                        <!-- Tombol Pemicu Dropdown -->
+                        <!-- Tombol Pemicu Dropdown dengan Foto Profil -->
                         <a class="nav-link dropdown-toggle d-flex align-items-center fw-semibold" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            @if(auth()->user() && auth()->user()->image && file_exists(public_path('storage/profile_photos/' . auth()->user()->image)))
-                                <img src="{{ asset('storage/profile_photos/' . auth()->user()->image) }}" class="rounded-circle me-2" width="32" height="32" style="object-fit: cover;">
+                            @if(auth()->user() && auth()->user()->image)
+                                @php
+                                    $avatarUrl = filter_var(auth()->user()->image, FILTER_VALIDATE_URL)
+                                        ? auth()->user()->image
+                                        : asset('storage/profile_photos/' . auth()->user()->image);
+                                @endphp
+                                <img src="{{ $avatarUrl }}" class="rounded-circle me-2" width="32" height="32" style="object-fit: cover;">
                             @else
                                 <i class="bi bi-person-circle me-1"></i>
                             @endif
-                            @auth
-                                {{ auth()->user()->name }}
-                            @else
-                                {{ optional(auth()->user())->name ?? 'Kevin Gultom' }}
-                            @endauth
+                            {{ optional(auth()->user())->name ?? 'User' }}
                         </a>
                         
-                        <!-- Isi Dropdown -->
+                        <!-- Isi Dropdown (tanpa Profile Saya) -->
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                             <li>
-                                <a class="dropdown-item" href="{{ route('profile') }}">
-                                    <i class="bi bi-person me-2"></i> Profile Saya
-                                </a>
-                            </li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li>
-                                <a class="dropdown-item" href="{{ route('favorit') }}">
+                                <a class="dropdown-item active" href="{{ route('favorit') }}">
                                     <i class="bi bi-bookmark-fill me-2"></i> Favorit Anda
                                 </a>
                             </li>

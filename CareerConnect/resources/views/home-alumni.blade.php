@@ -161,10 +161,21 @@
                         </h5>
 
                         <div class="mb-3">
-                            <label class="small text-muted d-block mb-2 fw-semibold">Perusahaan / Organisasi</label>
+                            <label class="small text-muted d-block mb-2 fw-semibold">Bidang Saat Ini</label>
                             <div class="info-box">
                                 @if(auth()->user()->current_field)
                                     {{ auth()->user()->current_field }}
+                                @else
+                                    <span class="text-muted fst-italic">Belum diatur</span>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="small text-muted d-block mb-2 fw-semibold">Pengalaman & Skills</label>
+                            <div class="info-box">
+                                @if(auth()->user()->experience)
+                                    {{ auth()->user()->experience }}
                                 @else
                                     <span class="text-muted fst-italic">Belum diatur</span>
                                 @endif

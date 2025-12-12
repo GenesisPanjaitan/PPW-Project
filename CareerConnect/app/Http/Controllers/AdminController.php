@@ -363,8 +363,15 @@ class AdminController extends Controller
     {
         /** @var \App\Models\User|null $admin */
             $admin = Auth::user();
+        
+        // Get admin notes
+        $notes = DB::table('admin_notes')
+            ->where('user_id', $admin->id)
+            ->orderBy('updated_at', 'desc')
+            ->get();
+        
         $this->addNotificationData();
-        return view('admin.profile', compact('admin'));
+        return view('admin.profile', compact('admin', 'notes'));
     }
 
     public function updateProfile(Request $request)
@@ -463,5 +470,53 @@ class AdminController extends Controller
         }
 
         return response()->json(['success' => true, 'user_id' => $userId, 'timestamp' => now()]);
+    }
+
+    // Notes CRUD Methods
+    public function storeNote(Request $request)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'content' => 'required|string'
+        ]);
+
+        DB::table('admin_notes')->insert([
+            'user_id' => Auth::id(),
+            'title' => $request->title,
+            'content' => $request->content,
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+
+        return response()->json(['success' => true]);
+    }
+
+    public function updateNote(Request $request, $id)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'content' => 'required|string'
+        ]);
+
+        DB::table('admin_notes')
+            ->where('id', $id)
+            ->where('user_id', Auth::id())
+            ->update([
+                'title' => $request->title,
+                'content' => $request->content,
+                'updated_at' => now()
+            ]);
+
+        return response()->json(['success' => true]);
+    }
+
+    public function deleteNote($id)
+    {
+        DB::table('admin_notes')
+            ->where('id', $id)
+            ->where('user_id', Auth::id())
+            ->delete();
+
+        return response()->json(['success' => true]);
     }
 }

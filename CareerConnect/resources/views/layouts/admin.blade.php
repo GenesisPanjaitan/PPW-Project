@@ -15,7 +15,7 @@
     <style>
         /* == CONFIG == */
         :root {
-            --admin-bg: #F8F9FC;
+            --admin-bg: linear-gradient(135deg, #e0f7fa 0%, #b3e5fc 50%, #e1f5fe 100%);
             --sidebar-width: 260px;
             --primary-color: #6b5ce7; /* Ungu CareerConnect */
             --text-color: #333;
@@ -23,8 +23,25 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background-color: var(--admin-bg);
+            background: linear-gradient(135deg, #e0f7fa 0%, #b3e5fc 50%, #e1f5fe 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
             overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.2) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
         }
 
         /* == SIDEBAR == */
@@ -37,6 +54,7 @@
             border-right: 1px solid #e0e0e0;
             position: fixed;
             z-index: 1000;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.05);
         }
         
         .sidebar-heading {
@@ -93,6 +111,8 @@
             width: 100%;
             margin-left: var(--sidebar-width); /* Geser konten ke kanan */
             transition: margin 0.25s ease-out;
+            position: relative;
+            z-index: 1;
         }
 
         /* == TOP NAVBAR == */
@@ -167,6 +187,94 @@
             0% { transform: scale(1); }
             50% { transform: scale(1.1); }
             100% { transform: scale(1); }
+        }
+
+        /* Profile Dropdown Styles */
+        .profile-dropdown {
+            border-radius: 1rem !important;
+            padding: 0.5rem 0;
+            margin-top: 0.5rem !important;
+            min-width: 240px;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .profile-dropdown .dropdown-item {
+            padding: 0.75rem 1.25rem;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: #495057;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 0.5rem;
+            margin: 0.125rem 0.5rem;
+        }
+
+        .profile-dropdown .dropdown-item:hover {
+            background: linear-gradient(135deg, rgba(107, 92, 231, 0.08) 0%, rgba(107, 92, 231, 0.05) 100%);
+            color: var(--primary-color);
+            transform: translateX(5px);
+            padding-left: 1.5rem;
+        }
+
+        .profile-dropdown .dropdown-item i {
+            width: 20px;
+            text-align: center;
+            font-size: 1.1rem;
+            transition: transform 0.2s ease;
+        }
+
+        .profile-dropdown .dropdown-item:hover i {
+            transform: scale(1.1);
+        }
+
+        .profile-dropdown .dropdown-divider {
+            margin: 0.5rem 0;
+            opacity: 0.1;
+        }
+
+        .profile-dropdown .dropdown-item.text-danger:hover {
+            background: linear-gradient(135deg, rgba(220, 53, 69, 0.08) 0%, rgba(220, 53, 69, 0.05) 100%);
+            color: #dc3545 !important;
+        }
+
+        .nav-link.dropdown-toggle {
+            border-radius: 50px;
+            padding: 0.4rem 1rem 0.4rem 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link.dropdown-toggle:hover {
+            background-color: rgba(107, 92, 231, 0.08);
+        }
+
+        .nav-link.dropdown-toggle::after {
+            margin-left: 0.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .nav-link.dropdown-toggle[aria-expanded="true"]::after {
+            transform: rotate(180deg);
+        }
+
+        .nav-link.dropdown-toggle img {
+            border: 2px solid #fff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .nav-link.dropdown-toggle:hover img {
+            border-color: var(--primary-color);
+            box-shadow: 0 4px 12px rgba(107, 92, 231, 0.3);
         }
 
         @yield('custom-styles')
@@ -375,24 +483,24 @@
 
                             <!-- Admin Profile Dropdown -->
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle d-flex align-items-center text-dark fw-semibold" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                                <a class="nav-link dropdown-toggle d-flex align-items-center text-dark fw-semibold" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     @if(auth()->user()->image && file_exists(public_path('storage/profile_photos/' . auth()->user()->image)))
-                                        <img src="{{ asset('storage/profile_photos/' . auth()->user()->image) }}" class="rounded-circle me-2" width="32" height="32" style="object-fit: cover;">
+                                        <img src="{{ asset('storage/profile_photos/' . auth()->user()->image) }}" class="rounded-circle me-2" width="36" height="36" style="object-fit: cover;">
                                     @else
-                                        <img src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->name ?? 'Admin') }}&background=6b5ce7&color=fff" class="rounded-circle me-2" width="32" height="32">
+                                        <img src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->name ?? 'Admin') }}&background=6b5ce7&color=fff" class="rounded-circle me-2" width="36" height="36">
                                     @endif
-                                    {{ auth()->user()->name ?? 'Administrator' }}
+                                    <span class="d-none d-md-inline">{{ auth()->user()->name ?? 'Administrator' }}</span>
                                 </a>
-                                <ul class="dropdown-menu dropdown-menu-end border-0 shadow" aria-labelledby="navbarDropdown">
+                                <ul class="dropdown-menu dropdown-menu-end profile-dropdown border-0 shadow-lg" aria-labelledby="navbarDropdown">
                                     <li>
                                         <a class="dropdown-item" href="{{ route('admin.profile') }}">
-                                            <i class="bi bi-person me-2"></i>Profil
+                                            <i class="bi bi-person-circle me-2"></i>Profil Saya
                                         </a>
                                     </li>
                                     <li><hr class="dropdown-divider"></li>
                                     <li>
                                         <a class="dropdown-item text-danger" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                            <i class="bi bi-box-arrow-right me-2"></i>Logout
+                                            <i class="bi bi-box-arrow-right me-2"></i>Keluar
                                         </a>
                                     </li>
                                 </ul>
@@ -410,6 +518,36 @@
             <div class="container-fluid px-4 py-4">
                 @yield('content')
             </div>
+
+            <!-- Footer Admin -->
+            <footer class="mt-5 py-4" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+                <div class="container-fluid px-4">
+                    <div class="row align-items-center">
+                        <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                            <div class="d-flex align-items-center justify-content-center justify-content-md-start">
+                                <img src="{{ asset('images/logokita.png') }}" alt="CareerConnect" style="height: 25px;" class="me-2">
+                                <span class="fw-bold">CareerConnect Admin</span>
+                            </div>
+                            <p class="mb-0 mt-2 small text-white-50">
+                                &copy; {{ date('Y') }} Institut Teknologi Del. All rights reserved.
+                            </p>
+                        </div>
+                        <div class="col-md-6 text-center text-md-end">
+                            <div class="d-flex gap-3 justify-content-center justify-content-md-end align-items-center">
+                                <a href="https://instagram.com/careerconnect.del" target="_blank" class="text-white-50 text-decoration-none">
+                                    <i class="bi bi-instagram fs-5"></i>
+                                </a>
+                                <a href="https://www.linkedin.com/school/institut-teknologi-del" target="_blank" class="text-white-50 text-decoration-none">
+                                    <i class="bi bi-linkedin fs-5"></i>
+                                </a>
+                                <a href="mailto:admin@careerconnect.del.ac.id" class="text-white-50 text-decoration-none">
+                                    <i class="bi bi-envelope-fill fs-5"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </footer>
             
         </div>
     </div>
@@ -430,5 +568,6 @@
     </script>
 
     @yield('custom-scripts')
+    @yield('scripts')
 </body>
 </html>

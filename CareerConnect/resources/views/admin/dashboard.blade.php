@@ -4,10 +4,49 @@
 
 @section('content')
 
+                <!-- Hero Section dengan Logo CareerConnect -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <div class="card border-0 shadow-lg" style="border-radius: 1.5rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); overflow: hidden;">
+                            <div class="card-body p-5">
+                                <div class="row align-items-center">
+                                    <div class="col-md-8">
+                                        <div class="d-flex align-items-center mb-3">
+                                            <div class="bg-white rounded-circle p-3 me-3 shadow" style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center;">
+                                                <i class="bi bi-building" style="font-size: 2.5rem; color: #667eea;"></i>
+                                            </div>
+                                            <div>
+                                                <h1 class="h2 mb-1 text-white fw-bold">CareerConnect</h1>
+                                                <p class="text-white-50 mb-0">Admin Dashboard - Institut Teknologi Del</p>
+                                            </div>
+                                        </div>
+                                        <p class="text-white mb-0 opacity-90">
+                                            <i class="bi bi-shield-check me-2"></i>
+                                            Kelola data mahasiswa, alumni, dan lowongan kerja dengan mudah
+                                        </p>
+                                    </div>
+                                    <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                                        <div class="bg-white bg-opacity-10 rounded-3 p-4 backdrop-blur">
+                                            <div class="text-white">
+                                                <i class="bi bi-calendar3 me-2"></i>
+                                                <small>{{ date('d F Y') }}</small>
+                                            </div>
+                                            <div class="text-white mt-2">
+                                                <i class="bi bi-clock me-2"></i>
+                                                <small id="current-time"></small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Dashboard Content -->
                 <div class="row">
                     <div class="col-12">
-                        <h1 class="h3 mb-4 text-gray-800">Dashboard Admin CareerConnect</h1>
+                        <h1 class="h3 mb-4 text-gray-800 fw-bold">Statistik Sistem</h1>
                     </div>
                 </div>
 
@@ -66,28 +105,54 @@
                 <!-- Quick Actions -->
                 <div class="row mb-4">
                     <div class="col-12">
-                        <div class="card shadow">
-                            <div class="card-header py-3">
-                                <h6 class="m-0 font-weight-bold text-primary">Aksi Cepat</h6>
+                        <div class="card shadow-lg border-0" style="border-radius: 1rem; overflow: hidden;">
+                            <div class="card-header py-3" style="background: linear-gradient(135deg, rgba(107, 92, 231, 0.1) 0%, rgba(107, 92, 231, 0.05) 100%); border-bottom: 2px solid rgba(107, 92, 231, 0.1);">
+                                <h6 class="m-0 fw-bold" style="color: #6b5ce7;">
+                                    <i class="bi bi-lightning-charge-fill me-2"></i>Aksi Cepat
+                                </h6>
                             </div>
-                            <div class="card-body">
-                                <div class="row justify-content-center">
-                                    <div class="col-md-4 mb-3">
-                                        <a href="{{ route('admin.mahasiswa') }}" class="btn btn-outline-primary w-100 py-3">
-                                            <i class="bi bi-mortarboard-fill d-block mb-2" style="font-size: 2rem;"></i>
-                                            Kelola Mahasiswa
+                            <div class="card-body p-4">
+                                <div class="row justify-content-center g-3">
+                                    <div class="col-md-4">
+                                        <a href="{{ route('admin.mahasiswa') }}" class="quick-action-card text-decoration-none d-block">
+                                            <div class="p-4 text-center h-100" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 1rem; position: relative; overflow: hidden;">
+                                                <div class="quick-action-icon-wrapper mb-3">
+                                                    <i class="bi bi-mortarboard-fill text-white" style="font-size: 3rem;"></i>
+                                                </div>
+                                                <h6 class="text-white fw-bold mb-2">Kelola Mahasiswa</h6>
+                                                <p class="text-white-50 small mb-0">Lihat & kelola data mahasiswa</p>
+                                                <div class="quick-action-arrow">
+                                                    <i class="bi bi-arrow-right-circle-fill text-white" style="font-size: 1.5rem;"></i>
+                                                </div>
+                                            </div>
                                         </a>
                                     </div>
-                                    <div class="col-md-4 mb-3">
-                                        <a href="{{ route('admin.alumni') }}" class="btn btn-outline-success w-100 py-3">
-                                            <i class="bi bi-people-fill d-block mb-2" style="font-size: 2rem;"></i>
-                                            Kelola Alumni
+                                    <div class="col-md-4">
+                                        <a href="{{ route('admin.alumni') }}" class="quick-action-card text-decoration-none d-block">
+                                            <div class="p-4 text-center h-100" style="background: linear-gradient(135deg, #48c78e 0%, #06d6a0 100%); border-radius: 1rem; position: relative; overflow: hidden;">
+                                                <div class="quick-action-icon-wrapper mb-3">
+                                                    <i class="bi bi-people-fill text-white" style="font-size: 3rem;"></i>
+                                                </div>
+                                                <h6 class="text-white fw-bold mb-2">Kelola Alumni</h6>
+                                                <p class="text-white-50 small mb-0">Lihat & kelola data alumni</p>
+                                                <div class="quick-action-arrow">
+                                                    <i class="bi bi-arrow-right-circle-fill text-white" style="font-size: 1.5rem;"></i>
+                                                </div>
+                                            </div>
                                         </a>
                                     </div>
-                                    <div class="col-md-4 mb-3">
-                                        <a href="{{ route('admin.lowongan') }}" class="btn btn-outline-warning w-100 py-3">
-                                            <i class="bi bi-briefcase-fill d-block mb-2" style="font-size: 2rem;"></i>
-                                            Kelola Lowongan
+                                    <div class="col-md-4">
+                                        <a href="{{ route('admin.lowongan') }}" class="quick-action-card text-decoration-none d-block">
+                                            <div class="p-4 text-center h-100" style="background: linear-gradient(135deg, #ffa726 0%, #ff7043 100%); border-radius: 1rem; position: relative; overflow: hidden;">
+                                                <div class="quick-action-icon-wrapper mb-3">
+                                                    <i class="bi bi-briefcase-fill text-white" style="font-size: 3rem;"></i>
+                                                </div>
+                                                <h6 class="text-white fw-bold mb-2">Kelola Lowongan</h6>
+                                                <p class="text-white-50 small mb-0">Lihat & kelola lowongan kerja</p>
+                                                <div class="quick-action-arrow">
+                                                    <i class="bi bi-arrow-right-circle-fill text-white" style="font-size: 1.5rem;"></i>
+                                                </div>
+                                            </div>
                                         </a>
                                     </div>
                                 </div>
@@ -100,67 +165,77 @@
                 <div class="row">
                     <!-- Recent Registrations -->
                     <div class="col-xl-6 col-lg-6 mb-4">
-                        <div class="card shadow h-100">
-                            <div class="card-header py-3">
-                                <h6 class="m-0 font-weight-bold text-primary">Pendaftaran Terbaru</h6>
+                        <div class="card shadow-lg border-0 h-100" style="border-radius: 1rem; overflow: hidden;">
+                            <div class="card-header py-3" style="background: linear-gradient(135deg, rgba(107, 92, 231, 0.1) 0%, rgba(107, 92, 231, 0.05) 100%); border-bottom: 2px solid rgba(107, 92, 231, 0.1);">
+                                <h6 class="m-0 fw-bold" style="color: #6b5ce7;">
+                                    <i class="bi bi-person-plus-fill me-2"></i>Pendaftaran Terbaru
+                                </h6>
                             </div>
-                            <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table table-sm">
-                                        <thead>
-                                            <tr>
-                                                <th>Nama</th>
-                                                <th>Role</th>
-                                                <th>Tanggal</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @forelse($recentRegistrations as $registration)
-                                            <tr>
-                                                <td>
-                                                    <div class="d-flex align-items-center">
-                                                        <img src="https://ui-avatars.com/api/?name={{ urlencode($registration->name) }}&background={{ $registration->role == 'mahasiswa' ? '667eea' : '48c78e' }}&color=fff&size=32" 
-                                                             class="rounded-circle me-2" width="32" height="32" alt="Avatar">
-                                                        <span>{{ $registration->name }}</span>
+                            <div class="card-body p-0">
+                                <div class="list-group list-group-flush">
+                                    @forelse($recentRegistrations as $index => $registration)
+                                    <div class="list-group-item border-0 registration-item" style="animation: fadeInLeft {{ 0.1 * ($index + 1) }}s ease-out;">
+                                        <div class="d-flex align-items-center justify-content-between py-2">
+                                            <div class="d-flex align-items-center flex-grow-1">
+                                                <div class="position-relative me-3">
+                                                    <img src="https://ui-avatars.com/api/?name={{ urlencode($registration->name) }}&background={{ $registration->role == 'mahasiswa' ? '667eea' : '48c78e' }}&color=fff&size=48" 
+                                                         class="rounded-circle avatar-img" width="48" height="48" alt="Avatar">
+                                                    <span class="position-absolute bottom-0 end-0 badge rounded-pill" style="background: {{ $registration->role == 'mahasiswa' ? 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' : 'linear-gradient(135deg, #48c78e 0%, #06d6a0 100%)' }};">
+                                                        <i class="bi {{ $registration->role == 'mahasiswa' ? 'bi-mortarboard-fill' : 'bi-briefcase-fill' }}" style="font-size: 0.7rem;"></i>
+                                                    </span>
+                                                </div>
+                                                <div>
+                                                    <h6 class="mb-1 fw-semibold" style="color: #2d3748;">{{ $registration->name }}</h6>
+                                                    <div class="d-flex align-items-center gap-2">
+                                                        <span class="badge" style="background: {{ $registration->role == 'mahasiswa' ? 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' : 'linear-gradient(135deg, #48c78e 0%, #06d6a0 100%)' }}; font-size: 0.75rem;">
+                                                            {{ $registration->role == 'mahasiswa' ? 'Mahasiswa' : 'Alumni' }}
+                                                        </span>
+                                                        @if($registration->created_at->isToday())
+                                                            <span class="badge bg-warning bg-opacity-25 text-warning pulse-badge">
+                                                                <i class="bi bi-star-fill me-1"></i>Baru
+                                                            </span>
+                                                        @endif
                                                     </div>
-                                                </td>
-                                                <td>
-                                                    @if($registration->role == 'mahasiswa')
-                                                        <span class="badge bg-primary">Mahasiswa</span>
-                                                    @else
-                                                        <span class="badge bg-success">Alumni</span>
-                                                    @endif
-                                                </td>
-                                                <td>
-                                                    <small class="text-muted">{{ $registration->created_at->format('d M Y') }}</small>
-                                                    @if($registration->created_at->isToday())
-                                                        <span class="badge bg-warning bg-opacity-25 text-warning ms-1">Baru</span>
-                                                    @endif
-                                                </td>
-                                            </tr>
-                                            @empty
-                                            <tr>
-                                                <td colspan="3" class="text-center text-muted py-3">
-                                                    <i class="bi bi-inbox me-2"></i>Belum ada pendaftaran terbaru
-                                                </td>
-                                            </tr>
-                                            @endforelse
-                                        </tbody>
-                                    </table>
+                                                </div>
+                                            </div>
+                                            <div class="text-end">
+                                                <small class="text-muted d-block">
+                                                    <i class="bi bi-calendar3 me-1"></i>{{ $registration->created_at->format('d M Y') }}
+                                                </small>
+                                                <small class="text-muted">
+                                                    <i class="bi bi-clock me-1"></i>{{ $registration->created_at->format('H:i') }}
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @empty
+                                    <div class="list-group-item border-0 text-center py-5">
+                                        <i class="bi bi-inbox" style="font-size: 3rem; color: #cbd5e0;"></i>
+                                        <p class="text-muted mt-3 mb-0">Belum ada pendaftaran terbaru</p>
+                                    </div>
+                                    @endforelse
                                 </div>
-                                <div class="text-center">
-                                    <a href="{{ route('admin.registrations') }}" class="btn btn-sm btn-primary">Lihat Semua</a>
+                                @if($recentRegistrations->isNotEmpty())
+                                <div class="text-center p-3 border-top">
+                                    <a href="{{ route('admin.registrations') }}" class="btn btn-sm btn-outline-primary rounded-pill px-4 hover-lift">
+                                        <i class="bi bi-eye me-2"></i>Lihat Semua Pendaftaran
+                                    </a>
                                 </div>
+                                @endif
                             </div>
                         </div>
                     </div>
 
                     <!-- Job Categories Chart -->
                     <div class="col-xl-6 col-lg-6 mb-4">
-                        <div class="card shadow h-100">
-                            <div class="card-header py-3 d-flex justify-content-between align-items-center">
-                                <h6 class="m-0 font-weight-bold text-primary">Kategori Lowongan</h6>
-                                <span class="badge bg-light text-dark">{{ $lowonganCount ?? 0 }} Total</span>
+                        <div class="card shadow-lg border-0 h-100" style="border-radius: 1rem; overflow: hidden;">
+                            <div class="card-header py-3 d-flex justify-content-between align-items-center" style="background: linear-gradient(135deg, rgba(107, 92, 231, 0.1) 0%, rgba(107, 92, 231, 0.05) 100%); border-bottom: 2px solid rgba(107, 92, 231, 0.1);">
+                                <h6 class="m-0 fw-bold" style="color: #6b5ce7;">
+                                    <i class="bi bi-pie-chart-fill me-2"></i>Kategori Lowongan
+                                </h6>
+                                <span class="badge rounded-pill" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 0.5rem 1rem;">
+                                    {{ $lowonganCount ?? 0 }} Total
+                                </span>
                             </div>
                             <div class="card-body">
                     
@@ -314,6 +389,118 @@
                 </div>
 
 <style>
+    /* Quick Action Cards Animation */
+    .quick-action-card {
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        display: block;
+    }
+
+    .quick-action-card > div {
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .quick-action-card:hover > div {
+        transform: translateY(-10px) scale(1.03);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+    }
+
+    .quick-action-icon-wrapper {
+        transition: transform 0.4s ease;
+    }
+
+    .quick-action-card:hover .quick-action-icon-wrapper {
+        transform: scale(1.15) rotate(5deg);
+    }
+
+    .quick-action-arrow {
+        position: absolute;
+        bottom: 1rem;
+        right: 1rem;
+        opacity: 0;
+        transform: translateX(-10px);
+        transition: all 0.3s ease;
+    }
+
+    .quick-action-card:hover .quick-action-arrow {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    .quick-action-card > div::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(255, 255, 255, 0.1);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .quick-action-card:hover > div::before {
+        opacity: 1;
+    }
+
+    /* Registration Items Animation */
+    .registration-item {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border-left: 3px solid transparent !important;
+    }
+
+    .registration-item:hover {
+        background: linear-gradient(90deg, rgba(107, 92, 231, 0.05) 0%, transparent 100%) !important;
+        border-left-color: #6b5ce7 !important;
+        transform: translateX(5px);
+    }
+
+    .registration-item .avatar-img {
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .registration-item:hover .avatar-img {
+        transform: scale(1.1);
+        box-shadow: 0 8px 20px rgba(107, 92, 231, 0.3);
+    }
+
+    .pulse-badge {
+        animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+        0%, 100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+        50% {
+            transform: scale(1.05);
+            opacity: 0.9;
+        }
+    }
+
+    @keyframes fadeInLeft {
+        from {
+            opacity: 0;
+            transform: translateX(-30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    .hover-lift {
+        transition: all 0.3s ease;
+    }
+
+    .hover-lift:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(107, 92, 231, 0.3);
+    }
+
+    /* Chart Container */
     .chart-container .bar {
         position: relative;
         animation: growUp 1s ease-out;
@@ -399,4 +586,17 @@
     }
 </style>
 
+@endsection
+
+@section('scripts')
+<script>
+    // Real-time clock
+    function updateTime() {
+        const now = new Date();
+        const timeString = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        document.getElementById('current-time').textContent = timeString;
+    }
+    updateTime();
+    setInterval(updateTime, 1000);
+</script>
 @endsection

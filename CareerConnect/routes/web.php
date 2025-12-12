@@ -129,6 +129,11 @@ Route::middleware('auth')->group(function () {
         Route::post('/profile', [AdminController::class, 'updateProfile'])->name('admin.profile.update');
         Route::get('/settings', [AdminController::class, 'settings'])->name('admin.settings');
         Route::post('/notifications/mark-read', [AdminController::class, 'markNotificationsRead'])->name('admin.notifications.markRead');
+        
+        // Admin Notes Routes
+        Route::post('/notes', [AdminController::class, 'storeNote'])->name('admin.notes.store');
+        Route::put('/notes/{id}', [AdminController::class, 'updateNote'])->name('admin.notes.update');
+        Route::delete('/notes/{id}', [AdminController::class, 'deleteNote'])->name('admin.notes.delete');
 
     });
 

@@ -343,7 +343,7 @@ class RecruitmentController extends Controller
 
         DB::table('recruitment')->where('id', $id)->delete();
 
-        return redirect()->route('recruitment')->with('success', 'Posting lowongan berhasil dihapus.');
+        return redirect()->route('recruitment')->with('delete_success', 'Posting lowongan berhasil dihapus.');
     }
 
     public function myPosts()

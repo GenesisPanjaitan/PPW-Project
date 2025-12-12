@@ -18,6 +18,28 @@ class ProfileController extends Controller
 
     public function academic()
     {
+        // Jika admin, kirim data statistik untuk diagram
+        if (strtolower(auth()->user()->role) === 'admin') {
+            $mahasiswaCount = DB::table('user')->where('role', 'mahasiswa')->count();
+            $alumniCount = DB::table('user')->where('role', 'alumni')->count();
+            
+            // Hitung lowongan per kategori
+            $lowonganByCategory = DB::table('recruitment')
+                ->join('category', 'recruitment.category_id', '=', 'category.id')
+                ->select('category.name as category_name', DB::raw('count(*) as total'))
+                ->groupBy('category.id', 'category.name')
+                ->get();
+            
+            // Hitung lowongan per tipe
+            $lowonganByType = DB::table('recruitment')
+                ->join('jobtype', 'recruitment.jobtype_id', '=', 'jobtype.id')
+                ->select('jobtype.name as type_name', DB::raw('count(*) as total'))
+                ->groupBy('jobtype.id', 'jobtype.name')
+                ->get();
+            
+            return view('profile_academic_admin', compact('mahasiswaCount', 'alumniCount', 'lowonganByCategory', 'lowonganByType'));
+        }
+        
         return view('profile_academic');
     }
 

@@ -239,9 +239,9 @@
                                             </a>
                                         @endauth
                                         
-                                        <!-- Tombol Edit & Hapus (Hanya Admin/Owner) -->
+                                        <!-- Tombol Edit & Hapus (Hanya Admin/Owner Alumni, bukan Mahasiswa) -->
                                         @auth
-                                            @if(auth()->user()->role === 'admin' || auth()->user()->id === $r->user_id)
+                                            @if(auth()->user()->role !== 'mahasiswa' && (auth()->user()->role === 'admin' || auth()->user()->id === $r->user_id))
                                                 <div class="d-flex gap-2 justify-content-lg-end mt-1">
                                                     <button class="btn btn-sm btn-outline-dark rounded-pill px-3 fw-semibold" onclick='openEditModal(@json($r))'>
                                                         <i class="bi bi-pencil-square"></i> Edit
