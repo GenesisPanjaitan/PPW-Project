@@ -81,6 +81,6 @@ class GoogleAuthController extends Controller
             ]);
         }
 
-        return redirect()->intended(route('home'))->with('login_success', 'Berhasil masuk dengan Google');
+        return redirect()->intended(route('home'))->with('login_success', 'Anda berhasil login dengan google');
     }
 }

@@ -97,6 +97,7 @@ class RegisterController extends Controller
             // Auto-login after registration
             Auth::login($user);
 
+            return redirect()->route('home')->with('success', 'Anda berhasil registrasi');
             $roleName = $role === 'alumni' ? 'Alumni' : 'Mahasiswa';
             return redirect()->route('home')->with([
                 'register_success' => true,
