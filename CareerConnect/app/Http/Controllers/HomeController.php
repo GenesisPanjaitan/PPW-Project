@@ -44,21 +44,11 @@ class HomeController extends Controller
         }
 
         // Tampilkan view berbeda berdasarkan role
-        if ($user->role === 'alumni') {
-            // Data tambahan untuk alumni
-            $myPostings = DB::table('recruitment')->where('user_id', $user->id)->get();
-            return view('home-alumni', [
-                'latestRecruitments' => $latestRecruitments, 
-                'favoriteIds' => $favoriteIds,
-                'myPostings' => $myPostings
-            ]);
-        } else {
-            // View default untuk mahasiswa
-            return view('home-mahasiswa', [
-                'latestRecruitments' => $latestRecruitments, 
-                'favoriteIds' => $favoriteIds
-            ]);
-        }
+        // Tampilkan view yang sama untuk mahasiswa dan alumni
+        return view('home-mahasiswa', [
+            'latestRecruitments' => $latestRecruitments, 
+            'favoriteIds' => $favoriteIds
+        ]);
     }
 
 
