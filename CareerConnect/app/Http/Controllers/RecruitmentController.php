@@ -76,7 +76,7 @@ class RecruitmentController extends Controller
             ->leftJoin('category as c', 'r.category_id', '=', 'c.id')
             ->leftJoin('jobtype as j', 'r.jobtype_id', '=', 'j.id')
             ->leftJoin('user as u', 'r.user_id', '=', 'u.id')
-            ->select('r.*', 'c.name as category', 'j.name as jobtype', 'u.name as author')
+            ->select('r.*', 'c.name as category', 'j.name as jobtype', 'u.name as author', 'u.image as author_image')
             ->where('r.id', $id)
             ->first();
 
@@ -87,7 +87,7 @@ class RecruitmentController extends Controller
         // fetch comments
         $comments = DB::table('comment as c')
             ->leftJoin('user as u', 'c.user_id', '=', 'u.id')
-            ->select('c.*', 'u.name as author')
+            ->select('c.*', 'u.name as author', 'u.image as author_image')
             ->where('c.recruitment_id', $id)
             ->orderBy('c.created_at', 'asc')
             ->get();

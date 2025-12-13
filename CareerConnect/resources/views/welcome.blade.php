@@ -148,32 +148,81 @@
 
     </main>
     
-    <footer class="py-5 bg-white border-top"> 
-    <div class="container"> 
-        <div class="row g-4 text-center"> 
-            
-            <div class="col-md-4"> 
-                <h5 class="fw-bold">Contact Us</h5> 
-                <ul class="list-unstyled text-muted"> 
-                    <li class="mb-2"><i class="bi bi-envelope me-2"></i>careerconnect@del.ac.id</li> 
-                    <li class="mb-2"><i class="bi bi-telephone me-2"></i>(0632) 123 456</li> 
-                    <li class="mb-2"><i class="bi bi-geo-alt me-2"></i>Institut Teknologi Del, Sitoluama</li> 
-                </ul> 
-            </div> 
-            
-            <div class="col-md-4"> 
-                <h5 class="fw-bold fs-4">CareerConnect</h5> 
-                <p class="text-muted"> Menghubungkan mahasiswa dan alumni Institut Teknologi Del dengan peluang terbaik untuk magang, part-time, dan karir penuh waktu. </p> 
-            </div> 
-            
-            <div class="col-md-4"> 
-                <h5 class="fw-bold">Dukungan</h5> 
-                <p class="text-muted mb-2">Platform ini dikembangkan bersama Institut Teknologi Del.</p> 
-                <img src="{{ asset('images/logo del.jpg') }}" alt="Logo Institut Teknologi Del" class="mx-auto d-block footer-logo"> 
-            </div> 
-        </div> 
-    </div> 
-</footer>
+    <footer class="footer-welcome py-5">
+        <div class="container">
+            <div class="row g-4">
+                <!-- About Section -->
+                <div class="col-lg-5 col-md-6">
+                    <div class="d-flex align-items-center mb-3">
+                        <img src="{{ asset('images/logokita.png') }}" alt="CareerConnect Logo" style="height: 35px;" class="me-2">
+                        <h5 class="fw-bold mb-0 text-dark">CareerConnect</h5>
+                    </div>
+                    <p class="text-muted mb-3" style="line-height: 1.7;">
+                        Platform yang menghubungkan mahasiswa dan alumni Institut Teknologi Del dengan peluang karir terbaik. Temukan lowongan pekerjaan, magang, dan peluang pengembangan karir Anda bersama kami.
+                    </p>
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="bi bi-geo-alt-fill text-muted"></i>
+                        <span class="text-muted small">Institut Teknologi Del, Sitoluama, Laguboti</span>
+                    </div>
+                </div>
+
+                <!-- Dukungan -->
+                <div class="col-lg-3 col-md-6">
+                    <h6 class="fw-bold mb-3 text-dark">Dukungan</h6>
+                    <p class="text-muted mb-3 small">
+                        Platform ini dikembangkan bersama Institut Teknologi Del untuk mendukung mahasiswa dan alumni dalam pengembangan karir.
+                    </p>
+                    <img src="{{ asset('images/logo del.jpg') }}" alt="Logo Institut Teknologi Del" class="footer-logo-del">
+                </div>
+
+                <!-- Social Media & Contact -->
+                <div class="col-lg-4 col-md-12">
+                    <h6 class="fw-bold mb-3 text-dark">Hubungi Kami</h6>
+                    <p class="text-muted mb-3 small">
+                        Ikuti media sosial kami untuk mendapatkan update lowongan terbaru dan informasi karir lainnya.
+                    </p>
+                    <div class="d-flex gap-3 mb-3">
+                        <a href="https://www.instagram.com/kevgtm" target="_blank" class="social-icon">
+                            <i class="bi bi-instagram fs-5"></i>
+                        </a>
+                        <a href="https://www.linkedin.com/in/kevin-gultom-889982322/" target="_blank" class="social-icon">
+                            <i class="bi bi-linkedin fs-5"></i>
+                        </a>
+                        <a href="https://web.facebook.com/Institut.Teknologi.Del/?_rdc=1&_rdr#" target="_blank" class="social-icon">
+                            <i class="bi bi-facebook fs-5"></i>
+                        </a>
+                        <a href="mailto:info@careerconnect.del.ac.id" class="social-icon">
+                            <i class="bi bi-envelope-fill fs-5"></i>
+                        </a>
+                    </div>
+                    <div class="d-flex align-items-center gap-2 mb-2">
+                        <i class="bi bi-envelope text-muted"></i>
+                        <span class="text-muted small">careerconnect@del.ac.id</span>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="bi bi-telephone text-muted"></i>
+                        <span class="text-muted small">(0632) 123 456</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-divider my-4"></div>
+
+            <!-- Copyright -->
+            <div class="row">
+                <div class="col-md-6 text-center text-md-start">
+                    <p class="mb-0 text-muted small">
+                        &copy; {{ date('Y') }} CareerConnect - Institut Teknologi Del. All rights reserved.
+                    </p>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <p class="mb-0 text-muted small">
+                        Made with <i class="bi bi-heart-fill text-danger"></i> by IT Del Students
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
 
 {{-- Inline styles khusus landing/pre-login --}}
 <style>
@@ -287,14 +336,45 @@
         box-shadow: 0 18px 45px rgba(0,0,0,0.12);
     }
 
-    footer {
-        border-radius: 18px 18px 0 0;
-        box-shadow: 0 -10px 30px rgba(0,0,0,0.05);
+    /* Footer Styles */
+    .footer-welcome {
+        background: #ffffff;
+        color: #333;
+        margin-top: 100px;
+        border-top: 1px solid #e0e0e0;
     }
-
-    .footer-logo {
-        max-width: 120px;
-        filter: drop-shadow(0 6px 12px rgba(0,0,0,0.1));
+    .footer-welcome a {
+        color: #666;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+    .footer-welcome a:hover {
+        color: #333;
+        transform: translateX(5px);
+    }
+    .social-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: #f8f9fa;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        color: #667eea;
+    }
+    .social-icon:hover {
+        background: #667eea;
+        transform: translateY(-5px);
+        color: white;
+    }
+    .footer-divider {
+        height: 1px;
+        background: #e0e0e0;
+    }
+    .footer-logo-del {
+        max-width: 80px;
+        filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
     }
 </style>
 
