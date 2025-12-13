@@ -26,15 +26,14 @@
                                         ? auth()->user()->image
                                         : asset('storage/profile_photos/' . auth()->user()->image);
                                 @endphp
-                                <img src="{{ $avatarUrl }}" class="rounded-circle me-2" width="32" height="32" style="object-fit: cover;">
+                                <img src="{{ $avatarUrl }}" class="rounded-circle me-2" width="32" height="32" style="object-fit: cover;" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-block';">
+                                <i class="bi bi-person-circle me-1" style="display: none;"></i>
                             @else
                                 <i class="bi bi-person-circle me-1"></i>
                             @endif
                             @auth {{ auth()->user()->name }} @else Guest @endauth
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="{{ route('profile') }}"><i class="bi bi-person me-2"></i> Profile Saya</a></li>
-                            <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="{{ route('favorit') }}"><i class="bi bi-bookmark-fill me-2"></i> Favorit Anda</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li>
@@ -77,10 +76,9 @@
                                     <img src="{{ asset('storage/' . $r->image) }}" 
                                          alt="Gambar Perusahaan" 
                                          class="w-100" 
-                                         style="height: 220px; object-fit: cover;"
-                                         onerror="this.onerror=null; this.src='{{ asset('images/jwmarriot.jpg') }}';">
+                                         style="height: 220px; object-fit: cover;">
                                 @else
-                                    <div class="bg-white d-flex align-items-center justify-content-center text-secondary" style="height: 220px;">
+                                    <div class="bg-light d-flex align-items-center justify-content-center text-secondary" style="height: 220px;">
                                         <div class="text-center">
                                             <i class="bi bi-building display-1 opacity-25"></i>
                                             <p class="small mt-2 mb-0 opacity-50">Tidak ada gambar</p>
@@ -123,18 +121,24 @@
                                         </div>
                                     </div>
                                     <div class="d-flex align-items-center">
-                                        @if(!empty($r->author_image))
-                                            @php
-                                                $posterUrl = filter_var($r->author_image, FILTER_VALIDATE_URL)
-                                                    ? $r->author_image
-                                                    : asset('storage/profile_photos/' . $r->author_image);
-                                            @endphp
-                                            <img src="{{ $posterUrl }}" class="rounded-circle me-3" width="45" height="45" style="object-fit: cover;">
-                                        @else
-                                            <div class="icon-box bg-light rounded-circle p-2 me-3 text-warning">
-                                                <i class="bi bi-person-circle fs-5"></i>
-                                            </div>
-                                        @endif
+                                        <div class="flex-shrink-0 me-3">
+                                            @if(!empty($r->author_image))
+                                                @php
+                                                    $posterUrl = filter_var($r->author_image, FILTER_VALIDATE_URL)
+                                                        ? $r->author_image
+                                                        : asset('storage/profile_photos/' . $r->author_image);
+                                                    $posterInitial = strtoupper(substr($r->author ?? 'A', 0, 1));
+                                                @endphp
+                                                <img src="{{ $posterUrl }}" class="rounded-circle poster-avatar" width="45" height="45" style="object-fit: cover;" data-initial="{{ $posterInitial }}" data-name="{{ $r->author ?? 'Alumni' }}">
+                                            @else
+                                                @php
+                                                    $posterInitial = strtoupper(substr($r->author ?? 'A', 0, 1));
+                                                @endphp
+                                                <div class="rounded-circle d-flex align-items-center justify-content-center text-white fw-bold" style="width: 45px; height: 45px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                                                    {{ $posterInitial }}
+                                                </div>
+                                            @endif
+                                        </div>
                                         <div>
                                             <small class="d-block text-muted" style="font-size: 0.75rem;">Diposting Oleh</small>
                                             <span class="fw-semibold text-dark">{{ $r->author ?? 'Alumni' }}</span>
@@ -196,19 +200,22 @@
                             @forelse($comments as $c)
                                 <div class="d-flex gap-3 mb-4 animate-fade-in">
                                     <!-- Avatar -->
-                                    @if(!empty($c->author_image))
-                                        @php
-                                            $commentUrl = filter_var($c->author_image, FILTER_VALIDATE_URL)
-                                                ? $c->author_image
-                                                : asset('storage/profile_photos/' . $c->author_image);
-                                        @endphp
-                                        <img src="{{ $commentUrl }}" class="rounded-circle shadow-sm" width="45" height="45" style="object-fit: cover;">
-                                    @else
-                                        <div class="avatar-comment flex-shrink-0 bg-gradient-primary text-white rounded-circle d-flex align-items-center justify-content-center shadow-sm" 
-                                             style="width: 45px; height: 45px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-                                            <span class="fw-bold">{{ substr($c->author ?? 'A', 0, 1) }}</span>
-                                        </div>
-                                    @endif
+                                    <div class="flex-shrink-0">
+                                        @if(!empty($c->author_image))
+                                            @php
+                                                $commentUrl = filter_var($c->author_image, FILTER_VALIDATE_URL)
+                                                    ? $c->author_image
+                                                    : asset('storage/profile_photos/' . $c->author_image);
+                                                $commentInitial = substr($c->author ?? 'A', 0, 1);
+                                            @endphp
+                                            <img src="{{ $commentUrl }}" class="rounded-circle shadow-sm comment-avatar" width="45" height="45" style="object-fit: cover;" data-initial="{{ $commentInitial }}">
+                                        @else
+                                            <div class="avatar-comment bg-gradient-primary text-white rounded-circle d-flex align-items-center justify-content-center shadow-sm" 
+                                                 style="width: 45px; height: 45px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                                                <span class="fw-bold">{{ substr($c->author ?? 'A', 0, 1) }}</span>
+                                            </div>
+                                        @endif
+                                    </div>
                                     
                                     <div class="flex-grow-1">
                                         <div class="bg-light p-3 rounded-4 rounded-top-left-0" style="border-top-left-radius: 0 !important;">
@@ -233,18 +240,20 @@
                             <form method="POST" action="{{ route('recruitment.comment', ['id' => $r->id]) }}">
                                 @csrf
                                 <div class="d-flex gap-3 align-items-start">
-                                    @if(auth()->check() && auth()->user()->image)
-                                        @php
-                                            $userAvatarUrl = filter_var(auth()->user()->image, FILTER_VALIDATE_URL)
-                                                ? auth()->user()->image
-                                                : asset('storage/profile_photos/' . auth()->user()->image);
-                                        @endphp
-                                        <img src="{{ $userAvatarUrl }}" class="rounded-circle" width="45" height="45" style="object-fit: cover;">
-                                    @else
-                                        <div class="avatar-comment flex-shrink-0 bg-dark text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 45px; height: 45px;">
-                                            <i class="bi bi-person-fill fs-5"></i>
-                                        </div>
-                                    @endif
+                                    <div class="flex-shrink-0">
+                                        @if(auth()->check() && auth()->user()->image)
+                                            @php
+                                                $userAvatarUrl = filter_var(auth()->user()->image, FILTER_VALIDATE_URL)
+                                                    ? auth()->user()->image
+                                                    : asset('storage/profile_photos/' . auth()->user()->image);
+                                            @endphp
+                                            <img src="{{ $userAvatarUrl }}" class="rounded-circle user-avatar" width="45" height="45" style="object-fit: cover;">
+                                        @else
+                                            <div class="avatar-comment bg-dark text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 45px; height: 45px;">
+                                                <i class="bi bi-person-fill fs-5"></i>
+                                            </div>
+                                        @endif
+                                    </div>
                                     <div class="w-100">
                                         <div class="position-relative">
                                             <textarea name="comment" class="form-control bg-light border-0 ps-3 pt-3" rows="2" placeholder="Tulis pertanyaan atau komentar..." required style="resize: none; border-radius: 1rem; padding-right: 60px;"></textarea>
@@ -269,5 +278,47 @@
             </div>
         </div>
     </main>
+
+    <script>
+        // Handle image error untuk foto profil komentar
+        document.querySelectorAll('.comment-avatar').forEach(img => {
+            img.addEventListener('error', function() {
+                const initial = this.getAttribute('data-initial') || 'A';
+                const fallback = document.createElement('div');
+                fallback.className = 'avatar-comment bg-gradient-primary text-white rounded-circle d-flex align-items-center justify-content-center shadow-sm';
+                fallback.style.width = '45px';
+                fallback.style.height = '45px';
+                fallback.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+                fallback.innerHTML = `<span class="fw-bold">${initial}</span>`;
+                this.parentElement.replaceChild(fallback, this);
+            });
+        });
+
+        // Handle image error untuk foto profil user di form
+        document.querySelectorAll('.user-avatar').forEach(img => {
+            img.addEventListener('error', function() {
+                const fallback = document.createElement('div');
+                fallback.className = 'avatar-comment bg-dark text-white rounded-circle d-flex align-items-center justify-content-center';
+                fallback.style.width = '45px';
+                fallback.style.height = '45px';
+                fallback.innerHTML = '<i class="bi bi-person-fill fs-5"></i>';
+                this.parentElement.replaceChild(fallback, this);
+            });
+        });
+
+        // Handle image error untuk foto profil pemosting
+        document.querySelectorAll('.poster-avatar').forEach(img => {
+            img.addEventListener('error', function() {
+                const initial = this.getAttribute('data-initial') || 'A';
+                const fallback = document.createElement('div');
+                fallback.className = 'rounded-circle d-flex align-items-center justify-content-center text-white fw-bold';
+                fallback.style.width = '45px';
+                fallback.style.height = '45px';
+                fallback.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+                fallback.innerHTML = initial;
+                this.parentElement.replaceChild(fallback, this);
+            });
+        });
+    </script>
 
 @endsection
