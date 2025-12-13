@@ -96,9 +96,9 @@
                             <div class="col-lg-3">
                                 <select name="type" class="form-select border-0 shadow-none text-muted cursor-pointer" style="background-position: right 0.75rem center;">
                                     <option value="">Semua Tipe Pekerjaan</option>
-                                    <option value="Full-time" {{ request('type') == 'Full-time' ? 'selected' : '' }}>Full-time</option>
-                                    <option value="Part-time" {{ request('type') == 'Part-time' ? 'selected' : '' }}>Part-time</option>
-                                    <option value="Internship" {{ request('type') == 'Internship' ? 'selected' : '' }}>Internship</option>
+                                    <option value="Full Time" {{ request('type') == 'Full Time' ? 'selected' : '' }}>Full Time</option>
+                                    <option value="Part Time" {{ request('type') == 'Part Time' ? 'selected' : '' }}>Part Time</option>
+                                    <option value="Magang" {{ request('type') == 'Magang' ? 'selected' : '' }}>Magang</option>
                                 </select>
                             </div>
                             <div class="col-auto d-none d-lg-block">

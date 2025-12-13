@@ -255,7 +255,7 @@
                                     
                                     $actualInternship = DB::table('recruitment')
                                         ->join('jobtype', 'recruitment.jobtype_id', '=', 'jobtype.id')
-                                        ->whereIn('jobtype.name', ['Internship', 'Magang'])
+                                        ->where('jobtype.name', 'Magang')
                                         ->count();
                                     
                                     $total = $actualFulltime + $actualParttime + $actualInternship;
@@ -277,21 +277,21 @@
                                     <div class="text-center">
                                         <div class="d-flex align-items-center justify-content-center mb-1">
                                             <div style="width: 12px; height: 12px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 50%; margin-right: 8px;"></div>
-                                            <small class="fw-bold">Full-time</small>
+                                            <small class="fw-bold">Full Time</small>
                                         </div>
                                         <div class="text-muted small">{{ $actualFulltime }} ({{ $percentFulltime }}%)</div>
                                     </div>
                                     <div class="text-center">
                                         <div class="d-flex align-items-center justify-content-center mb-1">
                                             <div style="width: 12px; height: 12px; background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); border-radius: 50%; margin-right: 8px;"></div>
-                                            <small class="fw-bold">Part-time</small>
+                                            <small class="fw-bold">Part Time</small>
                                         </div>
                                         <div class="text-muted small">{{ $actualParttime }} ({{ $percentParttime }}%)</div>
                                     </div>
                                     <div class="text-center">
                                         <div class="d-flex align-items-center justify-content-center mb-1">
                                             <div style="width: 12px; height: 12px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); border-radius: 50%; margin-right: 8px;"></div>
-                                            <small class="fw-bold">Internship</small>
+                                            <small class="fw-bold">Magang</small>
                                         </div>
                                         <div class="text-muted small">{{ $actualInternship }} ({{ $percentInternship }}%)</div>
                                     </div>
@@ -309,7 +309,7 @@
                                     new Chart(ctx, {
                                         type: 'doughnut',
                                         data: {
-                                            labels: ['Full-time', 'Part-time', 'Internship'],
+                                            labels: ['Full Time', 'Part Time', 'Magang'],
                                             datasets: [{
                                                 data: [{{ $actualFulltime }}, {{ $actualParttime }}, {{ $actualInternship }}],
                                                 backgroundColor: [

@@ -1118,7 +1118,7 @@
                         <a href="https://www.linkedin.com/in/kevin-gultom-889982322/" target="_blank" class="social-icon">
                             <i class="bi bi-linkedin fs-5"></i>
                         </a>
-                        <a href="https://web.facebook.com/Institut.Teknologi.Del/?_rdc=1&_rdr#" target="_blank" class="social-icon">
+                        <a href="https://web.facebook.com/genesis.panjaitan.5" target="_blank" class="social-icon">
                             <i class="bi bi-facebook fs-5"></i>
                         </a>
                         <a href="mailto:info@careerconnect.del.ac.id" class="social-icon">
