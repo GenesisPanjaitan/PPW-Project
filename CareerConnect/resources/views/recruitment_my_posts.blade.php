@@ -72,31 +72,55 @@
             </div>
 
             <!-- Statistics Card -->
-            <div class="row mb-4">
+            <div class="row g-3 mb-4">
                 <div class="col-md-4">
-                    <div class="card border-0 shadow-sm rounded-4 bg-primary text-white">
-                        <div class="card-body text-center py-4">
-                            <i class="bi bi-file-text fs-1 mb-2 opacity-75"></i>
-                            <h3 class="fw-bold mb-1">{{ $userPosts->count() }}</h3>
-                            <p class="mb-0 opacity-75">Total Postingan</p>
+                    <div class="card border-0 shadow-sm rounded-3 overflow-hidden" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                        <div class="card-body p-3">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px; background: rgba(255, 255, 255, 0.2);">
+                                        <i class="bi bi-file-text fs-4 text-white"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3 text-white">
+                                    <h4 class="fw-bold mb-0">{{ $userPosts->count() }}</h4>
+                                    <p class="mb-0 small opacity-90">Total Postingan</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="card border-0 shadow-sm rounded-4 bg-success text-white">
-                        <div class="card-body text-center py-4">
-                            <i class="bi bi-eye fs-1 mb-2 opacity-75"></i>
-                            <h3 class="fw-bold mb-1">{{ $userPosts->where('date', '>=', now()->subDays(30))->count() }}</h3>
-                            <p class="mb-0 opacity-75">Aktif Bulan Ini</p>
+                    <div class="card border-0 shadow-sm rounded-3 overflow-hidden" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);">
+                        <div class="card-body p-3">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px; background: rgba(255, 255, 255, 0.2);">
+                                        <i class="bi bi-calendar3 fs-4 text-white"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3 text-white">
+                                    <h4 class="fw-bold mb-0">{{ $userPosts->where('date', '>=', now()->subDays(30))->count() }}</h4>
+                                    <p class="mb-0 small opacity-90">Aktif Bulan Ini</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="card border-0 shadow-sm rounded-4 bg-warning text-white">
-                        <div class="card-body text-center py-4">
-                            <i class="bi bi-calendar-check fs-1 mb-2 opacity-75"></i>
-                            <h3 class="fw-bold mb-1">{{ $userPosts->where('date', '>=', now()->subDays(7))->count() }}</h3>
-                            <p class="mb-0 opacity-75">Minggu Ini</p>
+                    <div class="card border-0 shadow-sm rounded-3 overflow-hidden" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                        <div class="card-body p-3">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px; background: rgba(255, 255, 255, 0.2);">
+                                        <i class="bi bi-calendar-check fs-4 text-white"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3 text-white">
+                                    <h4 class="fw-bold mb-0">{{ $userPosts->where('date', '>=', now()->subDays(7))->count() }}</h4>
+                                    <p class="mb-0 small opacity-90">Minggu Ini</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

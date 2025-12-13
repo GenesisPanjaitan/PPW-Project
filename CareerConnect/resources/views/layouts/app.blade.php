@@ -257,11 +257,40 @@
         /* == Navbar Menu Aktif == */
         .navbar-nav .nav-link {
             border-bottom: 3px solid transparent;
-            padding-bottom: 5px; 
+            padding-bottom: 5px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
         }
+        
+        .navbar-nav .nav-link::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transform: translateX(-50%);
+            transition: width 0.3s ease;
+        }
+        
+        .navbar-nav .nav-link:hover {
+            color: #667eea !important;
+            transform: translateY(-2px);
+        }
+        
+        .navbar-nav .nav-link:hover::before {
+            width: 100%;
+        }
+        
         .navbar-nav .nav-link.active {
             color: #3B49DF !important; 
-            border-bottom: 3px solid #3B49DF; 
+            border-bottom: 3px solid #3B49DF;
+            font-weight: 600;
+        }
+        
+        .navbar-nav .nav-link.active::before {
+            width: 100%;
         }
 
         /* == Halaman Profil == */
@@ -511,8 +540,28 @@
             background-color: #F8F7FF;
             border: 1px solid #E0E0E0;
             border-radius: 0.75rem; 
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
             padding: 0.5rem 0;
+            transform-origin: top center;
+            animation: dropdownSlideIn 0.3s ease-out;
+            opacity: 0;
+            transform: translateY(-10px) scale(0.95);
+        }
+        
+        .navbar-nav .dropdown-menu.show {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+        
+        @keyframes dropdownSlideIn {
+            0% {
+                opacity: 0;
+                transform: translateY(-20px) scale(0.9);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
         }
         
         /* Mengatur style item di dalam dropdown */
@@ -520,13 +569,81 @@
             color: #333;
             font-weight: 500;
             padding: 0.6rem 1.25rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
         }
+        
+        .navbar-nav .dropdown-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 3px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+        
         .navbar-nav .dropdown-item:hover {
-            background-color: #E5E7EB; 
-            color: #000;
+            background: linear-gradient(90deg, rgba(102, 126, 234, 0.1) 0%, transparent 100%);
+            color: #667eea;
+            padding-left: 1.5rem;
+            transform: translateX(5px);
         }
+        
+        .navbar-nav .dropdown-item:hover::before {
+            transform: scaleY(1);
+        }
+        
         .navbar-nav .dropdown-item i {
-            color: #6B7280; 
+            color: #6B7280;
+            transition: all 0.3s ease;
+        }
+        
+        .navbar-nav .dropdown-item:hover i {
+            color: #667eea;
+            transform: scale(1.2);
+        }
+        
+        .navbar-nav .dropdown-item.active {
+            background: linear-gradient(90deg, rgba(102, 126, 234, 0.15) 0%, rgba(102, 126, 234, 0.05) 100%);
+            color: #667eea;
+            font-weight: 600;
+        }
+        
+        /* Animasi untuk dropdown divider */
+        .navbar-nav .dropdown-divider {
+            margin: 0.5rem 0;
+            border-color: rgba(0, 0, 0, 0.08);
+            animation: expandWidth 0.4s ease-out;
+        }
+        
+        @keyframes expandWidth {
+            0% {
+                transform: scaleX(0);
+            }
+            100% {
+                transform: scaleX(1);
+            }
+        }
+        
+        /* Animasi toggle dropdown */
+        .navbar-nav .nav-link.dropdown-toggle {
+            transition: all 0.3s ease;
+        }
+        
+        .navbar-nav .nav-link.dropdown-toggle[aria-expanded="true"] {
+            color: #667eea !important;
+        }
+        
+        .navbar-nav .nav-link.dropdown-toggle::after {
+            transition: transform 0.3s ease;
+        }
+        
+        .navbar-nav .nav-link.dropdown-toggle[aria-expanded="true"]::after {
+            transform: rotate(180deg);
         }
 
         /* Animasi Tombol Bookmark */
@@ -552,17 +669,16 @@
 
     {{-- Success Toast Notifications --}}
     @if(session('login_success'))
-    <div id="loginToast" class="position-fixed" style="top: 30px; right: 30px; z-index: 9999;">
-        <div class="card border-0 shadow-lg" style="border-radius: 15px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-width: 400px; animation: slideInDown 0.4s ease-out;">
-            <div class="card-body p-5">
-                <div class="d-flex align-items-start">
-                    <div style="width: 60px; height: 60px; border-radius: 50%; background: rgba(255, 255, 255, 0.25); display: flex; align-items: center; justify-content: center; margin-right: 20px; flex-shrink: 0;">
-                        <i class="bi bi-check-circle-fill text-white" style="font-size: 32px;"></i>
+    <div id="loginToast" class="position-fixed top-0 start-50 translate-middle-x" style="margin-top: 70px; z-index: 9999;">
+        <div class="card border-0 shadow-lg" style="border-radius: 12px; background: rgba(16, 185, 129, 0.95); min-width: 320px; animation: slideInDown 0.4s ease-out;">
+            <div class="card-body p-3">
+                <div class="d-flex align-items-center">
+                    <div style="width: 40px; height: 40px; border-radius: 50%; background: rgba(255, 255, 255, 0.3); display: flex; align-items: center; justify-content: center; margin-right: 12px; flex-shrink: 0;">
+                        <i class="bi bi-check-circle-fill text-white" style="font-size: 22px;"></i>
                     </div>
                     <div class="flex-grow-1">
-                        <h5 class="text-white fw-bold mb-2" style="font-size: 1.2rem;">Selamat Datang! 🎉</h5>
-                        <p class="text-white mb-0 opacity-90" style="font-size: 1rem;">
-                            Anda berhasil login. Silakan lanjutkan eksplorasi
+                        <p class="text-white mb-0 fw-semibold" style="font-size: 0.9rem;">
+                            Berhasil login sebagai {{ auth()->check() ? (auth()->user()->role === 'mahasiswa' ? 'mahasiswa' : (auth()->user()->role === 'alumni' ? 'alumni' : 'admin')) : 'pengguna' }}
                         </p>
                     </div>
                 </div>
@@ -592,23 +708,41 @@
     @endif
 
     @if(session('post_success'))
-    <div id="postJobToast" class="position-fixed" style="top: 30px; right: 30px; z-index: 9999;">
-        <div class="card border-0 shadow-lg" style="border-radius: 15px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-width: 350px; animation: slideInDown 0.4s ease-out;">
-            <div class="card-body p-4">
+    <div id="postJobToast" class="position-fixed top-0 start-50 translate-middle-x" style="margin-top: 20px; z-index: 9999;">
+        <div class="card border-0 shadow-lg" style="border-radius: 12px; background: rgba(16, 185, 129, 0.95); min-width: 320px; animation: slideInDown 0.4s ease-out;">
+            <div class="card-body p-3">
                 <div class="d-flex align-items-start">
-                    <div style="width: 50px; height: 50px; border-radius: 50%; background: rgba(255, 255, 255, 0.2); display: flex; align-items: center; justify-content: center; margin-right: 15px; flex-shrink: 0;">
-                        <i class="bi bi-check-circle-fill text-white" style="font-size: 28px;"></i>
+                    <div style="width: 40px; height: 40px; border-radius: 50%; background: rgba(255, 255, 255, 0.3); display: flex; align-items: center; justify-content: center; margin-right: 12px; flex-shrink: 0;">
+                        <i class="bi bi-check-circle-fill text-white" style="font-size: 22px;"></i>
                     </div>
                     <div class="flex-grow-1">
-                        <h6 class="text-white fw-bold mb-1" style="font-size: 1rem;">Lowongan Berhasil Diposting! 🚀</h6>
-                        <p class="text-white mb-1 opacity-90" style="font-size: 0.9rem;">
+                        <h6 class="text-white fw-bold mb-1" style="font-size: 0.9rem;">Lowongan Berhasil Diposting! 🚀</h6>
+                        <p class="text-white mb-0 opacity-90" style="font-size: 0.8rem;">
                             <strong>{{ session('job_position') ?? 'Posisi' }}</strong> di {{ session('job_company') ?? 'Perusahaan' }}
-                        </p>
-                        <p class="text-white mb-0 opacity-80" style="font-size: 0.85rem;">
-                            <i class="bi bi-check me-1"></i>Notifikasi dikirim ke mahasiswa
                         </p>
                     </div>
                     <button type="button" class="btn-close btn-close-white ms-2" style="opacity: 0.7;" onclick="document.getElementById('postJobToast').style.animation='slideOutUp 0.3s ease-in'; setTimeout(() => document.getElementById('postJobToast').remove(), 300);"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
+
+    @if(session('delete_success'))
+    <div id="deleteJobToast" class="position-fixed top-0 start-50 translate-middle-x" style="margin-top: 20px; z-index: 9999;">
+        <div class="card border-0 shadow-lg" style="border-radius: 12px; background: rgba(239, 68, 68, 0.95); min-width: 320px; animation: slideInDown 0.4s ease-out;">
+            <div class="card-body p-3">
+                <div class="d-flex align-items-start">
+                    <div style="width: 40px; height: 40px; border-radius: 50%; background: rgba(255, 255, 255, 0.3); display: flex; align-items: center; justify-content: center; margin-right: 12px; flex-shrink: 0;">
+                        <i class="bi bi-trash-fill text-white" style="font-size: 22px;"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                        <h6 class="text-white fw-bold mb-1" style="font-size: 0.9rem;">Lowongan Berhasil Dihapus!</h6>
+                        <p class="text-white mb-0 opacity-90" style="font-size: 0.8rem;">
+                            Posting lowongan telah dihapus dari sistem
+                        </p>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white ms-2" style="opacity: 0.7;" onclick="document.getElementById('deleteJobToast').style.animation='slideOutUp 0.3s ease-in'; setTimeout(() => document.getElementById('deleteJobToast').remove(), 300);"></button>
                 </div>
             </div>
         </div>
@@ -619,6 +753,36 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" xintegrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script>
+        // Auto-close notifications after timeout
+        document.addEventListener('DOMContentLoaded', function() {
+            // Login success notification - 3 seconds
+            const loginToast = document.getElementById('loginToast');
+            if (loginToast) {
+                setTimeout(function() {
+                    loginToast.style.animation = 'slideOutUp 0.3s ease-in';
+                    setTimeout(() => loginToast.remove(), 300);
+                }, 3000);
+            }
+
+            // Post job success notification - 5 seconds
+            const postJobToast = document.getElementById('postJobToast');
+            if (postJobToast) {
+                setTimeout(function() {
+                    postJobToast.style.animation = 'slideOutUp 0.3s ease-in';
+                    setTimeout(() => postJobToast.remove(), 300);
+                }, 5000);
+            }
+
+            // Delete job success notification - 4 seconds
+            const deleteJobToast = document.getElementById('deleteJobToast');
+            if (deleteJobToast) {
+                setTimeout(function() {
+                    deleteJobToast.style.animation = 'slideOutUp 0.3s ease-in';
+                    setTimeout(() => deleteJobToast.remove(), 300);
+                }, 4000);
+            }
+        });
+
         // Handle favorite form submissions via AJAX to avoid full page reload and toggle icon
         document.addEventListener('DOMContentLoaded', function() {
             const favForms = document.querySelectorAll('form.favorite-form');
@@ -859,6 +1023,135 @@
                 opacity: 0;
             }
         }
+
+        /* Footer Styles */
+        .footer {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            margin-top: 100px;
+        }
+        .footer a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        .footer a:hover {
+            color: white;
+            transform: translateX(5px);
+        }
+        .social-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        .social-icon:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-5px);
+        }
+        .footer-divider {
+            height: 1px;
+            background: rgba(255, 255, 255, 0.2);
+        }
     </style>
+
+    <!-- Footer -->
+    <footer class="footer mt-5 py-5">
+        <div class="container">
+            <div class="row g-4">
+                <!-- About Section -->
+                <div class="col-lg-5 col-md-6">
+                    <div class="d-flex align-items-center mb-3">
+                        <img src="{{ asset('images/logokita.png') }}" alt="CareerConnect Logo" style="height: 35px;" class="me-2">
+                        <h5 class="fw-bold mb-0">CareerConnect</h5>
+                    </div>
+                    <p class="text-white-50 mb-3" style="line-height: 1.7;">
+                        Platform yang menghubungkan mahasiswa dan alumni Institut Teknologi Del dengan peluang karir terbaik. Temukan lowongan pekerjaan, magang, dan peluang pengembangan karir Anda bersama kami.
+                    </p>
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="bi bi-geo-alt-fill text-white-50"></i>
+                        <span class="text-white-50 small">Institut Teknologi Del, Sitoluama, Laguboti</span>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="col-lg-3 col-md-6">
+                    <h6 class="fw-bold mb-3">Menu Cepat</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <a href="{{ route('home') }}" class="d-flex align-items-center">
+                                <i class="bi bi-chevron-right me-2"></i> Home
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="{{ route('recruitment') }}" class="d-flex align-items-center">
+                                <i class="bi bi-chevron-right me-2"></i> Recruitment
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="{{ route('profile') }}" class="d-flex align-items-center">
+                                <i class="bi bi-chevron-right me-2"></i> My Profile
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="{{ route('favorit') }}" class="d-flex align-items-center">
+                                <i class="bi bi-chevron-right me-2"></i> Favorit
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Social Media & Contact -->
+                <div class="col-lg-4 col-md-12">
+                    <h6 class="fw-bold mb-3">Hubungi Kami</h6>
+                    <p class="text-white-50 mb-3 small">
+                        Ikuti media sosial kami untuk mendapatkan update lowongan terbaru dan informasi karir lainnya.
+                    </p>
+                    <div class="d-flex gap-3 mb-3">
+                        <a href="https://www.instagram.com/kevgtm" target="_blank" class="social-icon">
+                            <i class="bi bi-instagram fs-5"></i>
+                        </a>
+                        <a href="https://www.linkedin.com/in/kevin-gultom-889982322/" target="_blank" class="social-icon">
+                            <i class="bi bi-linkedin fs-5"></i>
+                        </a>
+                        <a href="https://web.facebook.com/Institut.Teknologi.Del/?_rdc=1&_rdr#" target="_blank" class="social-icon">
+                            <i class="bi bi-facebook fs-5"></i>
+                        </a>
+                        <a href="mailto:info@careerconnect.del.ac.id" class="social-icon">
+                            <i class="bi bi-envelope-fill fs-5"></i>
+                        </a>
+                    </div>
+                    <div class="d-flex align-items-center gap-2 mb-2">
+                        <i class="bi bi-envelope text-white-50"></i>
+                        <span class="text-white-50 small">info@careerconnect.del.ac.id</span>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="bi bi-telephone text-white-50"></i>
+                        <span class="text-white-50 small">+62 632 331234</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-divider my-4"></div>
+
+            <!-- Copyright -->
+            <div class="row">
+                <div class="col-md-6 text-center text-md-start">
+                    <p class="mb-0 text-white-50 small">
+                        &copy; {{ date('Y') }} CareerConnect - Institut Teknologi Del. All rights reserved.
+                    </p>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <p class="mb-0 text-white-50 small">
+                        Made with <i class="bi bi-heart-fill text-danger"></i> by IT Del Students
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
 </body>
 </html>

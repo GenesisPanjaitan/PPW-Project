@@ -149,9 +149,9 @@
                         <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom">
                             <h5 class="fw-bold mb-0 text-dark">Deskripsi Pekerjaan</h5>
                             
-                            <!-- TOMBOL KELOLA (HANYA ADMIN/OWNER) -->
+                            <!-- TOMBOL KELOLA (HANYA ADMIN/OWNER ALUMNI, bukan Mahasiswa) -->
                             @auth
-                                @if(auth()->user()->role === 'admin' || auth()->user()->id === $r->user_id)
+                                @if(auth()->user()->role !== 'mahasiswa' && (auth()->user()->role === 'admin' || auth()->user()->id === $r->user_id))
                                     <a href="{{ route('recruitment') }}" class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-semibold">
                                         <i class="bi bi-pencil-square me-1"></i> Kelola di Recruitment
                                     </a>

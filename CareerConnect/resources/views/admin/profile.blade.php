@@ -5,19 +5,31 @@
 @section('content')
 
 <!-- Page Heading -->
-<div class="row">
+<div class="row mb-4">
     <div class="col-12">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <div>
-                <h1 class="h3 mb-2 text-gray-800">Profil Administrator</h1>
-                <p class="text-muted">Kelola informasi profil dan keamanan akun Anda</p>
+        <div class="card border-0 shadow-lg" style="border-radius: 1.5rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); overflow: hidden;">
+            <div class="card-body p-4">
+                <div class="d-flex justify-content-between align-items-center flex-wrap">
+                    <div class="text-white">
+                        <h1 class="h2 mb-2 fw-bold">
+                            <i class="bi bi-person-circle me-3"></i>Profil Administrator
+                        </h1>
+                        <p class="mb-0 opacity-90">
+                            <i class="bi bi-info-circle me-2"></i>Kelola informasi profil dan keamanan akun Anda
+                        </p>
+                    </div>
+                    <nav aria-label="breadcrumb" class="mt-3 mt-md-0">
+                        <ol class="breadcrumb mb-0 bg-white bg-opacity-10 rounded-pill px-4 py-2">
+                            <li class="breadcrumb-item">
+                                <a href="{{ route('admin.dashboard') }}" class="text-white text-decoration-none">
+                                    <i class="bi bi-house-fill me-1"></i>Dashboard
+                                </a>
+                            </li>
+                            <li class="breadcrumb-item active text-white fw-bold">Profil</li>
+                        </ol>
+                    </nav>
+                </div>
             </div>
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb mb-0">
-                    <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Profil</li>
-                </ol>
-            </nav>
         </div>
     </div>
 </div>
@@ -39,9 +51,9 @@
 <div class="row">
     <!-- Profile Information -->
     <div class="col-xl-8 col-lg-7">
-        <div class="card shadow mb-4">
-            <div class="card-header py-3 bg-gradient-primary text-white">
-                <h6 class="m-0 font-weight-bold">
+        <div class="card shadow-lg border-0 mb-4 profile-card" style="border-radius: 1rem; overflow: hidden;">
+            <div class="card-header py-3" style="background: linear-gradient(135deg, rgba(107, 92, 231, 0.1) 0%, rgba(107, 92, 231, 0.05) 100%); border-bottom: 2px solid rgba(107, 92, 231, 0.1);">
+                <h6 class="m-0 fw-bold" style="color: #6b5ce7;">
                     <i class="bi bi-person-circle me-2"></i>Informasi Profil
                 </h6>
             </div>
@@ -56,13 +68,14 @@
                                 <i class="bi bi-camera me-2"></i>Foto Profil
                             </h6>
                             <div class="d-flex align-items-center gap-3">
-                                <div class="profile-photo-preview">
+                                <div class="profile-photo-preview position-relative">
                                     @if($admin->image && file_exists(public_path('storage/profile_photos/' . $admin->image)))
                                         <img src="{{ asset('storage/profile_photos/' . $admin->image) }}" 
-                                             class="rounded-circle border" width="80" height="80" alt="Current Photo" id="photoPreview" style="object-fit: cover;">
+                                             class="rounded-circle border" width="100" height="100" alt="Current Photo" id="photoPreview" 
+                                             style="object-fit: cover;">
                                     @else
-                                        <img src="https://ui-avatars.com/api/?name={{ urlencode($admin->name) }}&background=6b5ce7&color=fff&size=80" 
-                                             class="rounded-circle border" width="80" height="80" alt="Default Avatar" id="photoPreview">
+                                        <img src="https://ui-avatars.com/api/?name={{ urlencode($admin->name) }}&background=6b5ce7&color=fff&size=100" 
+                                             class="rounded-circle border" width="100" height="100" alt="Default Avatar" id="photoPreview">
                                     @endif
                                 </div>
                                 <div class="flex-grow-1">
@@ -163,15 +176,16 @@
 
     <!-- Profile Summary -->
     <div class="col-xl-4 col-lg-5">
-        <div class="card shadow mb-4">
-            <div class="card-body text-center">
+        <div class="card shadow-lg border-0 mb-4 profile-summary-card" style="border-radius: 1rem; overflow: hidden;">
+            <div class="card-body text-center p-4">
                 <div class="mb-3">
                     @if($admin->image && file_exists(public_path('storage/profile_photos/' . $admin->image)))
                         <img src="{{ asset('storage/profile_photos/' . $admin->image) }}" 
-                             class="rounded-circle shadow" width="120" height="120" alt="Admin Photo" style="object-fit: cover;">
+                             class="rounded-circle shadow-lg profile-img-large" width="140" height="140" alt="Admin Photo" 
+                             style="object-fit: cover; border: 4px solid #fff;">
                     @else
-                        <img src="https://ui-avatars.com/api/?name={{ urlencode($admin->name) }}&background=6b5ce7&color=fff&size=120" 
-                             class="rounded-circle shadow" width="120" height="120" alt="Admin Avatar">
+                        <img src="https://ui-avatars.com/api/?name={{ urlencode($admin->name) }}&background=6b5ce7&color=fff&size=140" 
+                             class="rounded-circle shadow-lg profile-img-large" width="140" height="140" alt="Admin Avatar" style="border: 4px solid #fff;">
                     @endif
                 </div>
                 <h5 class="fw-bold">{{ $admin->name }}</h5>
@@ -179,6 +193,13 @@
                 <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-2">
                     <i class="bi bi-shield-check me-1"></i>Administrator
                 </span>
+                @if($admin->image && file_exists(public_path('storage/profile_photos/' . $admin->image)))
+                <div class="mt-3">
+                    <button onclick="showPhoto('{{ asset('storage/profile_photos/' . $admin->image) }}')" class="btn btn-sm btn-outline-primary rounded-pill">
+                        <i class="bi bi-eye me-1"></i>Lihat Foto
+                    </button>
+                </div>
+                @endif
                 <hr class="my-3">
                 <div class="small text-muted">
                     <div><strong>ID:</strong> {{ $admin->id }}</div>
@@ -187,62 +208,151 @@
             </div>
         </div>
 
-        <!-- Account Statistics -->
-        <div class="card shadow">
-            <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Statistik Akun</h6>
-            </div>
-            <div class="card-body">
-                <div class="row text-center">
-                    <div class="col-6">
-                        <div class="border-end">
-                            <h4 class="fw-bold text-primary mb-1">{{ \App\Models\User::where('role', 'mahasiswa')->count() }}</h4>
-                            <small class="text-muted">Mahasiswa</small>
-                        </div>
-                    </div>
-                    <div class="col-6">
-                        <h4 class="fw-bold text-success mb-1">{{ \App\Models\User::where('role', 'alumni')->count() }}</h4>
-                        <small class="text-muted">Alumni</small>
-                    </div>
-                </div>
-                <hr class="my-3">
-                <div class="text-center">
-                    <h5 class="fw-bold text-warning mb-1">{{ \Illuminate\Support\Facades\DB::table('recruitment')->count() }}</h5>
-                    <small class="text-muted">Total Lowongan</small>
-                </div>
-                <hr class="my-3">
-                <div class="d-grid">
-                    <a href="{{ route('admin.dashboard') }}" class="btn btn-outline-primary btn-sm">
-                        <i class="bi bi-speedometer2 me-1"></i>Lihat Dashboard
-                    </a>
-                </div>
-            </div>
-        </div>
+
     </div>
 </div>
 
-
+<!-- Simple Photo Lightbox -->
+<div id="photoLightbox" class="photo-lightbox" onclick="closePhoto()" style="display: none;">
+    <button class="photo-close-btn" onclick="closePhoto()">
+        <i class="bi bi-x-lg"></i>
+    </button>
+    <img id="lightboxImage" src="" alt="Profile Photo" onclick="event.stopPropagation()">
+</div>
 
 @endsection
 
 @section('custom-styles')
 <style>
-    .profile-photo-preview img {
-        border: 3px solid #e9ecef;
+    /* Profile Card Animations */
+    .profile-card {
+        animation: fadeInUp 0.5s ease-out;
+    }
+
+    .profile-summary-card {
+        animation: fadeInRight 0.6s ease-out;
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes fadeInRight {
+        from {
+            opacity: 0;
+            transform: translateX(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    /* Profile Photo Hover Effects */
+    .profile-img-large {
+        transition: all 0.4s ease;
+    }
+
+    .profile-img-large:hover {
+        transform: scale(1.05);
+        box-shadow: 0 12px 30px rgba(107, 92, 231, 0.4) !important;
+    }
+
+    /* Form Input Focus */
+    .form-control:focus {
+        border-color: #6b5ce7;
+        box-shadow: 0 0 0 0.2rem rgba(107, 92, 231, 0.25);
+    }
+
+    /* Button Hover Effects */
+    .btn-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
         transition: all 0.3s ease;
     }
-    
-    .profile-photo-preview img:hover {
-        border-color: #6b5ce7;
-        transform: scale(1.05);
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(107, 92, 231, 0.4);
     }
     
     #profile_photo {
         cursor: pointer;
+        transition: all 0.3s ease;
     }
     
     #profile_photo:hover {
         border-color: #6b5ce7;
+        box-shadow: 0 0 0 0.2rem rgba(107, 92, 231, 0.25);
+    }
+
+    /* Simple Photo Lightbox */
+    .photo-lightbox {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.9);
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        animation: fadeIn 0.3s ease;
+    }
+
+    .photo-lightbox img {
+        max-width: 90%;
+        max-height: 90%;
+        border-radius: 1rem;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        animation: zoomIn 0.3s ease;
+    }
+
+    .photo-close-btn {
+        position: fixed;
+        top: 30px;
+        right: 30px;
+        background: rgba(255, 255, 255, 0.9);
+        border: none;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        font-size: 1.5rem;
+        color: #333;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        z-index: 10000;
+    }
+
+    .photo-close-btn:hover {
+        background: #fff;
+        transform: scale(1.1) rotate(90deg);
+        color: #6b5ce7;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    @keyframes zoomIn {
+        from {
+            opacity: 0;
+            transform: scale(0.8);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
     }
 </style>
 @endsection
@@ -280,5 +390,27 @@
             reader.readAsDataURL(input.files[0]);
         }
     }
+
+    // Photo lightbox functions
+    function showPhoto(imageUrl) {
+        const lightbox = document.getElementById('photoLightbox');
+        const image = document.getElementById('lightboxImage');
+        image.src = imageUrl;
+        lightbox.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closePhoto() {
+        const lightbox = document.getElementById('photoLightbox');
+        lightbox.style.display = 'none';
+        document.body.style.overflow = '';
+    }
+
+    // Close on ESC key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closePhoto();
+        }
+    });
 </script>
 @endsection
