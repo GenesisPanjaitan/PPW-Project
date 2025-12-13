@@ -85,6 +85,17 @@ class RecruitmentSeeder extends Seeder
 
         $samples = [
             [
+                'position' => 'Software Engineer Intern',
+                'company_name' => 'SawitPro',
+                'description' => 'Kandidat diharapkan memiliki pemahaman atau pengalaman proyek dengan Golang, atau dasar yang kuat dalam bahasa pemrograman lain seperti Python/Java serta berminat belajar Go dengan cepat.',
+                'location' => 'Medan',
+                'link' => 'https://docs.google.com/forms/d/e/1FAIpQLSd2KmxciVKSgSO4atKngXEw1fjWMX6RG1Di1zqkOuqd9QTTgQ/viewform',
+                'image' => 'public\images\SawitPro.png',
+                'date' => $now->copy()->subDays(1)->toDateTimeString(),
+                'category' => 'Teknologi',
+                'jobtype' => 'Magang',
+            ],
+            [
                 'position' => 'Solution Engineer Intern',
                 'company_name' => 'PT Hutabyte Abhinaya Inovasi',
                 'description' => 'Kandidat diharapkan memahami konsep API, HTTP, JSON, database, struktur data, serta arsitektur jaringan, dan memiliki ketertarikan pada teknologi AI modern seperti LangChain, Transformer, OpenAI API, RAG, dan Vector Databases.',
@@ -93,7 +104,7 @@ class RecruitmentSeeder extends Seeder
                 'image' => 'https://images.glints.com/unsafe/160x0/glints-dashboard.oss-ap-southeast-1.aliyuncs.com/company-logo/ea9f475569309b1b653de2507740579b.png',
                 'date' => $now->copy()->subDays(3)->toDateTimeString(),
                 'category' => 'Teknologi',
-                'jobtype' => 'Magang',
+                'jobtype' => 'Part Time',
             ],
             [
                 'position' => 'Administrasi Perkantoran',
@@ -112,10 +123,10 @@ class RecruitmentSeeder extends Seeder
                 'description' => 'PT Umalo Sedia Tekno adalah perusahaan yang bergerak pada bidang industri, perdagangan dan konsultansi. Saat ini PT. Umalo sedang membuka lowongan magang mandiri untuk periode semester Genap T.A 2025/2026 untuk posisi sebagai UI/UX Designer.',
                 'location' => 'Jakarta',
                 'link' => ' ',
-                'image' => 'public\images\umalo.jpeg',
+                'image' => 'public\images\umalo.jpeg', 
                 'date' => $now->copy()->subDays(6)->toDateTimeString(),
-                'category' => 'Teknologi',
-                'jobtype' => 'Magang',
+                'category' => 'Desain',
+                'jobtype' => 'Part Time',
             ],
             [
                 'position' => 'Developer',
@@ -124,7 +135,7 @@ class RecruitmentSeeder extends Seeder
                 'location' => 'Jakarta',
                 'link' => ' ',
                 'image' => 'public\images\logo-pt-tera-multi-wahana.jpg',
-                'date' => $now->copy()->subDays(12)->toDateTimeString(),
+                'date' => $now->copy()->subDays(8)->toDateTimeString(),
                 'category' => 'Teknologi',
                 'jobtype' => 'Magang',
             ],
@@ -135,10 +146,10 @@ class RecruitmentSeeder extends Seeder
                 'location' => 'Depok',
                 'link' => ' ',
                 'image' => 'public/images/kreasi_nusantara_cover.jpeg',
-                'date' => $now->copy()->subDays(19)->toDateTimeString(),
+                'date' => $now->copy()->subDays(9)->toDateTimeString(),
                 'category' => 'Teknologi',
                 'jobtype' => 'Magang',
-            ],
+            ]
         ];
 
         foreach ($samples as $s) {
