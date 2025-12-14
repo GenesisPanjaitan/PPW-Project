@@ -73,7 +73,22 @@
                         <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-4">
                             <div class="position-relative">
                                 @if(!empty($r->image))
-                                    <img src="{{ asset('storage/' . $r->image) }}" 
+                                    @php
+                                        // Normalize windows backslashes and decide which URL to use.
+                                        $img = $r->image;
+                                        $normalized = str_replace('\\', '/', trim($img));
+
+                                        if (filter_var($normalized, FILTER_VALIDATE_URL)) {
+                                            $imgUrl = $normalized;
+                                        } elseif (str_starts_with($normalized, 'public/')) {
+                                            $imgUrl = asset(ltrim(str_replace('public/', '', $normalized), '/'));
+                                        } elseif (str_starts_with($normalized, 'images/') || str_starts_with($normalized, '/images/')) {
+                                            $imgUrl = asset(ltrim($normalized, '/'));
+                                        } else {
+                                            $imgUrl = asset('storage/' . ltrim($normalized, '/'));
+                                        }
+                                    @endphp
+                                    <img src="{{ $imgUrl }}" 
                                          alt="Gambar Perusahaan" 
                                          class="w-100" 
                                          style="height: 220px; object-fit: cover;">

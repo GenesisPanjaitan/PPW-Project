@@ -153,14 +153,21 @@ class RecruitmentSeeder extends Seeder
         ];
 
         foreach ($samples as $s) {
-            // Prepare payload
+            // Normalize image path so views can render it
+            $rawImage = $s['image'] ?? '';
+            $img = trim(str_replace('\\', '/', $rawImage));
+            // if seeder used leading public/ remove it -> public/images/... becomes images/...
+            if (str_starts_with($img, 'public/')) {
+                $img = ltrim(substr($img, strlen('public/')), '/');
+            }
+
             $payload = [
                 'position' => $s['position'],
                 'company_name' => $s['company_name'],
                 'description' => $s['description'],
                 'location' => $s['location'],
                 'link' => $s['link'],
-                'image' => $s['image'],
+                'image' => $img,
                 'date' => $s['date'],
                 'user_id' => $user->id,
                 'category_id' => $categoryIds[$s['category']] ?? array_values($categoryIds)[0],
