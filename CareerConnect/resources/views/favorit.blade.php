@@ -83,15 +83,18 @@
     <!-- =======================
     Konten Halaman Favorit
     ======================== -->
-    <main class="py-5">
+    <main class="py-5" style="background: linear-gradient(to bottom, #f8f9fa 0%, #ffffff 100%); min-height: calc(100vh - 200px);">
         <div class="container">
             <div class="row justify-content-center">
-                <div class="col-lg-8">
+                <div class="col-lg-9">
 
                     <!-- Judul Halaman -->
-                    <div class="text-center mb-5">
-                        <h2 class="fw-bold mb-1 text-recruitment-blue">Favorit Anda</h2>
-                        <p class="text-muted small">Pilihan Terbaik Menuju Karier Impian</p>
+                    <div class="text-center mb-5 mt-4">
+                        <div class="d-inline-block p-3 bg-primary bg-opacity-10 rounded-circle mb-3">
+                            <i class="bi bi-bookmark-star fs-1 text-primary"></i>
+                        </div>
+                        <h2 class="fw-bold mb-2" style="color: #2c3e50;">Favorit Anda</h2>
+                        <p class="text-muted">Koleksi lowongan terbaik yang Anda simpan</p>
                     </div>
 
                     <!-- 
@@ -103,31 +106,71 @@
                     -->
                     @if(!empty($favorites) && $favorites->count())
                         @foreach($favorites as $r)
-                            <div class="card shadow-sm mb-3">
-                                <div class="card-body d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <h5 class="fw-bold mb-1">{{ $r->position }}</h5>
-                                        <p class="mb-0 small text-muted">{{ $r->company_name }} • {{ $r->location }}</p>
-                                        <p class="mb-0 small text-secondary">{{ \Carbon\Carbon::parse($r->date)->diffForHumans() }}</p>
-                                    </div>
-                                    <div class="d-flex gap-2">
-                                        <a href="{{ route('recruitment.detail', ['id'=>$r->id]) }}" class="btn btn-sm btn-primary">Detail</a>
-                                        <form action="{{ route('favorite.destroy', ['id'=>$r->id]) }}" method="POST">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button class="btn btn-sm btn-outline-danger">Hapus</button>
-                                        </form>
+                            <div class="card border-0 shadow-sm mb-4 hover-card" style="border-radius: 1rem; overflow: hidden; transition: all 0.3s ease;">
+                                <div class="card-body p-0">
+                                    <div class="row g-0 align-items-center">
+                                        <!-- Foto Perusahaan -->
+                                        <div class="col-md-3">
+                                            @if(!empty($r->image))
+                                                <img src="{{ asset('storage/' . $r->image) }}" 
+                                                     alt="Foto Perusahaan" 
+                                                     class="w-100" 
+                                                     style="height: 180px; object-fit: cover;">
+                                            @else
+                                                <div class="bg-light d-flex align-items-center justify-content-center text-muted" style="height: 180px;">
+                                                    <div class="text-center">
+                                                        <i class="bi bi-image-fill fs-1 opacity-25"></i>
+                                                        <p class="small mt-2 mb-0">Foto tidak ditampilkan</p>
+                                                    </div>
+                                                </div>
+                                            @endif
+                                        </div>
+                                        
+                                        <!-- Informasi Lowongan -->
+                                        <div class="col-md-6 p-4">
+                                            <span class="badge bg-primary bg-opacity-10 text-primary mb-2 px-3 py-2 rounded-pill">
+                                                <i class="bi bi-briefcase me-1"></i> {{ $r->category ?? 'Lowongan' }}
+                                            </span>
+                                            <h5 class="fw-bold mb-2 text-dark">{{ $r->position }}</h5>
+                                            <div class="d-flex flex-wrap gap-3 text-muted small mb-2">
+                                                <span><i class="bi bi-building me-1"></i>{{ $r->company_name }}</span>
+                                                <span><i class="bi bi-geo-alt me-1"></i>{{ $r->location }}</span>
+                                            </div>
+                                            <span class="text-muted small">
+                                                <i class="bi bi-clock me-1"></i>{{ \Carbon\Carbon::parse($r->date)->diffForHumans() }}
+                                            </span>
+                                        </div>
+                                        
+                                        <!-- Tombol Aksi -->
+                                        <div class="col-md-3 p-4">
+                                            <div class="d-flex flex-column gap-2">
+                                                <a href="{{ route('recruitment.detail', ['id'=>$r->id]) }}" class="btn btn-primary px-4 py-2 rounded-pill">
+                                                    <i class="bi bi-eye me-2"></i>Lihat Detail
+                                                </a>
+                                                <form action="{{ route('favorite.destroy', ['id'=>$r->id]) }}" method="POST">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button class="btn btn-outline-danger px-4 py-2 rounded-pill w-100" onclick="return confirm('Hapus dari favorit?')">
+                                                        <i class="bi bi-trash me-2"></i>Hapus
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         @endforeach
                     @else
-                        <div class="card shadow-sm border-0" style="border-radius: 1rem;">
-                            <div class="card-body p-5 text-center">
-                                <i class="bi bi-bookmark-x fs-1 text-muted"></i>
-                                <h5 class="mt-3 fw-bold text-dark">Anda belum memiliki favorit</h5>
-                                <p class="text-muted">Klik ikon bookmark pada lowongan untuk menyimpannya di sini.</p>
-                                <a href="{{ route('recruitment') }}" class="btn btn-masuk text-white mt-3 px-4 py-2 fw-semibold">Jelajahi Lowongan</a>
+                        <div class="card border-0 shadow-sm" style="border-radius: 1.5rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                            <div class="card-body p-5 text-center text-white">
+                                <div class="mb-4">
+                                    <i class="bi bi-bookmark-heart display-1 opacity-75"></i>
+                                </div>
+                                <h4 class="fw-bold mb-3">Belum Ada Favorit</h4>
+                                <p class="mb-4 opacity-90">Mulai simpan lowongan favorit Anda dengan mengklik ikon bookmark pada setiap lowongan yang menarik.</p>
+                                <a href="{{ route('recruitment') }}" class="btn btn-light btn-lg px-5 py-3 rounded-pill fw-semibold shadow">
+                                    <i class="bi bi-search me-2"></i>Jelajahi Lowongan
+                                </a>
                             </div>
                         </div>
                     @endif
@@ -136,5 +179,19 @@
             </div>
         </div>
     </main>
+
+    <style>
+        .hover-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .hover-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1) !important;
+        }
+        main {
+            padding-bottom: 200px !important;
+            min-height: calc(100vh - 100px);
+        }
+    </style>
 
 @endsection
