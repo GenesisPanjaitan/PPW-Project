@@ -258,17 +258,34 @@ class RecruitmentController extends Controller
     /**
      * Update recruitment
      */
-    public function update(Request $request, $id): RedirectResponse
+    public function update(Request $request, $id)
     {
         $r = DB::table('recruitment')->where('id', $id)->first();
-        if (! $r) abort(404);
+        if (! $r) {
+            if ($request->wantsJson()) {
+                return response()->json(['status' => 'error', 'message' => 'Recruitment not found'], 404);
+            }
+            abort(404);
+        }
 
-        if (!Auth::check()) return redirect()->route('login');
+        if (!Auth::check()) {
+            if ($request->wantsJson()) {
+                return response()->json(['status' => 'error', 'message' => 'Unauthenticated'], 401);
+            }
+            return redirect()->route('login');
+        }
+        
         $user = Auth::user();
         if ($user->role === 'mahasiswa') {
+            if ($request->wantsJson()) {
+                return response()->json(['status' => 'error', 'message' => 'Aksi tidak diizinkan'], 403);
+            }
             return redirect()->route('recruitment')->with('error', 'Aksi tidak diizinkan.');
         }
         if ($user->role !== 'admin' && $r->user_id !== $user->id) {
+            if ($request->wantsJson()) {
+                return response()->json(['status' => 'error', 'message' => 'Anda hanya dapat mengedit postingan Anda sendiri'], 403);
+            }
             return redirect()->route('recruitment')->with('error', 'Anda hanya dapat mengedit postingan Anda sendiri.');
         }
 
@@ -321,27 +338,63 @@ class RecruitmentController extends Controller
             'updated_at' => now(),
         ]);
 
+        // Return JSON for API requests
+        if ($request->wantsJson()) {
+            $updated = DB::table('recruitment')->where('id', $id)->first();
+            return response()->json([
+                'status' => 'ok',
+                'message' => 'Recruitment updated successfully',
+                'data' => $updated
+            ]);
+        }
+
         return redirect()->route('recruitment')->with('success', 'Posting lowongan berhasil diperbarui.');
     }
 
     /**
      * Delete recruitment
      */
-    public function destroy($id): RedirectResponse
+    public function destroy(Request $request, $id)
     {
         $r = DB::table('recruitment')->where('id', $id)->first();
-        if (! $r) abort(404);
+        if (! $r) {
+            if ($request->wantsJson()) {
+                return response()->json(['status' => 'error', 'message' => 'Recruitment not found'], 404);
+            }
+            abort(404);
+        }
 
-        if (!Auth::check()) return redirect()->route('login');
+        if (!Auth::check()) {
+            if ($request->wantsJson()) {
+                return response()->json(['status' => 'error', 'message' => 'Unauthenticated'], 401);
+            }
+            return redirect()->route('login');
+        }
+        
         $user = Auth::user();
         if ($user->role === 'mahasiswa') {
+            if ($request->wantsJson()) {
+                return response()->json(['status' => 'error', 'message' => 'Aksi tidak diizinkan'], 403);
+            }
             return redirect()->route('recruitment')->with('error', 'Aksi tidak diizinkan.');
         }
         if ($user->role !== 'admin' && $r->user_id !== $user->id) {
+            if ($request->wantsJson()) {
+                return response()->json(['status' => 'error', 'message' => 'Anda hanya dapat menghapus postingan Anda sendiri'], 403);
+            }
             return redirect()->route('recruitment')->with('error', 'Anda hanya dapat menghapus postingan Anda sendiri.');
         }
 
         DB::table('recruitment')->where('id', $id)->delete();
+
+        // Return JSON for API requests
+        if ($request->wantsJson()) {
+            return response()->json([
+                'status' => 'ok',
+                'message' => 'Recruitment deleted successfully',
+                'recruitment_id' => (int)$id
+            ]);
+        }
 
         return redirect()->route('recruitment')->with('delete_success', 'Posting lowongan berhasil dihapus.');
     }
